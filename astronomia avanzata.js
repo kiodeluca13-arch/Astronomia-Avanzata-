@@ -376,5 +376,5 @@ footer{ text-align: center; padding: 30px; background: #03050d; color: rgba(255,
     .solar-system { transform: none; height: auto; width: auto; }
     .orbit { display: none; }
     .sun { position: relative; transform: none; animation: orbit-rotate 2s linear infinite; margin: 0 auto; }
-}
+} 
   
