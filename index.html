@@ -27,7 +27,8 @@
         padding: 0;
         overflow-x: hidden;
         position: relative;
-        font-family: sans-serif;
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.6;
     }
 
     /* CONTENITORE DELLO SFONDO */
@@ -41,7 +42,7 @@
         z-index: -1;
     }
 
-    /* LE STELLE CADENTI: Cadono in diagonale verso il basso-destra con testa bianca davanti */
+    /* LE STELLE CADENTI: Diagonali verso il basso-destra */
     .stella-cadente {
         position: absolute;
         top: -100px;
@@ -52,7 +53,6 @@
         box-shadow: 0 0 8px #ffffff;
         animation: caduta-diagonale linear infinite;
     }
-    /* Creazione della scia azzurra dietro la testa */
     .stella-cadente::after {
         content: '';
         position: absolute;
@@ -64,7 +64,6 @@
         transform: rotate(135deg);
         transform-origin: top left;
     }
-    
     .stella-cadente:nth-child(1) { left: 5%; animation-delay: 0s; animation-duration: 4s; }
     .stella-cadente:nth-child(2) { left: 40%; animation-delay: 2.5s; animation-duration: 5s; }
     .stella-cadente:nth-child(3) { left: 70%; animation-delay: 1.2s; animation-duration: 3.5s; }
@@ -80,11 +79,11 @@
     .pianeta-sfondo {
         position: absolute;
         border-radius: 50%;
-        opacity: 0.35;
+        opacity: 0.25;
         animation: ruotaPianeta 25s linear infinite; 
     }
     .marte {
-        top: 20%;
+        top: 15%;
         right: 8%;
         width: 55px;
         height: 55px;
@@ -93,7 +92,7 @@
         box-shadow: inset -10px -10px 25px rgba(0,0,0,0.9), 0 0 10px rgba(255,77,77,0.2);
     }
     .nettuno {
-        top: 75%;
+        top: 65%;
         left: 5%;
         width: 75px;
         height: 75px;
@@ -108,18 +107,61 @@
         100% { transform: rotate(360deg); background-position: 100% 50%; }
     }
 
-    /* STILE GENERALE DEI RIGUADRI GADGET */
+    /* CONTENUTI EDITORIALI E STRUTTURA */
+    .main-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    header {
+        text-align: center;
+        padding: 40px 0 20px 0;
+    }
+    header h1 {
+        font-size: 2.5rem;
+        color: #00e5ff;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 0 0 15px rgba(0,229,255,0.4);
+    }
+    header p {
+        color: #aaa;
+        font-size: 1.1rem;
+        margin-top: 10px;
+    }
+    .sezione-astronomia {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        backdrop-filter: blur(2px);
+    }
+    .sezione-astronomia h2 {
+        color: #4da6ff;
+        margin-top: 0;
+        border-bottom: 2px solid rgba(77, 166, 255, 0.2);
+        padding-bottom: 8px;
+    }
     .box-gadget {
         background: rgba(13, 27, 42, 0.85);
         border: 2px solid #1b4965;
         padding: 20px;
         border-radius: 15px;
-        max-width: 330px;
+        max-width: 100%;
+        box-sizing: border-box;
         margin: 25px auto;
         text-align: center;
         color: white;
         box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
         backdrop-filter: blur(5px);
+    }
+    .griglia-gadget {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
     }
     </style>
 </head>
@@ -134,124 +176,72 @@
     <div class="pianeta-sfondo nettuno"></div>
 </div>
 
+<div class="main-container">
 
-<!-- GADGET NASA: IMMAGINE DEL GIORNO -->
-<div class="box-gadget" style="border-color: #ff007f; max-width: 350px; margin-top: 40px;">
-    <h3 style="margin-top: 0; color: #ff007f; font-size: 16px;">📸 Foto del Giorno della NASA</h3>
-    <p id="titoloNasa" style="font-weight: bold; font-size: 13px; margin: 5px 0; color: #fff;"></p>
-    <div id="contenitoreMediaNasa" style="width: 100%; margin: 10px 0;">
-        <p style="font-size: 12px; color: #aaa;">Connessione ai telescopi NASA in corso...</p>
+    <!-- INTESTAZIONE DEL SITO -->
+    <header>
+        <h1>Astronomia Avanzata</h1>
+        <p>Esplorando i segreti del cosmo e del nostro Sistema Solare</p>
+    </header>
+
+    <!-- TESTI ORIGINALI DEL SITO RIPRISTINATI -->
+    <section class="sezione-astronomia">
+        <h2>Il Sole: La Nostra Stella</h2>
+        <p>Il Sole è il cuore pulsante del nostro sistema planetario. Una gigantesca sfera di plasma alimentata da reazioni di fusione nucleare nel suo nucleo, che convertono costantemente l'idrogeno in elio liberando l'energia fondamentale per la vita sulla Terra.</p>
+    </section>
+
+    <section class="sezione-astronomia">
+        <h2>I Pianeti Terrestri</h2>
+        <p>I pianeti più vicini al Sole (Mercurio, Venere, Terra e Marte) sono mondi rocciosi dotati di superfici solide. Ognuno di essi racconta una storia evolutiva unica: dall'inferno di Venere soffocato dall'effetto serra, ai deserti ferrosi di Marte, fino all'oasi protetta della nostra Terra.</p>
+    </section>
+
+    <section class="sezione-astronomia">
+        <h2>I Giganti Gassosi e di Ghiaccio</h2>
+        <p>Oltre la fascia degli asteroidi troviamo i giganti del Sistema Solare. Giove e Saturno, composti prevalentemente da idrogeno ed elio, dominano per massa e possiedono maestosi sistemi di anelli e satelliti. Più distanti si trovano Urano e Nettuno, i giganti di ghiaccio avvolti da atmosfere di metano che conferiscono loro tonalità blu profonde.</p>
+    </section>
+
+    <!-- RIGUADRO GRANDE: IMMAGINE DEL GIORNO DELLA NASA -->
+    <div class="box-gadget" style="border-color: #ff007f;">
+        <h3 style="margin-top: 0; color: #ff007f; font-size: 18px;">📸 Foto del Giorno della NASA</h3>
+        <p id="titoloNasa" style="font-weight: bold; font-size: 14px; margin: 5px 0; color: #fff;"></p>
+        <div id="contenitoreMediaNasa" style="width: 100%; margin: 15px 0; min-height: 150px;">
+            <p style="font-size: 13px; color: #aaa;">Connessione ai telescopi NASA in corso...</p>
+        </div>
+        <p id="dataNasa" style="font-size: 12px; color: #ff007f; margin: 5px 0; font-family: monospace;"></p>
     </div>
-    <p id="dataNasa" style="font-size: 11px; color: #ff007f; margin: 5px 0; font-family: monospace;"></p>
+
+    <!-- GRIGLIA PER GLI ALTRI GADGET MINORI -->
+    <div class="griglia-gadget">
+
+        <!-- GADGET: IL CALCOLATORE DEL PESO -->
+        <div class="box-gadget" style="border-color: #00e5ff; margin: 0;">
+            <h3 style="margin-top: 0; color: #00e5ff; font-size: 17px;">Quanto pesi nel Sistema Solare? 🚀</h3>
+            <input type="number" id="pesoTerra" placeholder="Inserisci il tuo peso in kg" style="width: 85%; padding: 10px; border-radius: 8px; border: 2px solid #1b4965; text-align: center; font-size: 15px; background: #0d1b2a; color: white; margin-bottom: 10px;">
+            <button onclick="calcolaPesoCompleto()" style="background: #00e5ff; color: #000; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 92%; font-size: 15px;">Calcola</button>
+            <div id="risultatoSpazio" style="margin-top: 15px; font-size: 13px; text-align: left; max-height: 180px; overflow-y: auto; line-height: 1.8;"></div>
+        </div>
+
+        <!-- GADGET: LE CITAZIONI STELLARI -->
+        <div class="box-gadget" style="cursor: pointer; border-color: #4da6ff; margin: 0;" onclick="NuovaCitazione()">
+            <h4 style="margin-top:0; color:#4da6ff; font-size:15px; text-transform:uppercase;">Citazione Stellare ⭐</h4>
+            <p id="testoCitazione" style="font-style: italic; font-size: 14px; min-height: 60px;">"La Terra è il nostro punto di partenza, non la nostra prigione."</p>
+            <span style="font-size: 11px; color: #aaa;">👉 Clicca qui per un'altra frase</span>
+        </div>
+
+        <!-- GADGET: LIVE VOYAGER 1 -->
+        <div class="box-gadget" style="border-color: #66fcf1; text-align: left; margin: 0;">
+            <span style="color: #66fcf1; font-weight: bold; font-size: 11px;">LIVE TELEMETRY</span>
+            <h5 style="margin: 5px 0; font-size: 14px;">Tempo della Sonda Voyager 1 nello Spazio:</h5>
+            <p id="anniVoyager" style="font-size: 16px; margin: 5px 0; color: #fff; font-weight: bold; font-family: monospace;"></p>
+        </div>
+
+    </div>
+
 </div>
-
-
-<!-- GADGET 1: IL CALCOLATORE DEL PESO SU TUTTI I PIANETI -->
-<div class="box-gadget" style="border-color: #00e5ff;">
-    <h3 style="margin-top: 0; color: #00e5ff; font-size: 18px;">Quanto pesi nel Sistema Solare? 🚀</h3>
-    <input type="number" id="pesoTerra" placeholder="Inserisci il tuo peso in kg" style="width: 85%; padding: 10px; border-radius: 8px; border: 2px solid #1b4965; text-align: center; font-size: 15px; background: #0d1b2a; color: white; margin-bottom: 10px;">
-    <button onclick="calcolaPesoCompleto()" style="background: #00e5ff; color: #000; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 92%; font-size: 15px;">Calcola</button>
-    <div id="risultatoSpazio" style="margin-top: 15px; font-size: 13px; text-align: left; max-height: 200px; overflow-y: auto; line-height: 1.8;"></div>
-</div>
-
-
-<!-- GADGET 2: IL GENERATORE DI CITAZIONI STELLARI -->
-<div class="box-gadget" style="cursor: pointer; border-color: #4da6ff;" onclick="NuovaCitazione()">
-    <h4 style="margin-top:0; color:#4da6ff; font-size:15px; text-transform:uppercase;">Citazione Stellare ⭐</h4>
-    <p id="testoCitazione" style="font-style: italic; font-size: 14px; min-height: 50px;">"La Terra è il nostro punto di partenza, non la nostra prigione."</p>
-    <span style="font-size: 10px; color: #aaa;">👉 Clicca sul riquadro per leggerne un'altra</span>
-</div>
-
-
-<!-- GADGET 3: TELEMETRIA LIVE VOYAGER 1 -->
-<div class="box-gadget" style="border-color: #66fcf1; text-align: left; max-width: 300px;">
-    <span style="color: #66fcf1; font-weight: bold; font-size: 11px;">LIVE TELEMETRY</span>
-    <h5 style="margin: 5px 0; font-size: 13px;">Tempo della Sonda Voyager 1 nello Spazio:</h5>
-    <p id="anniVoyager" style="font-size: 18px; margin: 5px 0; color: #fff; font-weight: bold; font-family: monospace;"></p>
-</div>
-
 
 <!-- TUTTI I SCRIPT LOGICI DEI GADGET -->
 <script>
-// FUNZIONE PER CARICARE LA FOTO DEL GIORNO DALLA NASA
-async function caricaFotoNasa() {
-    const contenitore = document.getElementById('contenitoreMediaNasa');
-    const titolo = document.getElementById('titoloNasa');
-    const dataElement = document.getElementById('dataNasa');
     
-    try {
-        const risposta = await fetch('https://nasa.gov');
-        const dati = await risposta.json();
-        
-        titolo.innerText = dati.title;
-        dataElement.innerText = "DATA NASA: " + dati.date;
-        
-        if(dati.media_type === "image") {
-            contenitore.innerHTML = `<img src="${dati.url}" style="width:100%; border-radius:8px; box-shadow: 0 0 10px rgba(0,0,0,0.5);" alt="${dati.title}">`;
-        } else if(dati.media_type === "video") {
-            contenitore.innerHTML = `<iframe src="${dati.url}" style="width:100%; height:200px; border:none; border-radius:8px;"></iframe>`;
-        }
-    } catch (errore) {
-        contenitore.innerHTML = "<p style='color:#ff4d4d; font-size:12px;'>Impossibile caricare l'immagine odierna da NASA TV.</p>";
-    }
-}
-caricaFotoNasa();
-
-// Logica Calcolo Peso
-function calcolaPesoCompleto() {
-    let peso = parseFloat(document.getElementById('pesoTerra').value);
-    let area = document.getElementById('risultatoSpazio');
-    if (!peso || peso <= 0) {
-        area.innerHTML = "<span style='color:#ff4d4d; font-weight:bold;'>Inserisci un peso valido!</span>";
-        return;
-    }
-    area.innerHTML = `
-        <b style="color:#00e5ff; display:block; text-align:center; margin-bottom:5px;">I tuoi risultati:</b>
-        ☄️ <b>Mercurio:</b> ${(peso * 0.378).toFixed(1)} kg<br>
-        🌌 <b>Venere:</b> ${(peso * 0.907).toFixed(1)} kg<br>
-        🌕 <b>Luna:</b> ${(peso * 0.166).toFixed(1)} kg<br>
-        🪐 <b>Marte:</b> ${(peso * 0.379).toFixed(1)} kg<br>
-        ⚡ <b>Giove:</b> ${(peso * 2.528).toFixed(1)} kg<br>
-        🪐 <b>Saturno:</b> ${(peso * 1.065).toFixed(1)} kg<br>
-        💎 <b>Urano:</b> ${(peso * 0.886).toFixed(1)} kg<br>
-        🔵 <b>Nettuno:</b> ${(peso * 1.137).toFixed(1)} kg<br>
-        ❄️ <b>Plutone:</b> ${(peso * 0.063).toFixed(1)} kg
-    `;
-}
-
-// Logica Citazioni Celebri
-const citazioni = [
-    '"La Terra è il nostro punto di partenza, non la nostra prigione." – K. Tsiolkovsky',
-    '"Siamo fatti di materia stellare che brucia." – Margherita Hack',
-    '"Guardate le stelle invece dei vostri piedi." – Stephen Hawking',
-    '"L\'universo non ha fretta, eppure tutto viene realizzato." – Lao Tzu',
-    '"Dietro ogni uomo vivo ci sono trenta fantasmi, l\'universo è immenso." – Arthur C. Clarke'
-];
-function NuovaCitazione() {
-    const casuale = citazioni[Math.floor(Math.random() * citazioni.length)];
-    
-<!-- Subito sotto continuerà il tuo logo e il resto del sito vecchio -->
-    
- 
-  <img src="logo-canale.png" alt="Logo del Canale" style="max-width: 150px; height: auto; display: block; margin: 20px auto;">
-    
-    
-
-<!-- Preloader: Sistema Solare (gira su PC, si semplifica su mobile per non rallentare) -->
-<div id="preloader">
-    <div class="solar-system">
-        <div class="sun"></div>
-        <div class="orbit orbit-1"><div class="planet planet-1"></div></div>
-        <div class="orbit orbit-2"><div class="planet planet-2"></div></div>
-        <div class="orbit orbit-3"><div class="planet planet-3"></div></div>
-    </div>
-</div>
-
-<!-- Sfondi Stellati -->
-<div id="stars"></div>
-<div class="shooting-stars-container" id="shooting-stars"></div>
-
-<header>
     <img src="logo.png" alt="Astronomia Avanzata" class="logo">
     <!-- Pulsante Menu per Smartphone -->
     <button class="menu-toggle" aria-label="Apri menu">☰</button>
