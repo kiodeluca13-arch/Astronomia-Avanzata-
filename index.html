@@ -6,7 +6,7 @@
     <title>Astronomia Avanzata | L'universo alla portata di tutti</title>
     
     <style>
-    /* Sfondo nero profondo + stelle fisse */
+    /* SFONDO SPAZIALE: Nero profondo con tantissime stelle fisse */
     body {
         background-color: #020208 !important;
         background-image: 
@@ -27,9 +27,10 @@
         padding: 0;
         overflow-x: hidden;
         position: relative;
+        font-family: sans-serif;
     }
 
-    /* Contenitore bloccato sullo sfondo */
+    /* CONTENITORE DELLO SFONDO */
     .spazio-sfondo {
         position: fixed;
         top: 0;
@@ -40,35 +41,50 @@
         z-index: -1;
     }
 
-    /* Stelle cadenti */
+    /* LE STELLE CADENTI: Cadono in diagonale verso il basso-destra con testa bianca davanti */
     .stella-cadente {
         position: absolute;
-        top: -60px;
-        width: 2px;
-        height: 60px;
-        background: linear-gradient(to bottom, rgba(255,255,255,0), #00e5ff, #ffffff);
-        animation: caduta-corretta linear infinite;
+        top: -100px;
+        width: 4px;
+        height: 4px;
+        background: #ffffff;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #ffffff;
+        animation: caduta-diagonale linear infinite;
     }
-    .stella-cadente:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 3.5s; }
-    .stella-cadente:nth-child(2) { left: 45%; animation-delay: 2s; animation-duration: 4.5s; }
-    .stella-cadente:nth-child(3) { left: 75%; animation-delay: 0.8s; animation-duration: 3s; }
+    /* Creazione della scia azzurra dietro la testa */
+    .stella-cadente::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 2px;
+        background: linear-gradient(to left, rgba(0, 229, 255, 0.8), rgba(0, 229, 255, 0));
+        transform: rotate(135deg);
+        transform-origin: top left;
+    }
+    
+    .stella-cadente:nth-child(1) { left: 5%; animation-delay: 0s; animation-duration: 4s; }
+    .stella-cadente:nth-child(2) { left: 40%; animation-delay: 2.5s; animation-duration: 5s; }
+    .stella-cadente:nth-child(3) { left: 70%; animation-delay: 1.2s; animation-duration: 3.5s; }
 
-    @keyframes caduta-corretta {
-        0% { transform: translateY(0) translateX(0) rotate(45deg); opacity: 0; }
+    @keyframes caduta-diagonale {
+        0% { transform: translate(0, 0); opacity: 0; }
         10% { opacity: 1; }
-        70% { opacity: 1; }
-        100% { transform: translateY(100vh) translateX(100vh) rotate(45deg); opacity: 0; }
+        80% { opacity: 1; }
+        100% { transform: translate(80vh, 80vh); opacity: 0; }
     }
 
-    /* Pianeti rotanti */
+    /* PIANETI ROTANTI SULLO SFONDO */
     .pianeta-sfondo {
         position: absolute;
         border-radius: 50%;
-        opacity: 0.4;
+        opacity: 0.35;
         animation: ruotaPianeta 25s linear infinite; 
     }
     .marte {
-        top: 25%;
+        top: 20%;
         right: 8%;
         width: 55px;
         height: 55px;
@@ -77,8 +93,8 @@
         box-shadow: inset -10px -10px 25px rgba(0,0,0,0.9), 0 0 10px rgba(255,77,77,0.2);
     }
     .nettuno {
-        top: 70%;
-        left: 6%;
+        top: 75%;
+        left: 5%;
         width: 75px;
         height: 75px;
         background: radial-gradient(circle at 30% 30%, #4da6ff, #003366, #4da6ff);
@@ -91,11 +107,25 @@
         0% { transform: rotate(0deg); background-position: 0% 50%; }
         100% { transform: rotate(360deg); background-position: 100% 50%; }
     }
+
+    /* STILE GENERALE DEI RIGUADRI GADGET */
+    .box-gadget {
+        background: rgba(13, 27, 42, 0.85);
+        border: 2px solid #1b4965;
+        padding: 20px;
+        border-radius: 15px;
+        max-width: 330px;
+        margin: 25px auto;
+        text-align: center;
+        color: white;
+        box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
+        backdrop-filter: blur(5px);
+    }
     </style>
 </head>
 <body>
 
-<!-- Elementi dello spazio profondo -->
+<!-- EFFETTI SCENICI ATTIVATI SULLO SFONDO -->
 <div class="spazio-sfondo">
     <div class="stella-cadente"></div>
     <div class="stella-cadente"></div>
@@ -104,6 +134,102 @@
     <div class="pianeta-sfondo nettuno"></div>
 </div>
 
+
+<!-- GADGET NASA: IMMAGINE DEL GIORNO -->
+<div class="box-gadget" style="border-color: #ff007f; max-width: 350px; margin-top: 40px;">
+    <h3 style="margin-top: 0; color: #ff007f; font-size: 16px;">📸 Foto del Giorno della NASA</h3>
+    <p id="titoloNasa" style="font-weight: bold; font-size: 13px; margin: 5px 0; color: #fff;"></p>
+    <div id="contenitoreMediaNasa" style="width: 100%; margin: 10px 0;">
+        <p style="font-size: 12px; color: #aaa;">Connessione ai telescopi NASA in corso...</p>
+    </div>
+    <p id="dataNasa" style="font-size: 11px; color: #ff007f; margin: 5px 0; font-family: monospace;"></p>
+</div>
+
+
+<!-- GADGET 1: IL CALCOLATORE DEL PESO SU TUTTI I PIANETI -->
+<div class="box-gadget" style="border-color: #00e5ff;">
+    <h3 style="margin-top: 0; color: #00e5ff; font-size: 18px;">Quanto pesi nel Sistema Solare? 🚀</h3>
+    <input type="number" id="pesoTerra" placeholder="Inserisci il tuo peso in kg" style="width: 85%; padding: 10px; border-radius: 8px; border: 2px solid #1b4965; text-align: center; font-size: 15px; background: #0d1b2a; color: white; margin-bottom: 10px;">
+    <button onclick="calcolaPesoCompleto()" style="background: #00e5ff; color: #000; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 92%; font-size: 15px;">Calcola</button>
+    <div id="risultatoSpazio" style="margin-top: 15px; font-size: 13px; text-align: left; max-height: 200px; overflow-y: auto; line-height: 1.8;"></div>
+</div>
+
+
+<!-- GADGET 2: IL GENERATORE DI CITAZIONI STELLARI -->
+<div class="box-gadget" style="cursor: pointer; border-color: #4da6ff;" onclick="NuovaCitazione()">
+    <h4 style="margin-top:0; color:#4da6ff; font-size:15px; text-transform:uppercase;">Citazione Stellare ⭐</h4>
+    <p id="testoCitazione" style="font-style: italic; font-size: 14px; min-height: 50px;">"La Terra è il nostro punto di partenza, non la nostra prigione."</p>
+    <span style="font-size: 10px; color: #aaa;">👉 Clicca sul riquadro per leggerne un'altra</span>
+</div>
+
+
+<!-- GADGET 3: TELEMETRIA LIVE VOYAGER 1 -->
+<div class="box-gadget" style="border-color: #66fcf1; text-align: left; max-width: 300px;">
+    <span style="color: #66fcf1; font-weight: bold; font-size: 11px;">LIVE TELEMETRY</span>
+    <h5 style="margin: 5px 0; font-size: 13px;">Tempo della Sonda Voyager 1 nello Spazio:</h5>
+    <p id="anniVoyager" style="font-size: 18px; margin: 5px 0; color: #fff; font-weight: bold; font-family: monospace;"></p>
+</div>
+
+
+<!-- TUTTI I SCRIPT LOGICI DEI GADGET -->
+<script>
+// FUNZIONE PER CARICARE LA FOTO DEL GIORNO DALLA NASA
+async function caricaFotoNasa() {
+    const contenitore = document.getElementById('contenitoreMediaNasa');
+    const titolo = document.getElementById('titoloNasa');
+    const dataElement = document.getElementById('dataNasa');
+    
+    try {
+        const risposta = await fetch('https://nasa.gov');
+        const dati = await risposta.json();
+        
+        titolo.innerText = dati.title;
+        dataElement.innerText = "DATA NASA: " + dati.date;
+        
+        if(dati.media_type === "image") {
+            contenitore.innerHTML = `<img src="${dati.url}" style="width:100%; border-radius:8px; box-shadow: 0 0 10px rgba(0,0,0,0.5);" alt="${dati.title}">`;
+        } else if(dati.media_type === "video") {
+            contenitore.innerHTML = `<iframe src="${dati.url}" style="width:100%; height:200px; border:none; border-radius:8px;"></iframe>`;
+        }
+    } catch (errore) {
+        contenitore.innerHTML = "<p style='color:#ff4d4d; font-size:12px;'>Impossibile caricare l'immagine odierna da NASA TV.</p>";
+    }
+}
+caricaFotoNasa();
+
+// Logica Calcolo Peso
+function calcolaPesoCompleto() {
+    let peso = parseFloat(document.getElementById('pesoTerra').value);
+    let area = document.getElementById('risultatoSpazio');
+    if (!peso || peso <= 0) {
+        area.innerHTML = "<span style='color:#ff4d4d; font-weight:bold;'>Inserisci un peso valido!</span>";
+        return;
+    }
+    area.innerHTML = `
+        <b style="color:#00e5ff; display:block; text-align:center; margin-bottom:5px;">I tuoi risultati:</b>
+        ☄️ <b>Mercurio:</b> ${(peso * 0.378).toFixed(1)} kg<br>
+        🌌 <b>Venere:</b> ${(peso * 0.907).toFixed(1)} kg<br>
+        🌕 <b>Luna:</b> ${(peso * 0.166).toFixed(1)} kg<br>
+        🪐 <b>Marte:</b> ${(peso * 0.379).toFixed(1)} kg<br>
+        ⚡ <b>Giove:</b> ${(peso * 2.528).toFixed(1)} kg<br>
+        🪐 <b>Saturno:</b> ${(peso * 1.065).toFixed(1)} kg<br>
+        💎 <b>Urano:</b> ${(peso * 0.886).toFixed(1)} kg<br>
+        🔵 <b>Nettuno:</b> ${(peso * 1.137).toFixed(1)} kg<br>
+        ❄️ <b>Plutone:</b> ${(peso * 0.063).toFixed(1)} kg
+    `;
+}
+
+// Logica Citazioni Celebri
+const citazioni = [
+    '"La Terra è il nostro punto di partenza, non la nostra prigione." – K. Tsiolkovsky',
+    '"Siamo fatti di materia stellare che brucia." – Margherita Hack',
+    '"Guardate le stelle invece dei vostri piedi." – Stephen Hawking',
+    '"L\'universo non ha fretta, eppure tutto viene realizzato." – Lao Tzu',
+    '"Dietro ogni uomo vivo ci sono trenta fantasmi, l\'universo è immenso." – Arthur C. Clarke'
+];
+function NuovaCitazione() {
+    const casuale = citazioni[Math.floor(Math.random() * citazioni.length)];
+    
 <!-- Subito sotto continuerà il tuo logo e il resto del sito vecchio -->
     
  
