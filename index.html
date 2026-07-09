@@ -5,17 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Astronomia Avanzata - L'universo alla portata di tutti</title>
 <style>
-body{background:#020208 radial-gradient(1.5px 1.5px at 20px 30px,#fff,transparent) repeat;background-size:300px 300px;color:#fff;margin:0;font-family:sans-serif;overflow-x:hidden;}
+body{background:#020208 radial-gradient(1.5px 1.5px at 20px 30px,#fff,transparent) repeat;background-size:300px 300px;color:#fff;margin:0;font-family:'Segoe UI',sans-serif;overflow-x:hidden;}
 .spazio-sfondo-fisso{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;}
-.stella-cadente-nuova{position:absolute;top:-100px;width:4px;height:4px;background:#fff;border-radius:50%;animation:caduta 4s linear infinite;box-shadow:0 0 8px #fff;}
-@keyframes caduta{0%{transform:translate(0,0);opacity:0;}10%{opacity:1;}100%{transform:translate(80vh,80vh);opacity:0;}}
+.stella-cadente-nuova{position:absolute;top:-100px;left:10%;width:2px;height:2px;background:#fff;border-radius:50%;animation:caduta 3s linear infinite;box-shadow:0 0 6px #fff;}
+.stella-cadente-nuova::before{content:'';position:absolute;top:0;left:0;width:120px;height:1px;background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);transform:translateX(-120px) rotate(45deg);}
+.stella-cadente-nuova:nth-child(2){left:40%;animation-delay:1.2s;}
+.stella-cadente-nuova:nth-child(3){left:70%;animation-delay:2.5s;}
+@keyframes caduta{0%{transform:translate(0,0) rotate(45deg);opacity:0;}10%{opacity:1;}100%{transform:translate(80vw,80vh) rotate(45deg);opacity:0;}}
 section,.box-gadget-centrato{background:rgba(13,27,42,0.85);padding:25px;border-radius:12px;max-width:750px;margin:20px auto;border:1px solid #1b4965;text-align:center;backdrop-filter:blur(5px);}
 h1,h2,h3{color:#00e5ff;}
-input,button{width:85%;padding:12px;margin:8px;border-radius:5px;border:none;background:#0d1b2a;color:#fff;box-sizing:border-box;}
+input,button{width:85%;padding:12px;margin:8px;border-radius:5px;border:none;background:#0d1b2a;color:#fff;box-sizing:border-box;font-size:14px;}
 button{background:#00e5ff;color:#000;font-weight:bold;cursor:pointer;transition:0.3s;}
 button:hover{transform:scale(1.03);}
 .btn-sito{background:#00e5ff;color:#000;animation:pulse 2s infinite;}
-.btn-whatsapp{background:#25D366;color:#fff;margin-top:15px;} /* VERDE WHATSAPP */
+.btn-whatsapp{background:#25D366;color:#fff;margin-top:10px;}
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 nav{background:rgba(13,27,42,0.95);padding:15px;text-align:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #00e5ff;}
 nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-size:15px;}
@@ -26,9 +29,7 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 #stella-target{position:absolute;width:30px;height:30px;background:#fff;border-radius:50%;box-shadow:0 0 15px #fff;cursor:pointer;display:none;line-height:30px;text-align:center;font-size:20px;}
 .page{display:none;}
 .page.active{display:block;}
-.logo-header{max-width:160px;height:auto;display:block;margin:0 auto 15px auto;filter:drop-shadow(0 0 10px #00e5ff);}
-
-/* SCHERMATA DI CARICAMENTO SISTEMA SOLARE */
+.logo-header{max-width:180px;height:auto;display:block;margin:0 auto 15px auto;filter:drop-shadow(0 0 15px #00e5ff);}
 #loader-sistema{position:fixed;top:0;left:0;width:100%;height:100%;background:#020208;z-index:9999;display:flex;justify-content:center;align-items:center;flex-direction:column;transition:opacity 0.5s;}
 .sole{width:50px;height:50px;background:radial-gradient(circle, #ffcc00, #ff9900);border-radius:50%;box-shadow:0 0 30px #ffcc00;position:relative;}
 .orbita{position:absolute;width:120px;height:120px;border:1px dashed rgba(255,255,255,0.2);border-radius:50%;animation:ruota 3s linear infinite;}
@@ -38,19 +39,26 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 </head>
 <body>
 
-<!-- SCHERMATA DI CARICAMENTO -->
 <div id="loader-sistema">
     <div class="sole"><div class="orbita"><div class="pianeta"></div></div></div>
     <p style="margin-top:20px;color:#00e5ff;">Caricamento Universo...</p>
 </div>
 
-<div class="spazio-sfondo-fisso"><div class="stella-cadente-nuova"></div></div>
+<div class="spazio-sfondo-fisso">
+    <div class="stella-cadente-nuova"></div>
+    <div class="stella-cadente-nuova"></div>
+    <div class="stella-cadente-nuova"></div>
+</div>
 
 <header style="text-align:center;padding:25px 10px;">
-<img src="logo-canale.png" alt="Logo Astronomia Avanzata" class="logo-header" onerror="this.style.display='none'">
+<img src="logo-canale.png" alt="Logo Astronomia Avanzata" class="logo-header">
 <h1>Astronomia Avanzata</h1>
 <p>L'universo alla portata di tutti</p>
 <button class="btn-sito" onclick="apriIscrizione()">✨ ISCRIVITI AL SITO</button>
+<br>
+<a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank">
+    <button class="btn-whatsapp">📢 UNISCITI AL CANALE WHATSAPP</button>
+</a>
 </header>
 
 <nav>
@@ -72,6 +80,28 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     <h3 id="contatore-iscritti">0</h3>
     <p>Appassionati nella Community</p>
 </section>
+
+<!-- GADGET NUOVO 1: DISTANZA ANNI LUCE -->
+<div class="box-gadget-centrato" style="border-color:#ff00ff;">
+    <h3 style="color:#ff00ff;">🌌 Da Anni-Luce a Km</h3>
+    <input type="number" id="anniLuceInput" placeholder="Inserisci Anni Luce">
+    <button onclick="calcolaAnniLuce()">Converti in Km</button>
+    <div id="risultatoAnniLuce" style="margin-top:15px;"></div>
+</div>
+
+<!-- GADGET NUOVO 2: OROSCOPO SPAZIALE -->
+<div class="box-gadget-centrato" onclick="oroscopoSpaziale()" style="cursor:pointer;border-color:#ffcc00;">
+    <h3 style="color:#ffcc00;">🔮 Oroscopo Spaziale</h3>
+    <p id="testoOroscopo">Clicca per scoprire il tuo segno cosmico di oggi!</p>
+</div>
+
+<!-- GADGET NUOVO 3: NOME ASTRONAUTA -->
+<div class="box-gadget-centrato" style="border-color:#4da6ff;">
+    <h3 style="color:#4da6ff;">👨‍🚀 Nome da Astronauta</h3>
+    <input type="text" id="nomeRealeInput" placeholder="Inserisci il tuo nome">
+    <button onclick="generaNomeAstronauta()">Genera Nome Spaziale</button>
+    <div id="risultatoNomeAstro" style="margin-top:15px;font-size:18px;color:#00e5ff;"></div>
+</div>
 
 <div class="box-gadget-centrato" style="border-color:#ff9900;">
     <h3 style="color:#ff9900;">🚀 Community del Sito</h3>
@@ -116,7 +146,7 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 <div id="chi-siamo" class="page">
 <section>
     <h2>👨‍🚀 Chi Siamo</h2>
-    <img src="logo-canale.png" style="max-width:120px;margin:10px auto;" onerror="this.style.display='none'">
+    <img src="logo-canale.png" style="max-width:120px;margin:10px auto;">
     <h3>Astronomia Avanzata</h3>
     <p style="font-size:16px;line-height:1.9;text-align:left;">
     Ciao! Sono un ragazzo appassionato di astronomia. <br><br>
@@ -124,15 +154,10 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     Voglio rendere il cosmo accessibile per chiunque voglia alzare gli occhi al cielo. <br><br>
     L'universo è di tutti. Esploriamolo insieme! 🌌
     </p>
-    <!-- BOTTONE WHATSAPP SOTTO LA DESCRIZIONE -->
-    <a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank">
-        <button class="btn-whatsapp">📢 UNISCITI AL CANALE WHATSAPP</button>
-    </a>
 </section>
 </div>
 
 <script>
-    // NASCONDI SCHERMATA DI CARICAMENTO DOPO 1.5 SECONDI
     window.addEventListener('load', function(){
         setTimeout(() => {
             document.getElementById('loader-sistema').style.opacity = '0';
@@ -140,7 +165,6 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
                 document.getElementById('loader-sistema').style.display = 'none';
             }, 500);
         }, 1500);
-
         avviaNasa();
         mostraQuiz();
         avviaContatore();
@@ -148,63 +172,52 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     });
 
     function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
-
     let iscritti = localStorage.getItem('iscritti')? parseInt(localStorage.getItem('iscritti')) : 0;
-
     function apriIscrizione(){let b=document.getElementById('box-iscrizione');b.style.display=b.style.display==='none'?'block':'none';}
     function confermaIscrizione(){let e=document.getElementById('email-utente').value;if(e.includes('@')){iscritti++;localStorage.setItem('iscritti', iscritti);alert('Iscritto con successo! 🌌');document.getElementById('box-iscrizione').style.display='none';avviaContatore();}else{alert('Email non valida!');}}
-
     function salvaPost(){localStorage.setItem('posts', document.getElementById('reddit-board').innerHTML);}
     function caricaPost(){if(localStorage.getItem('posts')){document.getElementById('reddit-board').innerHTML=localStorage.getItem('posts');}}
     function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;document.getElementById('reddit-board').innerHTML+=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`;document.getElementById('chat-testo').value="";salvaPost();}
 
-    async function avviaNasa(){
-        try{
-            const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');
-            const d = await res.json();
-            document.getElementById('apod-img').src = d.url || 'https://source.unsplash.com/600x400/?galaxy';
-            document.getElementById('apod-title').innerText = d.title || "Profondità Cosmiche";
-            document.getElementById('apod-expl').innerText = d.explanation || "";
-            document.getElementById('apod-loading-status').style.display = 'none';
-            document.getElementById('apod-content-box').style.display = 'block';
-        }catch(e){
-            document.getElementById('apod-img').src = 'https://source.unsplash.com/600x400/?galaxy';
-            document.getElementById('apod-title').innerText = "Cielo Stellato";
-            document.getElementById('apod-expl').innerText = "Impossibile caricare la foto NASA oggi.";
-            document.getElementById('apod-loading-status').style.display = 'none';
-            document.getElementById('apod-content-box').style.display = 'block';
-        }
+    // GADGET NUOVO 1
+    function calcolaAnniLuce(){
+        let al = parseFloat(document.getElementById('anniLuceInput').value);
+        if(!al){alert("Inserisci un numero!");return;}
+        let km = al * 9460730472580.8;
+        document.getElementById('risultatoAnniLuce').innerHTML = `<b>${al} Anni Luce</b> = <br> ${km.toExponential(2)} Km`;
     }
 
-    function calcolaPeso(){
-        let p=parseFloat(document.getElementById('pesoTerraGadget').value);
-        if(!p){alert("Inserisci un peso!");return;}
-        document.getElementById('risultatoSpazioGadget').innerHTML=`
-        ☀️ <b>Sole:</b> ${(p*27.9).toFixed(1)} kg<br>
-        ☿️ <b>Mercurio:</b> ${(p*0.38).toFixed(1)} kg<br>
-        ♀️ <b>Venere:</b> ${(p*0.91).toFixed(1)} kg<br>
-        🌍 <b>Terra:</b> ${(p*1).toFixed(1)} kg<br>
-        🌕 <b>Luna:</b> ${(p*0.166).toFixed(1)} kg<br>
-        ♂️ <b>Marte:</b> ${(p*0.38).toFixed(1)} kg<br>
-        ♃ <b>Giove:</b> ${(p*2.53).toFixed(1)} kg<br>
-        ♄ <b>Saturno:</b> ${(p*1.07).toFixed(1)} kg<br>
-        ♅ <b>Urano:</b> ${(p*0.89).toFixed(1)} kg<br>
-        ♆ <b>Nettuno:</b> ${(p*1.14).toFixed(1)} kg
-        `;
+    // GADGET NUOVO 2
+    const oroscopi = [
+        {segno:"Orione", frase:"Oggi brillerai più delle stelle. È il momento di osare!"},
+        {segno:"Andromeda", frase:"Una nuova galassia di opportunità si apre davanti a te."},
+        {segno:"Cassiopea", frase:"Attenzione alle stelle cadenti. Esprimi un desiderio."},
+        {segno:"Pegaso", frase:"La tua creatività volerà oggi. Scrivi, disegna, crea!"}
+    ];
+    function oroscopoSpaziale(){
+        let o = oroscopi[Math.floor(Math.random()*oroscopi.length)];
+        document.getElementById('testoOroscopo').innerHTML = `<b>Sei ${o.segno}!</b><br>${o.frase}`;
     }
 
-    const frasi=['"Guardate le stelle." – Hawking','"Il cosmo è tutto ciò che è." – Sagan','"Siamo fatti di materia stellare." – Hack','"L\'universo non ha fretta." – Lao Tzu','"Due cose sono infinite: l\'universo e la stupidità umana." – Einstein'];
+    // GADGET NUOVO 3
+    function generaNomeAstronauta(){
+        let nome = document.getElementById('nomeRealeInput').value.trim();
+        if(!nome){alert("Inserisci un nome!");return;}
+        let prefissi = ["Comandante", "Capitano", "Dott.", "Pilota", "Ammiraglio"];
+        let suffissi = ["di Marte", "delle Pleiadi", "di Andromeda", "dello Spazio", "di Giove"];
+        let nomeAstro = `${prefissi[Math.floor(Math.random()*prefissi.length)]} ${nome} ${suffissi[Math.floor(Math.random()*suffissi.length)]}`;
+        document.getElementById('risultatoNomeAstro').innerText = nomeAstro;
+    }
+
+    async function avviaNasa(){try{const res=await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');const d=await res.json();document.getElementById('apod-img').src=d.url;document.getElementById('apod-title').innerText=d.title;document.getElementById('apod-expl').innerText=d.explanation;}catch(e){document.getElementById('apod-img').src='https://source.unsplash.com/600x400/?galaxy';}document.getElementById('apod-loading-status').style.display='none';document.getElementById('apod-content-box').style.display='block';}
+    function calcolaPeso(){let p=parseFloat(document.getElementById('pesoTerraGadget').value);if(!p){alert("Inserisci un peso!");return;}document.getElementById('risultatoSpazioGadget').innerHTML=`☀️ <b>Sole:</b> ${(p*27.9).toFixed(1)} kg<br>🌍 <b>Terra:</b> ${(p*1).toFixed(1)} kg<br>🌕 <b>Luna:</b> ${(p*0.166).toFixed(1)} kg<br>♃ <b>Giove:</b> ${(p*2.53).toFixed(1)} kg`;}
+    const frasi=['"Guardate le stelle." – Hawking','"Il cosmo è tutto ciò che è." – Sagan','"Siamo fatti di materia stellare." – Hack'];
     function NuovaCitazione(){document.getElementById('testoCitazione').innerText=frasi[Math.floor(Math.random()*frasi.length)];}
-
     function avviaContatore(){const cn=document.getElementById('contatore-iscritti');let tg=iscritti,cur=0,it=setInterval(()=>{if(cur<tg){cur+=Math.ceil(tg/40);cn.innerText=cur;}else{cn.innerText=tg;clearInterval(it);}},20);}
-
-    const dQuiz=[{d:"Pianeta più vicino al Sole?",o:["Venere","Mercurio","Marte"],g:1},{d:"Di che colore è Marte?",o:["Rosso","Blu","Verde"],g:0}];
-    let cQ=0,pQ=0;
-    function mostraQuiz(){let q=dQuiz[cQ];document.getElementById('quiz-domanda').innerText=q.d;let div=document.getElementById('quiz-opzioni');div.innerHTML="";q.o.forEach((o,i)=>{div.innerHTML+=`<button class="quiz-opt" onclick="rispondiQuiz(${i})">${o}</button>`;});}
+    const dQuiz=[{d:"Pianeta più vicino al Sole?",o:["Venere","Mercurio","Marte"],g:1}];
+    let cQ=0,pQ=0;function mostraQuiz(){let q=dQuiz[cQ];document.getElementById('quiz-domanda').innerText=q.d;let div=document.getElementById('quiz-opzioni');div.innerHTML="";q.o.forEach((o,i)=>{div.innerHTML+=`<button class="quiz-opt" onclick="rispondiQuiz(${i})">${o}</button>`;});}
     function rispondiQuiz(i){if(i===dQuiz[cQ].g){pQ++;alert("Esatto!")}else{alert("Sbagliato!")}cQ=(cQ+1)%dQuiz.length;document.getElementById('quiz-punti').innerText="Punteggio: "+pQ;mostraQuiz();}
-
-    let tSt=15,pSt=0,timerStInterval;
-    function startGiocoStella(){pSt=0;tSt=15;document.getElementById('btn-stella').style.display='none';document.getElementById('timer-stella').style.display='block';spostaStella();timerStInterval=setInterval(()=>{tSt--;document.getElementById('s-tempo').innerText=tSt;document.getElementById('s-punti').innerText=pSt;if(tSt<=0){clearInterval(timerStInterval);document.getElementById('stella-target').style.display='none';document.getElementById('btn-stella').style.display='inline-block';alert('Fine! Punti: '+pSt)}},1000);}
+    let tSt=15,pSt=0,timerStInterval;function startGiocoStella(){pSt=0;tSt=15;document.getElementById('btn-stella').style.display='none';document.getElementById('timer-stella').style.display='block';spostaStella();timerStInterval=setInterval(()=>{tSt--;document.getElementById('s-tempo').innerText=tSt;document.getElementById('s-punti').innerText=pSt;if(tSt<=0){clearInterval(timerStInterval);document.getElementById('stella-target').style.display='none';document.getElementById('btn-stella').style.display='inline-block';alert('Fine! Punti: '+pSt)}},1000);}
     function spostaStella(){let s=document.getElementById('stella-target');s.style.display='block';s.style.top=Math.random()*140+'px';s.style.left=Math.random()*85+'%';}
     function colpisciStella(){pSt++;spostaStella();}
 </script>
