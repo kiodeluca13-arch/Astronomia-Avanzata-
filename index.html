@@ -81,7 +81,6 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     <p>Appassionati nella Community</p>
 </section>
 
-<!-- GADGET NUOVO 1: DISTANZA ANNI LUCE -->
 <div class="box-gadget-centrato" style="border-color:#ff00ff;">
     <h3 style="color:#ff00ff;">🌌 Da Anni-Luce a Km</h3>
     <input type="number" id="anniLuceInput" placeholder="Inserisci Anni Luce">
@@ -89,13 +88,11 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     <div id="risultatoAnniLuce" style="margin-top:15px;"></div>
 </div>
 
-<!-- GADGET NUOVO 2: OROSCOPO SPAZIALE -->
 <div class="box-gadget-centrato" onclick="oroscopoSpaziale()" style="cursor:pointer;border-color:#ffcc00;">
     <h3 style="color:#ffcc00;">🔮 Oroscopo Spaziale</h3>
     <p id="testoOroscopo">Clicca per scoprire il tuo segno cosmico di oggi!</p>
 </div>
 
-<!-- GADGET NUOVO 3: NOME ASTRONAUTA -->
 <div class="box-gadget-centrato" style="border-color:#4da6ff;">
     <h3 style="color:#4da6ff;">👨‍🚀 Nome da Astronauta</h3>
     <input type="text" id="nomeRealeInput" placeholder="Inserisci il tuo nome">
@@ -170,7 +167,6 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
         avviaContatore();
         caricaPost();
     });
-
     function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
     let iscritti = localStorage.getItem('iscritti')? parseInt(localStorage.getItem('iscritti')) : 0;
     function apriIscrizione(){let b=document.getElementById('box-iscrizione');b.style.display=b.style.display==='none'?'block':'none';}
@@ -178,38 +174,11 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     function salvaPost(){localStorage.setItem('posts', document.getElementById('reddit-board').innerHTML);}
     function caricaPost(){if(localStorage.getItem('posts')){document.getElementById('reddit-board').innerHTML=localStorage.getItem('posts');}}
     function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;document.getElementById('reddit-board').innerHTML+=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`;document.getElementById('chat-testo').value="";salvaPost();}
-
-    // GADGET NUOVO 1
-    function calcolaAnniLuce(){
-        let al = parseFloat(document.getElementById('anniLuceInput').value);
-        if(!al){alert("Inserisci un numero!");return;}
-        let km = al * 9460730472580.8;
-        document.getElementById('risultatoAnniLuce').innerHTML = `<b>${al} Anni Luce</b> = <br> ${km.toExponential(2)} Km`;
-    }
-
-    // GADGET NUOVO 2
-    const oroscopi = [
-        {segno:"Orione", frase:"Oggi brillerai più delle stelle. È il momento di osare!"},
-        {segno:"Andromeda", frase:"Una nuova galassia di opportunità si apre davanti a te."},
-        {segno:"Cassiopea", frase:"Attenzione alle stelle cadenti. Esprimi un desiderio."},
-        {segno:"Pegaso", frase:"La tua creatività volerà oggi. Scrivi, disegna, crea!"}
-    ];
-    function oroscopoSpaziale(){
-        let o = oroscopi[Math.floor(Math.random()*oroscopi.length)];
-        document.getElementById('testoOroscopo').innerHTML = `<b>Sei ${o.segno}!</b><br>${o.frase}`;
-    }
-
-    // GADGET NUOVO 3
-    function generaNomeAstronauta(){
-        let nome = document.getElementById('nomeRealeInput').value.trim();
-        if(!nome){alert("Inserisci un nome!");return;}
-        let prefissi = ["Comandante", "Capitano", "Dott.", "Pilota", "Ammiraglio"];
-        let suffissi = ["di Marte", "delle Pleiadi", "di Andromeda", "dello Spazio", "di Giove"];
-        let nomeAstro = `${prefissi[Math.floor(Math.random()*prefissi.length)]} ${nome} ${suffissi[Math.floor(Math.random()*suffissi.length)]}`;
-        document.getElementById('risultatoNomeAstro').innerText = nomeAstro;
-    }
-
-    async function avviaNasa(){try{const res=await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');const d=await res.json();document.getElementById('apod-img').src=d.url;document.getElementById('apod-title').innerText=d.title;document.getElementById('apod-expl').innerText=d.explanation;}catch(e){document.getElementById('apod-img').src='https://source.unsplash.com/600x400/?galaxy';}document.getElementById('apod-loading-status').style.display='none';document.getElementById('apod-content-box').style.display='block';}
+    function calcolaAnniLuce(){let al=parseFloat(document.getElementById('anniLuceInput').value);if(!al){alert("Inserisci un numero!");return;}let km=al*9460730472580.8;document.getElementById('risultatoAnniLuce').innerHTML=`<b>${al} Anni Luce</b> = <br> ${km.toExponential(2)} Km`;}
+    const oroscopi=[{segno:"Orione",frase:"Oggi brillerai più delle stelle. È il momento di osare!"},{segno:"Andromeda",frase:"Una nuova galassia di opportunità si apre davanti a te."},{segno:"Cassiopea",frase:"Attenzione alle stelle cadenti. Esprimi un desiderio."},{segno:"Pegaso",frase:"La tua creatività volerà oggi. Scrivi, disegna, crea!"}];
+    function oroscopoSpaziale(){let o=oroscopi[Math.floor(Math.random()*oroscopi.length)];document.getElementById('testoOroscopo').innerHTML=`<b>Sei ${o.segno}!</b><br>${o.frase}`;}
+    function generaNomeAstronauta(){let nome=document.getElementById('nomeRealeInput').value.trim();if(!nome){alert("Inserisci un nome!");return;}let prefissi=["Comandante","Capitano","Dott.","Pilota","Ammiraglio"];let suffissi=["di Marte","delle Pleiadi","di Andromeda","dello Spazio","di Giove"];let nomeAstro=`${prefissi[Math.floor(Math.random()*prefissi.length)]} ${nome} ${suffissi[Math.floor(Math.random()*suffissi.length)]}`;document.getElementById('risultatoNomeAstro').innerText=nomeAstro;}
+    async function avviaNasa(){try{const res=await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');const d=await res.json();document.getElementById('apod-img').src=d.url;document.getElementById('apod-title').innerText=d.title;document.getElementById('apod-expl').innerText=d.explanation;}catch(e){document.getElementById('apod-img').src='https://source.unsplash.com/600x400/?galaxy';document.getElementById('apod-title').innerText='Cielo Stellato';document.getElementById('apod-expl').innerText='Foto NASA non disponibile oggi.';}document.getElementById('apod-loading-status').style.display='none';document.getElementById('apod-content-box').style.display='block';}
     function calcolaPeso(){let p=parseFloat(document.getElementById('pesoTerraGadget').value);if(!p){alert("Inserisci un peso!");return;}document.getElementById('risultatoSpazioGadget').innerHTML=`☀️ <b>Sole:</b> ${(p*27.9).toFixed(1)} kg<br>🌍 <b>Terra:</b> ${(p*1).toFixed(1)} kg<br>🌕 <b>Luna:</b> ${(p*0.166).toFixed(1)} kg<br>♃ <b>Giove:</b> ${(p*2.53).toFixed(1)} kg`;}
     const frasi=['"Guardate le stelle." – Hawking','"Il cosmo è tutto ciò che è." – Sagan','"Siamo fatti di materia stellare." – Hack'];
     function NuovaCitazione(){document.getElementById('testoCitazione').innerText=frasi[Math.floor(Math.random()*frasi.length)];}
