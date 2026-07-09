@@ -104,7 +104,7 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 <script>
     function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 
-    let iscritti = localStorage.getItem('iscritti')? parseInt(localStorage.getItem('iscritti')) : 0; // <-- ORA PARTE DA 0
+    let iscritti = localStorage.getItem('iscritti')? parseInt(localStorage.getItem('iscritti')) : 0;
 
     function apriIscrizione(){let b=document.getElementById('box-iscrizione');b.style.display=b.style.display==='none'?'block':'none';}
     function confermaIscrizione(){let e=document.getElementById('email-utente').value;if(e.includes('@')){iscritti++;localStorage.setItem('iscritti', iscritti);alert('Iscritto con successo! 🌌');document.getElementById('box-iscrizione').style.display='none';avviaContatore();}else{alert('Email non valida!');}}
@@ -113,7 +113,34 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     function caricaPost(){if(localStorage.getItem('posts')){document.getElementById('reddit-board').innerHTML=localStorage.getItem('posts');}}
     function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;document.getElementById('reddit-board').innerHTML+=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`;document.getElementById('chat-testo').value="";salvaPost();}
 
-    async function avviaNasa(){try{const res=await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY'),d=await res.json();document.getElementById('apod-img').src=d.url;document.getElementById('apod-title').innerText=d.title;document.getElementById('apod-expl').innerText=d.explanation;document.getElementById('apod-loading-status').style.display='none';document.getElementById('apod-content-box').style.display='block';}catch(e){document.getElementById('apod-loading-status').innerText="Errore caricamento NASA";}}
+    // NASA FIXATA - ORA FUNZIONA SICURO
+    async function avviaNasa(){
+        try{
+            const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');
+            if(!res.ok) throw new Error("Errore API");
+            const d = await res.json();
+
+            // Se è un video invece che immagine
+            if(d.media_type === 'image'){
+                document.getElementById('apod-img').src = d.url;
+                document.getElementById('apod-img').style.display = 'block';
+            } else {
+                document.getElementById('apod-img').src = 'https://source.unsplash.com/600x400/?galaxy,space';
+            }
+
+            document.getElementById('apod-title').innerText = d.title || "Profondità Cosmiche";
+            document.getElementById('apod-expl').innerText = d.explanation || "Oggi la NASA non ha una descrizione.";
+            document.getElementById('apod-loading-status').style.display = 'none';
+            document.getElementById('apod-content-box').style.display = 'block';
+        }catch(e){
+            // Immagine di backup se NASA è down
+            document.getElementById('apod-img').src = 'https://source.unsplash.com/600x400/?galaxy,space';
+            document.getElementById('apod-title').innerText = "Cielo Stellato";
+            document.getElementById('apod-expl').innerText = "Impossibile caricare la foto NASA oggi. Ti mostriamo una galassia casuale!";
+            document.getElementById('apod-loading-status').style.display = 'none';
+            document.getElementById('apod-content-box').style.display = 'block';
+        }
+    }
 
     function avviaContatore(){const cn=document.getElementById('contatore-iscritti');let tg=iscritti,cur=0,it=setInterval(()=>{if(cur<tg){cur+=Math.ceil(tg/40);cn.innerText=cur;}else{cn.innerText=tg;clearInterval(it);}},20);}
 
