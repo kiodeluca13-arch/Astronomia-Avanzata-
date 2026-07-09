@@ -4,162 +4,160 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Astronomia Avanzata - L'universo alla portata di tutti</title>
-<meta name="description" content="Community di astronomia con news, quiz, giochi e foto NASA. Scopri il cosmo da Campotosto e Poggio Cancelli.">
+<meta name="description" content="Community di astronomia con quiz, giochi, news e foto NASA. Creato da un ragazzo appassionato per portare l'astronomia a tutti.">
 <style>
 body{background:#020208 radial-gradient(1.5px 1.5px at 20px 30px,#fff,transparent) repeat;background-size:300px 300px;color:#fff;margin:0;font-family:sans-serif;overflow-x:hidden;}
 .spazio-sfondo-fisso{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;}
 .stella-cadente-nuova{position:absolute;top:-100px;width:4px;height:4px;background:#fff;border-radius:50%;animation:caduta 4s linear infinite;box-shadow:0 0 8px #fff;}
-.stella-cadente-nuova::after {content:'';position:absolute;width:80px;height:2px;background:linear-gradient(to left,#00e5ff,transparent);transform:rotate(135deg);transform-origin:top left;}
-.stella-cadente-nuova:nth-child(1){left:5%;animation-duration:3.5s;}
-.stella-cadente-nuova:nth-child(2){left:45%;animation-delay:2s;animation-duration:5s;}
-.stella-cadente-nuova:nth-child(3){left:80%;animation-delay:1s;animation-duration:4s;}
 @keyframes caduta{0%{transform:translate(0,0);opacity:0;}10%{opacity:1;}100%{transform:translate(80vh,80vh);opacity:0;}}
-.pianeta-sfondo{position:absolute;border-radius:50%;opacity:0.25;animation:ruota 25s linear infinite;background-size:200% 100%;}
-.marte-nuovo{top:20%;right:8%;width:55px;height:55px;background:radial-gradient(circle at 30% 30%,#ff4d4d,#990000,#ff4d4d);}
-.nettuno-nuovo{top:75%;left:5%;width:75px;height:75px;background:radial-gradient(circle at 30% 30%,#4da6ff,#003366,#4da6ff);animation-duration:40s;}
-.giove-nuovo{top:40%;left:10%;width:90px;height:90px;background:radial-gradient(circle at 30% 30%,#e0a86e,#8b5a2b,#e0a86e);animation-duration:35s;}
-@keyframes ruota{0%{transform:rotate(0deg);background-position:0% 50%;}100%{transform:rotate(360deg);background-position:100% 50%;}}
-section,.box-gadget-centrato{background:rgba(13,27,42,0.85);padding:20px;border-radius:12px;max-width:700px;margin:20px auto;border:1px solid #1b4965;text-align:center;backdrop-filter:blur(5px);}
+section,.box-gadget-centrato{background:rgba(13,27,42,0.85);padding:25px;border-radius:12px;max-width:750px;margin:20px auto;border:1px solid #1b4965;text-align:center;backdrop-filter:blur(5px);}
 h1,h2,h3{color:#00e5ff;}
-input,button{width:85%;padding:10px;margin:5px;border-radius:5px;border:none;background:#0d1b2a;color:#fff;box-sizing:border-box;}
+input,button{width:85%;padding:12px;margin:8px;border-radius:5px;border:none;background:#0d1b2a;color:#fff;box-sizing:border-box;}
 button{background:#00e5ff;color:#000;font-weight:bold;cursor:pointer;transition:0.3s;}
 button:hover{transform:scale(1.03);}
-nav{background:rgba(13,27,42,0.95);padding:12px;text-align:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #00e5ff;}
-nav a{color:#00e5ff;margin:0 15px;text-decoration:none;font-weight:bold;font-size:14px;}
-nav a:hover{color:#fff;}
-#preloader{position:fixed;top:0;left:0;width:100%;height:100%;background:#020208;z-index:9999;display:flex;justify-content:center;align-items:center;animation:svanisciPreloader 0.5s ease 2.5s forwards;}
-.solar-system{position:relative;width:160px;height:160px;}
-.sun{position:absolute;top:65px;left:65px;width:30px;height:30px;background:#ffcc00;border-radius:50%;box-shadow:0 0 20px #ff9900;}
-.orbit{position:absolute;border:1px dashed rgba(255,255,255,0.15);border-radius:50%;animation:spin linear infinite;}
-.orbit-1{top:45px;left:45px;width:70px;height:70px;animation-duration:3s;}
-.orbit-2{top:25px;left:25px;width:110px;height:110px;animation-duration:5s;}
-.orbit-3{top:5px;left:5px;width:150px;height:150px;animation-duration:8s;}
-.planet{position:absolute;top:0;left:50%;width:10px;height:10px;border-radius:50%;transform:translateX(-50%);}
-.p1{background:#ff4d4d;}.p2{background:#00e5ff;}.p3{background:#ffcc00;}
-@keyframes spin{100%{transform:rotate(360deg);}}
-@keyframes svanisciPreloader{0%{opacity:1;visibility:visible;}100%{opacity:0;visibility:hidden;display:none;}}
-.btn-social{color:#fff;font-size:13px;width:auto;padding:10px 18px;border-radius:20px;text-decoration:none;display:inline-block;margin:5px;font-weight:bold;}
-.btn-youtube{background:#ff0000;box-shadow:0 0 10px rgba(255,0,0,0.3);}
-.btn-whatsapp{background:#25d366;box-shadow:0 0 10px rgba(37,211,102,0.3);}
-.btn-sito{background:#00e5ff;color:#000;box-shadow:0 0 10px rgba(0,229,255,0.3);animation:pulse 2s infinite;}
+nav{background:rgba(13,27,42,0.95);padding:15px;text-align:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #00e5ff;}
+nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-size:15px;}
+nav a:hover{color:#fff;border-bottom:2px solid #00e5ff;}
+.btn-sito{background:#00e5ff;color:#000;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
-#reddit-board{max-height:250px;overflow-y:auto;text-align:left;margin:15px auto;width:90%;}
-.reddit-post{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;margin-bottom:12px;animation:fadeIn 0.5s;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-.post-header{font-size:11px;color:#888;margin-bottom:6px;}
-.post-user{color:#ffcc00;font-weight:bold;}
-.post-content{font-size:14px;color:#eee;margin-bottom:10px;}
-.post-actions{display:flex;gap:15px;align-items:center;font-size:12px;}
-.vote-btn{background:none;width:auto;padding:0;margin:0;color:#aaa;font-size:14px;cursor:pointer;}
-.vote-count{font-weight:bold;color:#00e5ff;min-width:15px;text-align:center;}
-.reply-link{color:#ff007f;cursor:pointer;font-weight:bold;}
-.quiz-opt{background:#1a3a5f;color:#fff;margin:5px auto;width:90%;display:block;text-align:left;padding:8px;cursor:pointer;border-radius:5px;}
+#reddit-board{max-height:300px;overflow-y:auto;text-align:left;margin:15px auto;width:90%;}
+.reddit-post{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;margin-bottom:12px;}
+.quiz-opt{background:#1a3a5f;color:#fff;margin:8px auto;width:90%;display:block;text-align:left;padding:12px;cursor:pointer;border-radius:5px;border:1px solid #00e5ff;}
 .quiz-opt:hover{background:#00e5ff;color:#000;}
-#area-gioco{position:relative;width:100%;height:150px;background:#050c14;border-radius:8px;margin-top:10px;overflow:hidden;}
-#stella-target{position:absolute;width:25px;height:25px;background:#fff;border-radius:50%;box-shadow:0 0 15px #fff;cursor:pointer;display:none;line-height:25px;text-align:center;font-size:18px;}
+#area-gioco{position:relative;width:100%;height:180px;background:#050c14;border-radius:8px;margin-top:10px;overflow:hidden;border:1px solid #00e5ff;}
+#stella-target{position:absolute;width:30px;height:30px;background:#fff;border-radius:50%;box-shadow:0 0 15px #fff;cursor:pointer;display:none;line-height:30px;text-align:center;font-size:20px;}
 .page{display:none;}
 .page.active{display:block;}
-.titolo-sezione{border-left:4px solid #00e5ff;padding-left:10px;text-align:left;}
+.logo-header{max-width:160px;height:auto;display:block;margin:0 auto 15px auto;filter:drop-shadow(0 0 10px #00e5ff);}
 </style>
 </head>
 <body>
-<div id="preloader"><div class="solar-system"><div class="sun"></div><div class="orbit orbit-1"><div class="planet p1"></div></div><div class="orbit orbit-2"><div class="planet p2"></div></div><div class="orbit orbit-3"><div class="planet p3"></div></div></div></div>
-<div class="spazio-sfondo-fisso"><div class="stella-cadente-nuova"></div><div class="stella-cadente-nuova"></div><div class="stella-cadente-nuova"></div><div class="pianeta-sfondo marte-nuovo"></div><div class="pianeta-sfondo nettuno-nuovo"></div><div class="pianeta-sfondo giove-nuovo"></div></div>
+<div class="spazio-sfondo-fisso"><div class="stella-cadente-nuova"></div><div class="stella-cadente-nuova" style="left:50%;animation-delay:2s;"></div></div>
 
-<header style="text-align:center;padding:20px 10px;">
-<img src="logo canale.png" alt="Logo Astronomia Avanzata" style="max-width:150px;height:auto;display:block;margin:0 auto 15px auto;" onerror="this.style.display='none'">
-<h1 style="margin:0;">Astronomia Avanzata</h1><p style="margin:5px 0 20px 0;">L'universo alla portata di tutti</p>
-<button class="btn-social btn-sito" onclick="apriIscrizione()">✨ ISCRIVITI AL SITO</button>
-<a href="https://youtube.com" target="_blank" class="btn-social btn-youtube">🔴 YOUTUBE</a>
-<a href="https://whatsapp.com" target="_blank" class="btn-social btn-whatsapp">🟢 WHATSAPP</a>
+<header style="text-align:center;padding:25px 10px;">
+<img src="logo canale.png" alt="Logo Astronomia Avanzata" class="logo-header" onerror="this.style.display='none'">
+<h1 style="margin:5px 0;">Astronomia Avanzata</h1>
+<p style="margin:0 0 20px 0;">L'universo alla portata di tutti</p>
+<button class="btn-sito" onclick="apriIscrizione()">✨ ISCRIVITI AL SITO</button>
 </header>
 
 <nav>
 <a href="#" onclick="showPage('home')">🏠 Home</a>
-<a href="#" onclick="showPage('sistema')">🪐 Sistema Solare</a>
-<a href="#" onclick="showPage('deep')">🌌 Deep Space</a>
-<a href="#" onclick="showPage('curiosita')">💡 Curiosità</a>
+<a href="#" onclick="showPage('giochi')">🕹️ Giochi</a>
+<a href="#" onclick="showPage('chi-siamo')">👨‍🚀 Chi Siamo</a>
 </nav>
 
 <div id="box-iscrizione" class="box-gadget-centrato" style="border-color:#00e5ff; display:none;">
-    <h3>Diventa un Membro! 🌌</h3><input type="email" id="email-utente" placeholder="Inserisci la tua Email" style="width:70%;"><button onclick="confermaIscrizione()" style="width:25%; background:#00e5ff; color:#000;">Unisciti</button>
+    <h3>Diventa un Membro! 🌌</h3>
+    <input type="email" id="email-utente" placeholder="Inserisci la tua Email">
+    <button onclick="confermaIscrizione()">Unisciti alla Community</button>
 </div>
 
+<!-- PAGINA 1: HOME -->
 <div id="home" class="page active">
-<section><h2>Chi siamo</h2><p>Rendiamo l'astronomia accessibile con approfondimenti scientifici dedicati al cosmo. Osserviamo da Campotosto e Poggio Cancelli.</p><h3 id="contatore-iscritti">0</h3><p>Appassionati nella Community</p></section>
-
-<section style="border-color:#00e5ff;">
-    <h2 class="titolo-sezione">🕹️ Sala Giochi Stellare</h2>
-    <div style="background:rgba(0,0,0,0.2);padding:12px;border-radius:8px;margin-bottom:15px;">
-        <h3 style="font-size:15px;margin:0 0 5px 0;color:#ffcc00;">1. Quiz dell'Astronauta</h3>
-        <p id="quiz-domanda" style="font-size:13px;margin:5px 0;">Caricamento...</p>
-        <div id="quiz-opzioni"></div>
-        <p id="quiz-punti" style="font-size:12px;color:#00e5ff;margin:5px 0;font-weight:bold;">Punteggio: 0</p>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);padding:12px;border-radius:8px;">
-        <h3 style="font-size:15px;margin:0 0 5px 0;color:#ff007f;">2. Acchiappa la Stella Cadente</h3>
-        <button onclick="startGiocoStella()" id="btn-stella" style="background:#ff007f;color:#fff;width:60%;padding:5px;">Inizia Gioco</button>
-        <p id="timer-stella" style="font-size:12px;margin:5px 0;display:none;">Tempo: <span id="s-tempo">15</span>s | Punti: <span id="s-punti">0</span> | Record: <span id="s-record">0</span></p>
-        <div id="area-gioco"><div id="stella-target" onclick="colpisciStella()">⭐</div></div>
-    </div>
+<section>
+    <h2>Benvenuto in Astronomia Avanzata</h2>
+    <p>Il tuo portale per esplorare l'universo. Qui trovi news, foto NASA, curiosità e strumenti per appassionati di spazio.</p>
+    <h3 id="contatore-iscritti">0</h3>
+    <p>Appassionati nella Community</p>
 </section>
 
-<div class="box-gadget-centrato" style="border-color:#ff9900;"><h3 style="color:#ff9900;margin:0;">🚀 Community del Sito</h3><div id="reddit-board"></div><div style="background:rgba(0,0,0,0.2);padding:10px;border-radius:8px;"><input type="text" id="chat-nome" placeholder="u/Nome" style="width:30%;display:inline-block;margin-right:2%;"><input type="text" id="chat-testo" placeholder="Scrivi alla community..." style="width:52%;display:inline-block;"><button onclick="creaPostReddit()" style="width:85%;margin-top:5px;background:#ff9900;">Pubblica</button></div></div>
+<div class="box-gadget-centrato" style="border-color:#ff9900;">
+    <h3 style="color:#ff9900;">🚀 Community del Sito</h3>
+    <div id="reddit-board"></div>
+    <div>
+        <input type="text" id="chat-nome" placeholder="u/Nome" style="width:30%;display:inline-block;margin-right:2%;">
+        <input type="text" id="chat-testo" placeholder="Scrivi alla community..." style="width:52%;display:inline-block;">
+        <button onclick="creaPostReddit()" style="width:85%;margin-top:8px;background:#ff9900;">Pubblica</button>
+    </div>
+</div>
 
 <div class="box-gadget-centrato"><h3>Quanto pesi nel Sistema Solare? 🚀</h3><input type="number" id="pesoTerraGadget" placeholder="Peso in kg"><button onclick="calcolaPeso()">Calcola</button><div id="risultatoSpazioGadget" style="margin-top:10px;text-align:left;line-height:1.8;"></div></div>
 
-<div class="box-gadget-centrato" onclick="NuovaCitazione()" style="cursor:pointer;border-color:#4da6ff;"><p id="testoCitazione" style="font-style:italic;margin:0;font-size:14px;">"Siamo fatti di materia stellare che brucia." – M. Hack</p><span style="font-size:10px;color:#aaa;margin-top:5px;display:block;">👉 Clicca qui per cambiare citazione</span></div>
+<div class="box-gadget-centrato" onclick="NuovaCitazione()" style="cursor:pointer;border-color:#4da6ff;"><p id="testoCitazione" style="font-style:italic;">"Siamo fatti di materia stellare che brucia." – M. Hack</p><span style="font-size:10px;color:#aaa;">👉 Clicca per nuova citazione</span></div>
 
-<div class="box-gadget-centrato"><h5>Tempo della Sonda Voyager 1 nello Spazio:</h5><p id="contatoreVoyagerLive" style="font-family:monospace;font-weight:bold;font-size:16px;"></p></div>
+<section id="nasa-apod"><h2>Foto del Giorno NASA</h2><div id="apod-loading-status">Caricamento...</div><div id="apod-content-box" style="display:none;"><img id="apod-img" src="" style="max-width:100%;border-radius:8px;"><h3 id="apod-title"></h3><p id="apod-expl" style="font-size:12px;text-align:left;"></p></div></section>
 </div>
 
-<div id="sistema" class="page">
-<section><h2 class="titolo-sezione">🪐 Sistema Solare</h2><p id="curiosita-sistema" style="font-size:15px;">Caricamento curiosità...</p></section>
-<section id="nasa-apod"><h2>Foto del Giorno NASA</h2><div id="apod-loading-status">Caricamento...</div><div id="apod-content-box" style="display:none;"><img id="apod-img" src="" alt="NASA" style="max-width:100%;border-radius:8px;"><h3 id="apod-title" style="font-size:16px;"></h3><p id="apod-expl" style="font-size:12px;text-align:left;"></p></div></section>
+<!-- PAGINA 2: GIOCHI -->
+<div id="giochi" class="page">
+<section style="border-color:#00e5ff;">
+    <h2>🕹️ Sala Giochi Stellare</h2>
+    <p>Metti alla prova le tue conoscenze spaziali e la tua velocità!</p>
+
+    <div style="background:rgba(0,0,0,0.2);padding:15px;border-radius:8px;margin-bottom:20px;">
+        <h3 style="color:#ffcc00;">1. Quiz dell'Astronauta</h3>
+        <p id="quiz-domanda">Caricamento domanda...</p>
+        <div id="quiz-opzioni"></div>
+        <p id="quiz-punti" style="color:#00e5ff;font-weight:bold;">Punteggio: 0</p>
+    </div>
+
+    <div style="background:rgba(0,0,0,0.2);padding:15px;border-radius:8px;">
+        <h3 style="color:#ff007f;">2. Acchiappa la Stella Cadente</h3>
+        <p>Clicca sulla stella più volte possibile in 15 secondi!</p>
+        <button onclick="startGiocoStella()" id="btn-stella" style="background:#ff007f;">Inizia Gioco</button>
+        <p id="timer-stella" style="display:none;">Tempo: <span id="s-tempo">15</span>s | Punti: <span id="s-punti">0</span> | Record: <span id="s-record">0</span></p>
+        <div id="area-gioco"><div id="stella-target" onclick="colpisciStella()">⭐</div></div>
+    </div>
+</section>
 </div>
 
-<div id="deep" class="page">
-<section><h2 class="titolo-sezione">🌌 Deep Space</h2><p id="curiosita-deep" style="font-size:15px;">Caricamento curiosità...</p></section>
-<section><h2>📡 News dall'Universo</h2><div style="background:rgba(0,0,0,0.2);padding:12px;border-radius:8px;text-align:left;"><h3 id="news-titolo" style="margin:0 0 5px 0;font-size:16px;"></h3><p id="news-testo" style="margin:0;font-size:14px;opacity:0.9;"></p></div></section>
-</div>
-
-<div id="curiosita" class="page">
-<section><h2 class="titolo-sezione">💡 Curiosità del Giorno</h2><p id="curiosita-giorno" style="font-size:18px;line-height:1.6;"></p></section>
-<section><h2>🛸 Misteri dello Spazio</h2><p id="mistero-spazio" style="font-size:15px;"></p></section>
+<!-- PAGINA 3: CHI SIAMO -->
+<div id="chi-siamo" class="page">
+<section>
+    <h2>👨‍🚀 Chi Siamo</h2>
+    <img src="logo canale.png" style="max-width:120px;margin:10px auto;" onerror="this.style.display='none'">
+    <h3>Astronomia Avanzata</h3>
+    <p style="font-size:16px;line-height:1.9;text-align:left;">
+    Ciao! Sono un ragazzo appassionato di astronomia. <br><br>
+    Ho creato <b>Astronomia Avanzata</b> con un unico obiettivo: <b>portare l'astronomia a tutti</b>.
+    Voglio rendere il cosmo accessibile, comprensibile e appassionante per chiunque voglia alzare gli occhi al cielo. <br><br>
+    Qui troverai news verificate, foto dalla NASA, quiz, giochi e una community di persone che come me guardano alle stelle e si fanno domande. <br><br>
+    L'universo è di tutti. Esploriamolo insieme! 🌌
+    </p>
+</section>
 </div>
 
 <script>
-    function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+    function showPage(id){
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
     let iscritti = localStorage.getItem('iscritti')? parseInt(localStorage.getItem('iscritti')) : 10000;
     function apriIscrizione(){let b=document.getElementById('box-iscrizione');b.style.display=b.style.display==='none'?'block':'none';}
-    function confermaIscrizione(){let e=document.getElementById('email-utente').value;if(e.includes('@')){iscritti++;localStorage.setItem('iscritti', iscritti);alert('Iscritto con successo! 🌌 Benvenuto nella community!');document.getElementById('box-iscrizione').style.display='none';avviaContatore();}else{alert('Email non valida!');}}
+    function confermaIscrizione(){let e=document.getElementById('email-utente').value;if(e.includes('@')){iscritti++;localStorage.setItem('iscritti', iscritti);alert('Iscritto con successo! 🌌 Benvenuto!');document.getElementById('box-iscrizione').style.display='none';avviaContatore();}else{alert('Email non valida!');}}
+
     function salvaPost(){localStorage.setItem('posts', document.getElementById('reddit-board').innerHTML);}
     function caricaPost(){if(localStorage.getItem('posts')){document.getElementById('reddit-board').innerHTML=localStorage.getItem('posts');}}
-    function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;let b=document.getElementById('reddit-board'),u=n.startsWith('u/')?n:'u/'+n,p=u.replace('u/','').replace(/['"]/g,'');b.innerHTML+=`<div class="reddit-post"><div class="post-header">Inviato da <span class="post-user">${u}</span></div><div class="post-content">${t}</div><div class="post-actions"><button class="vote-btn" onclick="vota(this,1)">⬆️</button><span class="vote-count">1</span><button class="vote-btn" onclick="vota(this,-1)">⬇️</button><span class="reply-link" onclick="avviaRisposta('${p}')">💬 Rispondi</span></div></div>`;document.getElementById('chat-testo').value="";salvaPost();}
-    function vota(b,v){let p=b.parentElement,s=p.querySelector('.vote-count');s.innerText=parseInt(s.innerText)+v;b.style.opacity="0.5";b.disabled=true;salvaPost();}
-    function avviaRisposta(u){let i=document.getElementById('chat-testo');i.value=`@${u} `;i.focus();}
-    async function avviaNasa(){try{const res=await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY'),d=await res.json();if(d.media_type==="image"&&d.url){document.getElementById('apod-img').src=d.url;}else{document.getElementById('apod-img').src="https://source.unsplash.com/600x400/?nebula";}document.getElementById('apod-title').innerText=d.title||"Profondità Cosmiche";document.getElementById('apod-expl').innerText=d.explanation||"";document.getElementById('apod-loading-status').style.display='none';document.getElementById('apod-content-box').style.display='block';}catch(e){document.getElementById('apod-loading-status').innerText="Impossibile caricare foto NASA oggi";}
-    }
-    function calcolaPeso(){let p=parseFloat(document.getElementById('pesoTerraGadget').value);if(!p||p<=0)return;document.getElementById('risultatoSpazioGadget').innerHTML=`🌕 <b>Luna:</b> ${(p*0.166).toFixed(1)} kg<br>☄️ <b>Mercurio:</b> ${(p*0.378).toFixed(1)} kg<br>🪐 <b>Marte:</b> ${(p*0.379).toFixed(1)} kg<br>🪐 <b>Saturno:</b> ${(p*1.065).toFixed(1)} kg<br>🔵 <b>Nettuno:</b> ${(p*1.137).toFixed(1)} kg<br>⚡ <b>Giove:</b> ${(p*2.528).toFixed(1)} kg`; }
-    const frasi=['"Guardate le stelle." – S. Hawking','"L\'universo non ha fretta." – Lao Tzu','"Il cosmo è tutto ciò che è." – C. Sagan','"Siamo fatti di materia stellare." – M. Hack','"Due cose sono infinite: l\'universo e la stupidità umana." – A. Einstein','"La scienza è magia che funziona." – K. Vonnegut','"Siamo polvere di stelle." – C. Sagan','"L\'astronomia costringe l\'anima a guardare in alto." – Platone','"Nel cosmo c\'è tutto ciò che c\'è." – C. Sagan','"Il cielo notturno è un universo di meraviglie." – G. Galilei','"Esploriamo per sapere chi siamo." – C. Sagan','"Le stelle appartengono a tutti." – C. Sagan','"Siamo un modo per il cosmo di conoscersi." – C. Sagan','"L\'immaginazione ci porta spesso in mondi che non sono mai esistiti." – C. Sagan','"La Terra è un granello di polvere sospeso in un raggio di sole." – C. Sagan'];
+    function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;document.getElementById('reddit-board').innerHTML+=`<div class="reddit-post"><b style="color:#ffcc00;">${n}</b><p>${t}</p></div>`;document.getElementById('chat-testo').value="";salvaPost();}
+
+    async function avviaNasa(){try{const res=await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY'),d=await res.json();document.getElementById('apod-img').src=d.url||"https://source.unsplash.com/600x400/?space";document.getElementById('apod-title').innerText=d.title||"Profondità Cosmiche";document.getElementById('apod-expl').innerText=d.explanation||"";document.getElementById('apod-loading-status').style.display='none';document.getElementById('apod-content-box').style.display='block';}catch(e){document.getElementById('apod-loading-status').innerText="Impossibile caricare foto NASA";}}
+
+    function calcolaPeso(){let p=parseFloat(document.getElementById('pesoTerraGadget').value);if(!p)return;document.getElementById('risultatoSpazioGadget').innerHTML=`🌕 <b>Luna:</b> ${(p*0.166).toFixed(1)} kg<br>🪐 <b>Marte:</b> ${(p*0.379).toFixed(1)} kg<br>⚡ <b>Giove:</b> ${(p*2.528).toFixed(1)} kg`;}
+
+    const frasi=['"Guardate le stelle." – Hawking','"Il cosmo è tutto ciò che è." – Sagan','"Siamo fatti di materia stellare." – Hack','"L\'universo non ha fretta." – Lao Tzu'];
     function NuovaCitazione(){document.getElementById('testoCitazione').innerText=frasi[Math.floor(Math.random()*frasi.length)];}
-    setInterval(()=>{let anni=((new Date().getTime()-new Date("September 5, 1977").getTime())/(1000*60*60*24*365.25)).toFixed(8);document.getElementById('contatoreVoyagerLive').innerText=anni+" anni";},100);
+
     function avviaContatore(){const cn=document.getElementById('contatore-iscritti');let tg=iscritti,cur=0,it=setInterval(()=>{if(cur<tg){cur+=Math.ceil(tg/40);cn.innerText=cur;}else{cn.innerText=tg;clearInterval(it);}},20);}
-    const notizie=[{t:"Rilevato Lampo Gamma",d:"Un potentissimo lampo gamma proveniente da una galassia a 5 miliardi di anni luce."}, {t:"Attività Solare in Aumento",d:"Nuove macchie solari stanno generando aurore."}, {t:"Sonda in Avvicinamento su Marte",d:"La telemetria conferma la correzione di rotta."}, {t:"Scoperta Esopianeta Oceanico",d:"James Webb rileva vapore acqueo nell'atmosfera."}];
-    const curiositaSistema=["Giove è così grande che tutti gli altri pianeti ci starebbero dentro.", "Su Venere un giorno dura più di un anno.", "Saturno galleggerebbe nell'acqua.", "Mercurio ha code come una cometa."];
-    const curiositaDeep=["Andromeda si sta scontrando con la Via Lattea.", "Ci sono più stelle che granelli di sabbia sulla Terra.", "Sagittarius A* è il buco nero al centro della Via Lattea.", "La Nebulosa Testa di Cavallo è a 1300 anni luce."];
-    const curiositaGiorno=["La luce del Sole impiega 8 minuti per arrivare sulla Terra.", "Nello spazio non c'è suono.", "Il diamante più grande è grande quanto la Terra.", "Un giorno su Urano dura 42 anni terrestri."];
-    const misteri=["Cosa c'è oltre l'universo osservabile?", "La materia oscura compone il 27% dell'universo.", "I buchi neri evaporano con la radiazione di Hawking."];
-    let giorno = new Date().getDate();
-    document.getElementById('news-titolo').innerText="📡 "+notizie[giorno%notizie.length].t;
-    document.getElementById('news-testo').innerText=notizie[giorno%notizie.length].d;
-    document.getElementById('curiosita-sistema').innerText=curiositaSistema[giorno%curiositaSistema.length];
-    document.getElementById('curiosita-deep').innerText=curiositaDeep[giorno%curiositaDeep.length];
-    document.getElementById('curiosita-giorno').innerText=curiositaGiorno[giorno%curiositaGiorno.length];
-    document.getElementById('mistero-spazio').innerText=misteri[giorno%misteri.length];
-    const dQuiz=[{d:"Qual è il pianeta più vicino al Sole?",o:["Venere","Mercurio","Marte"],g:1},{d:"Quale pianeta ha gli anelli più maestosi?",o:["Giove","Urano","Saturno"],g:2},{d:"Di che colore è Marte?",o:["Rosso","Blu","Verde"],g:0},{d:"Quante lune ha Giove?",o:["4","67","12"],g:1},{d:"Cos'è una Supernova?",o:["Stella che esplode","Buco nero","Cometa"],g:0}];
+
+    const dQuiz=[{d:"Qual è il pianeta più vicino al Sole?",o:["Venere","Mercurio","Marte"],g:1},{d:"Di che colore è Marte?",o:["Rosso","Blu","Verde"],g:0},{d:"Quante lune ha la Terra?",o:["0","1","2"],g:1}];
     let cQ=0,pQ=0;
     function mostraQuiz(){let q=dQuiz[cQ];document.getElementById('quiz-domanda').innerText=q.d;let div=document.getElementById('quiz-opzioni');div.innerHTML="";q.o.forEach((o,i)=>{div.innerHTML+=`<button class="quiz-opt" onclick="rispondiQuiz(${i})">${o}</button>`;});}
-    function rispondiQuiz(i){if(i===dQuiz[cQ].g){pQ++;alert("Esatto! 🎉");}else{alert("Sbagliato! La risposta era: "+dQuiz[cQ].o[dQuiz[cQ].g]);}cQ=(cQ+1)%dQuiz.length;document.getElementById('quiz-punti').innerText="Punteggio: "+pQ;mostraQuiz();}
+    function rispondiQuiz(i){if(i===dQuiz[cQ].g){pQ++;alert("Esatto! 🎉");}else{alert("Sbagliato! Era: "+dQuiz[cQ].o[dQuiz[cQ].g]);}cQ=(cQ+1)%dQuiz.length;document.getElementById('quiz-punti').innerText="Punteggio: "+pQ;mostraQuiz();}
+
     let tSt=15,pSt=0,timerStInterval,record=localStorage.getItem('record')?parseInt(localStorage.getItem('record')):0;
-    function startGiocoStella(){pSt=0;tSt=15;document.getElementById('btn-stella').style.display='none';document.getElementById('timer-stella').style.display='block';document.getElementById('s-punti').innerText=pSt;document.getElementById('s-record').innerText=record;document.getElementById('s-tempo').innerText=tSt;spostaStella();timerStInterval=setInterval(()=>{tSt--;document.getElementById('s-tempo').innerText=tSt;if(tSt<=0){clearInterval(timerStInterval);document.getElementById('stella-target').style.display='none';document.getElementById('btn-stella').style.display='inline-block';if(pSt>record){record=pSt;localStorage.setItem('record',record);alert('NUOVO RECORD! '+pSt+' punti! 🏆');}else{alert('Tempo scaduto! Punteggio finale: '+pSt);}}
+    function startGiocoStella(){pSt=0;tSt=15;document.getElementById('btn-stella').style.display='none';document.getElementById('timer-stella').style.display='block';document.getElementById('s-record').innerText=record;spostaStella();timerStInterval=setInterval(()=>{tSt--;document.getElementById('s-tempo').innerText=tSt;document.getElementById('s-punti').innerText=pSt;if(tSt<=0){clearInterval(timerStInterval);document.getElementById('stella-target').style.display='none';document.getElementById('btn-stella').style.display='inline-block';if(pSt>record){record=pSt;localStorage.setItem('record',record);alert('NUOVO RECORD! '+pSt+' punti! 🏆');}else{alert('Fine! Punteggio: '+pSt)}}},1000);}
+    function spostaStella(){let s=document.getElementById('stella-target');s.style.display='block';s.style.top=Math.random()*140+'px';s.style.left=Math.random()*85+'%';}
+    function colpisciStella(){pSt++;spostaStella();}
+
+    window.addEventListener('load', function(){
+        avviaNasa();
+        mostraQuiz();
+        avviaContatore();
+        caricaPost();
+        document.getElementById('s-record').innerText=record;
+    });
+</script>
+</body></html>
