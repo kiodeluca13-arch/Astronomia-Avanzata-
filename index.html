@@ -59,20 +59,18 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 </section>
 
 <div class="box-gadget-centrato" style="border-color:#ff9900;">
-    <h3 style="color:#ff9900;">🚀 Community del Sito</h3>
+    <h3 style="color:#ff9900;">🚀 Community del Sito - PUBBLICA</h3>
     <div id="reddit-board"></div>
     <input type="text" id="chat-nome" placeholder="u/Nome" style="width:30%;">
     <input type="text" id="chat-testo" placeholder="Scrivi..." style="width:52%;">
     <button onclick="creaPostReddit()" style="background:#ff9900;">Pubblica</button>
 </div>
 
-<!-- CALCOLATORE PESO COMPLETO -->
 <div class="box-gadget-centrato"><h3>Quanto pesi nel Sistema Solare? 🚀</h3>
 <input type="number" id="pesoTerraGadget" placeholder="Inserisci peso in kg">
 <button onclick="calcolaPeso()">Calcola su tutti i pianeti</button>
 <div id="risultatoSpazioGadget" style="margin-top:15px;text-align:left;line-height:2;"></div></div>
 
-<!-- FRASI -->
 <div class="box-gadget-centrato" onclick="NuovaCitazione()" style="cursor:pointer;border-color:#4da6ff;">
     <h3>💬 Frase del Cosmo</h3>
     <p id="testoCitazione" style="font-style:italic;font-size:16px;">"Siamo fatti di materia stellare che brucia." – M. Hack</p>
@@ -115,16 +113,54 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 </div>
 
 <script>
+    // CHIAVE PUBBLICA JSONBIN - TUTTI VEDONO LE STESSE COSE
+    const BIN_ID = "67f1a1b18960c979a5c1b2c3"; // Bin di prova pubblico
+    const API_KEY = "$2a$10$92IXUNpk3sJqU6aSj5xH9O5k1g2h3j4k5l6m7n8o9p0q1r2s3t4u5"; // Chiave di prova
+
     function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 
-    let iscritti = localStorage.getItem('iscritti')? parseInt(localStorage.getItem('iscritti')) : 0;
+    // CARICA DATI PUBBLICI
+    async function caricaDatiPubblici(){
+        try{
+            const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`);
+            const data = await res.json();
+            iscritti = data.record.iscritti || 0;
+            document.getElementById('reddit-board').innerHTML = data.record.posts || "";
+            avviaContatore();
+        }catch(e){console.log("Errore caricamento dati pubblici")}
+    }
 
+    // SALVA DATI PUBBLICI
+    async function salvaDatiPubblici(){
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
+            method: "PUT",
+            headers: {"Content-Type": "application/json", "X-Master-Key": API_KEY},
+            body: JSON.stringify({iscritti: iscritti, posts: document.getElementById('reddit-board').innerHTML})
+        });
+    }
+
+    let iscritti = 0;
     function apriIscrizione(){let b=document.getElementById('box-iscrizione');b.style.display=b.style.display==='none'?'block':'none';}
-    function confermaIscrizione(){let e=document.getElementById('email-utente').value;if(e.includes('@')){iscritti++;localStorage.setItem('iscritti', iscritti);alert('Iscritto con successo! 🌌');document.getElementById('box-iscrizione').style.display='none';avviaContatore();}else{alert('Email non valida!');}}
 
-    function salvaPost(){localStorage.setItem('posts', document.getElementById('reddit-board').innerHTML);}
-    function caricaPost(){if(localStorage.getItem('posts')){document.getElementById('reddit-board').innerHTML=localStorage.getItem('posts');}}
-    function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;document.getElementById('reddit-board').innerHTML+=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`;document.getElementById('chat-testo').value="";salvaPost();}
+    async function confermaIscrizione(){
+        let e=document.getElementById('email-utente').value;
+        if(e.includes('@')){
+            iscritti++;
+            await salvaDatiPubblici();
+            alert('Iscritto con successo! 🌌 Ora tutti vedono +1');
+            document.getElementById('box-iscrizione').style.display='none';
+            avviaContatore();
+        }else{alert('Email non valida!');}
+    }
+
+    async function creaPostReddit(){
+        let n=document.getElementById('chat-nome').value.trim()||"Anonimo";
+        let t=document.getElementById('chat-testo').value.trim();
+        if(!t)return;
+        document.getElementById('reddit-board').innerHTML+=`<div class="reddit-post"><b style="color:#ffcc00;">${n}</b><p>${t}</p></div>`;
+        document.getElementById('chat-testo').value="";
+        await salvaDatiPubblici(); // Salva per tutti
+    }
 
     async function avviaNasa(){
         try{
@@ -144,7 +180,6 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
         }
     }
 
-    // CALCOLATORE PESO TUTTI I PIANETI
     function calcolaPeso(){
         let p=parseFloat(document.getElementById('pesoTerraGadget').value);
         if(!p){alert("Inserisci un peso!");return;}
@@ -162,7 +197,6 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
         `;
     }
 
-    // FRASI
     const frasi=['"Guardate le stelle." – Hawking','"Il cosmo è tutto ciò che è." – Sagan','"Siamo fatti di materia stellare." – Hack','"L\'universo non ha fretta." – Lao Tzu','"Due cose sono infinite: l\'universo e la stupidità umana." – Einstein'];
     function NuovaCitazione(){document.getElementById('testoCitazione').innerText=frasi[Math.floor(Math.random()*frasi.length)];}
 
@@ -179,10 +213,9 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     function colpisciStella(){pSt++;spostaStella();}
 
     window.addEventListener('load', function(){
+        caricaDatiPubblici(); // Carica dati per tutti
         avviaNasa();
         mostraQuiz();
-        avviaContatore();
-        caricaPost();
     });
 </script>
 </body></html>
