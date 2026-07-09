@@ -7,18 +7,15 @@
 <style>
 body{background:#020208 radial-gradient(1.5px 1.5px at 20px 30px,#fff,transparent) repeat;background-size:300px 300px;color:#fff;margin:0;font-family:sans-serif;overflow-x:hidden;}
 .spazio-sfondo-fisso{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;}
-.stella-cadente-nuova{position:absolute;top:-100px;left:10%;width:2px;height:2px;background:#fff;border-radius:50%;animation:caduta 3s linear infinite;box-shadow:0 0 6px #fff;}
-.stella-cadente-nuova::before{content:'';position:absolute;top:0;left:0;width:100px;height:1px;background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);transform:translateX(-100px) rotate(45deg);}
-.stella-cadente-nuova:nth-child(2){left:40%;animation-delay:1s;}
-.stella-cadente-nuova:nth-child(3){left:70%;animation-delay:2s;}
-@keyframes caduta{0%{transform:translate(0,0) rotate(45deg);opacity:0;}10%{opacity:1;}100%{transform:translate(80vw,80vh) rotate(45deg);opacity:0;}}
+.stella-cadente-nuova{position:absolute;top:-100px;width:4px;height:4px;background:#fff;border-radius:50%;animation:caduta 4s linear infinite;box-shadow:0 0 8px #fff;}
+@keyframes caduta{0%{transform:translate(0,0);opacity:0;}10%{opacity:1;}100%{transform:translate(80vh,80vh);opacity:0;}}
 section,.box-gadget-centrato{background:rgba(13,27,42,0.85);padding:25px;border-radius:12px;max-width:750px;margin:20px auto;border:1px solid #1b4965;text-align:center;backdrop-filter:blur(5px);}
 h1,h2,h3{color:#00e5ff;}
 input,button{width:85%;padding:12px;margin:8px;border-radius:5px;border:none;background:#0d1b2a;color:#fff;box-sizing:border-box;}
 button{background:#00e5ff;color:#000;font-weight:bold;cursor:pointer;transition:0.3s;}
 button:hover{transform:scale(1.03);}
 .btn-sito{background:#00e5ff;color:#000;animation:pulse 2s infinite;}
-.btn-whatsapp{background:#25D366;color:#fff;margin-top:10px;} /* BOTTONE VERDE WHATSAPP */
+.btn-whatsapp{background:#25D366;color:#fff;margin-top:15px;} /* VERDE WHATSAPP */
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 nav{background:rgba(13,27,42,0.95);padding:15px;text-align:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #00e5ff;}
 nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-size:15px;}
@@ -29,8 +26,9 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 #stella-target{position:absolute;width:30px;height:30px;background:#fff;border-radius:50%;box-shadow:0 0 15px #fff;cursor:pointer;display:none;line-height:30px;text-align:center;font-size:20px;}
 .page{display:none;}
 .page.active{display:block;}
-.logo-header{max-width:180px;height:auto;display:block;margin:0 auto 15px auto;filter:drop-shadow(0 0 15px #00e5ff);} /* LOGO */
+.logo-header{max-width:160px;height:auto;display:block;margin:0 auto 15px auto;filter:drop-shadow(0 0 10px #00e5ff);}
 
+/* SCHERMATA DI CARICAMENTO SISTEMA SOLARE */
 #loader-sistema{position:fixed;top:0;left:0;width:100%;height:100%;background:#020208;z-index:9999;display:flex;justify-content:center;align-items:center;flex-direction:column;transition:opacity 0.5s;}
 .sole{width:50px;height:50px;background:radial-gradient(circle, #ffcc00, #ff9900);border-radius:50%;box-shadow:0 0 30px #ffcc00;position:relative;}
 .orbita{position:absolute;width:120px;height:120px;border:1px dashed rgba(255,255,255,0.2);border-radius:50%;animation:ruota 3s linear infinite;}
@@ -40,28 +38,19 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 </head>
 <body>
 
+<!-- SCHERMATA DI CARICAMENTO -->
 <div id="loader-sistema">
     <div class="sole"><div class="orbita"><div class="pianeta"></div></div></div>
     <p style="margin-top:20px;color:#00e5ff;">Caricamento Universo...</p>
 </div>
 
-<div class="spazio-sfondo-fisso">
-    <div class="stella-cadente-nuova"></div>
-    <div class="stella-cadente-nuova"></div>
-    <div class="stella-cadente-nuova"></div>
-</div>
+<div class="spazio-sfondo-fisso"><div class="stella-cadente-nuova"></div></div>
 
 <header style="text-align:center;padding:25px 10px;">
-<!-- LOGO -->
-<img src="logo-canale.png" alt="Logo Astronomia Avanzata" class="logo-header">
+<img src="logo-canale.png" alt="Logo Astronomia Avanzata" class="logo-header" onerror="this.style.display='none'">
 <h1>Astronomia Avanzata</h1>
 <p>L'universo alla portata di tutti</p>
 <button class="btn-sito" onclick="apriIscrizione()">✨ ISCRIVITI AL SITO</button>
-<br>
-<!-- BOTTONE WHATSAPP -->
-<a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank">
-    <button class="btn-whatsapp">📢 UNISCITI AL CANALE WHATSAPP</button>
-</a>
 </header>
 
 <nav>
@@ -127,7 +116,7 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
 <div id="chi-siamo" class="page">
 <section>
     <h2>👨‍🚀 Chi Siamo</h2>
-    <img src="logo-canale.png" style="max-width:120px;margin:10px auto;">
+    <img src="logo-canale.png" style="max-width:120px;margin:10px auto;" onerror="this.style.display='none'">
     <h3>Astronomia Avanzata</h3>
     <p style="font-size:16px;line-height:1.9;text-align:left;">
     Ciao! Sono un ragazzo appassionato di astronomia. <br><br>
@@ -135,10 +124,15 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
     Voglio rendere il cosmo accessibile per chiunque voglia alzare gli occhi al cielo. <br><br>
     L'universo è di tutti. Esploriamolo insieme! 🌌
     </p>
+    <!-- BOTTONE WHATSAPP SOTTO LA DESCRIZIONE -->
+    <a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank">
+        <button class="btn-whatsapp">📢 UNISCITI AL CANALE WHATSAPP</button>
+    </a>
 </section>
 </div>
 
 <script>
+    // NASCONDI SCHERMATA DI CARICAMENTO DOPO 1.5 SECONDI
     window.addEventListener('load', function(){
         setTimeout(() => {
             document.getElementById('loader-sistema').style.opacity = '0';
@@ -171,13 +165,15 @@ nav a{color:#00e5ff;margin:0 20px;text-decoration:none;font-weight:bold;font-siz
             document.getElementById('apod-img').src = d.url || 'https://source.unsplash.com/600x400/?galaxy';
             document.getElementById('apod-title').innerText = d.title || "Profondità Cosmiche";
             document.getElementById('apod-expl').innerText = d.explanation || "";
+            document.getElementById('apod-loading-status').style.display = 'none';
+            document.getElementById('apod-content-box').style.display = 'block';
         }catch(e){
-            document.getElementById('apod-img').src = 'https://source.unsplash.com/600x400/?galaxy,nebula,space';
+            document.getElementById('apod-img').src = 'https://source.unsplash.com/600x400/?galaxy';
             document.getElementById('apod-title').innerText = "Cielo Stellato";
-            document.getElementById('apod-expl').innerText = "Impossibile caricare la foto NASA oggi. Ecco una bella galassia!";
+            document.getElementById('apod-expl').innerText = "Impossibile caricare la foto NASA oggi.";
+            document.getElementById('apod-loading-status').style.display = 'none';
+            document.getElementById('apod-content-box').style.display = 'block';
         }
-        document.getElementById('apod-loading-status').style.display = 'none';
-        document.getElementById('apod-content-box').style.display = 'block';
     }
 
     function calcolaPeso(){
