@@ -279,7 +279,7 @@ async function salvaPunteggioAutomatico(){
 }
 async function caricaClassifica(){let d=await getBin(BIN_CLASSIFICA);let lista=d&&d.classifica?d.classifica:[];lista.sort((a,b)=>b.punteggio-a.punteggio);let html='';lista.slice(0,10).forEach((p,i)=>{html+=`<div class="classifica-item"><span>${i+1}. ${p.nome}</span><span>${p.punteggio} pts</span></div>`;});document.getElementById('classifica-lista').innerHTML=html||'<p>Gioca per entrare in classifica!</p>';}
 
-// NASA
+// NASA CON FALLBACK
 async function caricaNASA(){
     try{
         const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);
@@ -295,4 +295,4 @@ async function caricaNASA(){
             <p style="font-size:12px;color:#aaa;margin-top:10px;">Data: ${data.date}</p>
         `;
     }catch(e){
-        document.getElementById('nasa-apod').innerHTML='<h3 style="color:#00e5ff;">Gal
+        document.getElementById('nasa-apod').innerHTML='<h3 style="color:
