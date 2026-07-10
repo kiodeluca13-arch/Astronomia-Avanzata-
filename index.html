@@ -85,7 +85,6 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 
 <div id="home" class="page active">
     <div class="box"><h2>Benvenuto</h2><h2 id="contatore-iscritti" style="font-size:40px;">0</h2><p>Appassionati nella Community</p></div>
-
     <div class="box" style="border-color:#ff9900;">
         <h2 style="color:#ff9900;">🚀 Community Spaziale</h2>
         <input type="text" id="chat-nome" placeholder="u/Nome" style="width:35%;display:inline-block">
@@ -93,9 +92,7 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
         <button class="btn-box btn-arancione" onclick="creaPostReddit()">Invia</button>
         <div id="reddit-board">Caricamento chat...</div>
     </div>
-
     <div class="box"><h2>Quanto pesi nel Sistema Solare? 🚀</h2><input type="number" id="pesoTerraGadget" placeholder="kg"><select id="pianetaPeso" style="width:90%;padding:12px;background:#091220;color:#fff"><option value="0.165">Mercurio</option><option value="0.903">Venere</option><option value="1">Terra</option><option value="0.38">Marte</option><option value="2.34">Giove</option><option value="1.06">Saturno</option><option value="0.92">Urano</option><option value="1.19">Nettuno</option></select><button class="btn-box" onclick="calcolaPeso()">Calcola</button><div id="risultatoSpazioGadget"></div></div>
-
     <div class="box" style="border-color:#00ff88;">
         <h2 style="color:#00ff88;">🛰️ Stazione Spaziale ISS</h2>
         <p>Guarda dove si trova la ISS in tempo reale</p>
@@ -127,7 +124,7 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 </div>
 
 <div id="nasa" class="page">
-    <div class="box"><h2>🛰️ Foto del Giorno NASA</h2><div id="nasa-apod">Caricamento...</div></div>
+    <div class="box"><h2>🛰️ Foto del Giorno NASA</h2><div id="nasa-apod">Caricamento automatico...</div></div>
     <div class="box" style="border-color:#00ff88;">
         <h2 style="color:#00ff88;">🚀 Calendario Lanci</h2>
         <div id="calendario-lanci">
@@ -160,8 +157,23 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
     </div>
 </div>
 
-<div id="pwdPop"><div class="popBox"><h3>Accesso Admin</h3><input type="password" id="pwd" placeholder="astro2026"><br><button class="btn-box" onclick="checkPwd()">Entra</button></div></div>
-<div id="uploadPop"><div class="popBox"><h3>Carica Foto</h3><input type="file" id="uploadFoto" accept="image/*"><br><button class="btn-box" onclick="salvaFoto()">Salva</button></div></div>
+<!-- POPUP ADMIN FINALE - NIENTE PASSWORD SCRITTA -->
+<div id="pwdPop">
+    <div class="popBox">
+        <h3>🔐 Accesso Admin</h3>
+        <p style="color:#00e5ff;margin:10px 0;font-size:16px;font-weight:bold;">Inserisci password</p>
+        <input type="password" id="pwd" placeholder=""><br>
+        <button class="btn-box" onclick="checkPwd()">Entra</button>
+    </div>
+</div>
+
+<div id="uploadPop">
+    <div class="popBox">
+        <h3>📤 Carica Foto</h3>
+        <input type="file" id="uploadFoto" accept="image/*"><br>
+        <button class="btn-box" onclick="salvaFoto()">Salva</button>
+    </div>
+</div>
 
 <script>
 const API_KEY = "$2a$10$Of8B49grvxrMdmYIrN9o7.BVgcF3GjHut.mQKHFy7/rNfZuMVUcse";
@@ -194,7 +206,7 @@ function creaStelleEComete(){
     }
 }
 
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='giochi'){caricaClassifica()}if(id==='admin'){caricaGalleryAdmin()}}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='giochi'){caricaClassifica()}if(id==='admin'){caricaGalleryAdmin()}if(id==='nasa'){caricaNASA()}}
 
 async function getBin(id){try{const res=await fetch(JSONBIN_URL+id+"/latest",{headers:{"X-Master-Key":API_KEY}});const data=await res.json();return data.record;}catch(e){return null}}
 async function updateBin(id,data){await fetch(JSONBIN_URL+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(data)});}
@@ -269,9 +281,20 @@ async function salvaPunteggioAutomatico(){
 async function caricaClassifica(){let d=await getBin(BIN_CLASSIFICA);let lista=d&&d.classifica?d.classifica:[];lista.sort((a,b)=>b.punteggio-a.punteggio);let html='';lista.slice(0,10).forEach((p,i)=>{html+=`<div class="classifica-item"><span>${i+1}. ${p.nome}</span><span>${p.punteggio} pts</span></div>`;});document.getElementById('classifica-lista').innerHTML=html||'<p>Gioca per entrare in classifica!</p>';}
 
 // NASA
-async function caricaNASA(){try{const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);const data=await res.json();document.getElementById('nasa-apod').innerHTML=`<h3>${data.title}</h3><img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0"><p style="text-align:left;font-size:14px;">${data.explanation}</p>`;}catch(e){document.getElementById('nasa-apod').innerHTML='Errore NASA'}}
+async function caricaNASA(){
+    try{
+        const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);
+        const data=await res.json();
+        document.getElementById('nasa-apod').innerHTML=`
+            <h3 style="color:#00e5ff;margin-bottom:10px;">${data.title}</h3>
+            <img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0;border:2px solid #00e5ff">
+            <p style="text-align:left;font-size:14px;line-height:1.6;">${data.explanation}</p>
+            <p style="font-size:12px;color:#aaa;margin-top:10px;">Data: ${data.date}</p>
+        `;
+    }catch(e){
+        document.getElementById('nasa-apod').innerHTML='<p>Errore nel caricamento NASA. Riprova più tardi</p>'
+    }
+}
 
 window.addEventListener('load', function(){setTimeout(function(){document.getElementById('loader').style.opacity='0';setTimeout(function(){document.getElementById('loader').style.display='none';},800);},1500);});
-window.addEventListener('load', async function(){creaStelleEComete();caricaIscritti();caricaPost();caricaFoto();caricaNASA();});
-</script>
-</body></html>
+window.addEventListener('load', async function(){creaStel
