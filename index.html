@@ -7,10 +7,11 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{background:#000;color:#fff;overflow-x:hidden}
-#loader{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center, #0a1a2a 0%, #000 100%);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:all 0.8s} /* transition:all */
-#loader.nascosto{opacity:0;visibility:hidden;z-index:-1} /* <- AGGIUNTO visibility:hidden */
+#loader{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center, #0a1a2a 0%, #000 100%);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.8s ease-out, visibility 0.8s ease-out}
+#loader.nascosto{opacity:0;visibility:hidden;pointer-events:none;z-index:-999}
 .sistema-solare{position:relative;width:200px;height:200px;margin:20px auto}
-.sole{position:absolute;top:50%;left:50%;width:50px;height:50px;background:radial-gradient(circle,#ffdd00,#ff9900);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 40px #ff9900}
+.sole{position:absolute;top:50%;left:50%;width:50px;height:50px;background:radial-gradient(circle,#ffdd00,#ff9900);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 40px #ff9900;animation:pulsazione 2s ease-in-out infinite}
+@keyframes pulsazione{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.1)}}
 .orbita{position:absolute;top:50%;left:50%;border:1px dashed rgba(0,229,255,0.3);border-radius:50%;transform:translate(-50%,-50%);animation:ruota 4s linear infinite}
 .orbita1{width:80px;height:80px;animation-duration:3s}
 .orbita2{width:120px;height:120px;animation-duration:4s}
@@ -18,7 +19,8 @@ body{background:#000;color:#fff;overflow-x:hidden}
 .pianeta{position:absolute;width:12px;height:12px;border-radius:50%;top:-6px}
 .p1{background:#00e5ff;left:34px}.p2{background:#ff9900;left:54px}.p3{background:#ff007f;left:74px}
 @keyframes ruota{100%{transform:translate(-50%,-50%) rotate(360deg)}}
-.loader-testo h2{color:#00e5ff;text-shadow:0 0 15px #00e5ff;font-size:28px;margin-bottom:5px}
+.loader-testo h2{color:#00e5ff;text-shadow:0 0 15px #00e5ff;font-size:28px;margin-bottom:5px;animation:glow 1.5s ease-in-out infinite}
+@keyframes glow{0%,100%{text-shadow:0 0 15px #00e5ff}50%{text-shadow:0 0 25px #00e5ff, 0 0 35px #00e5ff}}
 .spazio-sfondo-fisso{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:-2;overflow:hidden;}
 .stella-fissa{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle 3s infinite;}
 @keyframes twinkle{0%,100%{opacity:0.2}50%{opacity:1}}
@@ -30,13 +32,16 @@ header{text-align:center;padding:30px 20px}
 h1{color:#00e5ff;font-size:32px;margin-bottom:5px;text-shadow:0 0 10px #00e5ff}
 .slogan{color:#aaa;font-size:16px;margin-bottom:20px}
 .btn-principale{background:#00e5ff;color:#000;border:none;padding:15px 25px;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;width:90%;max-width:400px;transition:0.3s}
+.btn-principale:hover{transform:scale(1.05);box-shadow:0 0 20px #00e5ff}
 .btn-whatsapp{background:#25D366;color:#fff;text-decoration:none;display:inline-block;margin-top:15px}
 nav{background:#0a1a2a;padding:12px;display:flex;justify-content:space-around;position:sticky;top:0;z-index:10;border-bottom:2px solid #00e5ff;flex-wrap:wrap}
-nav a{color:#00e5ff;text-decoration:none;font-weight:bold;font-size:14px;padding:5px;cursor:pointer}
-.box{background:#0d1b2a;margin:15px;border-radius:12px;padding:20px;border:1px solid #1b4965;text-align:center}
+nav a{color:#00e5ff;text-decoration:none;font-weight:bold;font-size:14px;padding:5px;cursor:pointer;transition:0.2s}
+nav a:hover{color:#fff;text-shadow:0 0 10px #00e5ff}
+.box{background:#0d1b2a;margin:15px;border-radius:12px;padding:20px;border:1px solid #1b4965;text-align:center;box-shadow:0 0 15px rgba(0,229,255,0.1)}
 .box h2{color:#00e5ff;margin-bottom:15px;font-size:22px}
-input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;background:#091220;color:#fff;font-size:15px}
-.btn-box{background:#00e5ff;color:#000;border:none;padding:12px;border-radius:6px;width:90%;font-weight:bold;cursor:pointer;font-size:16px;margin:5px 0}
+input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;background:#091220;color:#fff;font-size:15px;border:1px solid #1b4965}
+.btn-box{background:#00e5ff;color:#000;border:none;padding:12px;border-radius:6px;width:90%;font-weight:bold;cursor:pointer;font-size:16px;margin:5px 0;transition:0.3s}
+.btn-box:hover{transform:scale(1.03);box-shadow:0 0 15px #00e5ff}
 .btn-arancione{background:#ff9900}
 .btn-verde{background:#00ff88}
 #reddit-board{max-height:250px;overflow-y:auto;text-align:left;margin:10px 0}
@@ -47,8 +52,8 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 .popBox{background:#111;padding:25px;border-radius:12px;text-align:center;width:90%;max-width:350px;border:1px solid #333}
 .page{display:none}
 .page.active{display:block}
-.quiz-opzione{background:#1b4965;margin:5px 0;padding:12px;border-radius:6px;cursor:pointer}
-.quiz-opzione:hover{background:#00e5ff;color:#000}
+.quiz-opzione{background:#1b4965;margin:5px 0;padding:12px;border-radius:6px;cursor:pointer;transition:0.2s}
+.quiz-opzione:hover{background:#00e5ff;color:#000;transform:translateX(5px)}
 .classifica-item{display:flex;justify-content:space-between;padding:8px;background:rgba(0,229,255,0.1);margin:5px 0;border-radius:5px}
 #game-area{width:100%;height:300px;background:radial-gradient(#0a1a2a,#000);border-radius:10px;position:relative;overflow:hidden;border:2px solid #00e5ff;margin:10px 0}
 .game-obj{position:absolute;border-radius:50%;cursor:pointer;transition:0.1s;z-index:5}
@@ -93,7 +98,7 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
         <button class="btn-box btn-arancione" onclick="creaPostReddit()">Invia</button>
         <div id="reddit-board">Caricamento chat...</div>
     </div>
-    <div class="box"><h2>Quanto pesi nel Sistema Solare? 🚀</h2><input type="number" id="pesoTerraGadget" placeholder="kg"><select id="pianetaPeso" style="width:90%;padding:12px;background:#091220;color:#fff"><option value="0.165">Mercurio</option><option value="0.903">Venere</option><option value="1">Terra</option><option value="0.38">Marte</option><option value="2.34">Giove</option><option value="1.06">Saturno</option><option value="0.92">Urano</option><option value="1.19">Nettuno</option></select><button class="btn-box" onclick="calcolaPeso()">Calcola</button><div id="risultatoSpazioGadget"></div></div>
+    <div class="box"><h2>Quanto pesi nel Sistema Solare? 🚀</h2><input type="number" id="pesoTerraGadget" placeholder="kg"><select id="pianetaPeso" style="width:90%;padding:12px;background:#091220;color:#fff;border:1px solid #1b4965"><option value="0.165">Mercurio</option><option value="0.903">Venere</option><option value="1">Terra</option><option value="0.38">Marte</option><option value="2.34">Giove</option><option value="1.06">Saturno</option><option value="0.92">Urano</option><option value="1.19">Nettuno</option></select><button class="btn-box" onclick="calcolaPeso()">Calcola</button><div id="risultatoSpazioGadget"></div></div>
     <div class="box" style="border-color:#00ff88;">
         <h2 style="color:#00ff88;">🛰️ Stazione Spaziale ISS</h2>
         <p>Guarda dove si trova la ISS in tempo reale</p>
@@ -285,13 +290,4 @@ async function caricaNASA(){
     try{
         const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);
         const data=await res.json();
-        if(data.code === 429){
-            document.getElementById('nasa-apod').innerHTML='<p>Limite NASA raggiunto oggi. Riprova domani 🌌</p>'
-            return;
-        }
-        document.getElementById('nasa-apod').innerHTML=`
-            <h3 style="color:#00e5ff;margin-bottom:10px;">${data.title}</h3>
-            <img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0;border:2px solid #00e5ff" onerror="this.src='https://apod.nasa.gov/apod/image/2310/M31_SubaruV4_960.jpg'">
-            <p style="text-align:left;font-size:14px;line-height:1.6;">${data.explanation}</p>
-            <p style="font-size:12px;color:#aaa;margin-top:10px;">Data: ${data.date}</p>
-  
+        if(data.code 
