@@ -67,7 +67,7 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 <div class="spazio-sfondo-fisso" id="sfondo-stelle"></div>
 
 <header>
-<img src="logo-astro.png" class="logo-header">
+<img src="logo.png" class="logo-header" onerror="this.style.display='none'">
 <h1>Astronomia Avanzata</h1>
 <p class="slogan">L'universo alla portata di tutti</p>
 <button class="btn-principale" onclick="apriIscrizione()">✨ ISCRIVITI AL SITO</button>
@@ -147,17 +147,16 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 <div id="chi-siamo" class="page">
     <div class="box">
         <h2>👨‍🚀 Chi Siamo</h2>
-        <img id="foto-creatore" src="logo-astro.png">
+        <img id="foto-creatore" src="logo.png" onerror="this.src='https://via.placeholder.com/180x180/00e5ff/000?text=ASTRO'">
         <p><b>Ciao sono Federico</b><br>
         <i>sono un ragazzo appassionato di astronomia con un solo obiettivo:
         avvicinare l'universo a tutti in modo rapido e divertente.
         Un passo alla volta verso le stelle</i> 🌌</p>
         <p><b>Contattami:</b> 334 899 6505</p>
-        <a href="https://whatsapp.com/channel/0029Vajx5QdDJ6Gz3m2k0I2s" class="btn-principale btn-whatsapp" target="_blank">💬 Canale WhatsApp</a>
+        <a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" class="btn-principale btn-whatsapp" target="_blank">💬 Canale WhatsApp</a>
     </div>
 </div>
 
-<!-- POPUP ADMIN FINALE - NIENTE PASSWORD SCRITTA -->
 <div id="pwdPop">
     <div class="popBox">
         <h3>🔐 Accesso Admin</h3>
@@ -285,16 +284,15 @@ async function caricaNASA(){
     try{
         const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);
         const data=await res.json();
+        if(data.code === 429){
+            document.getElementById('nasa-apod').innerHTML='<p>Limite NASA raggiunto oggi. Riprova domani 🌌</p>'
+            return;
+        }
         document.getElementById('nasa-apod').innerHTML=`
             <h3 style="color:#00e5ff;margin-bottom:10px;">${data.title}</h3>
-            <img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0;border:2px solid #00e5ff">
+            <img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0;border:2px solid #00e5ff" onerror="this.src='https://apod.nasa.gov/apod/image/2310/M31_SubaruV4_960.jpg'">
             <p style="text-align:left;font-size:14px;line-height:1.6;">${data.explanation}</p>
             <p style="font-size:12px;color:#aaa;margin-top:10px;">Data: ${data.date}</p>
         `;
     }catch(e){
-        document.getElementById('nasa-apod').innerHTML='<p>Errore nel caricamento NASA. Riprova più tardi</p>'
-    }
-}
-
-window.addEventListener('load', function(){setTimeout(function(){document.getElementById('loader').style.opacity='0';setTimeout(function(){document.getElementById('loader').style.display='none';},800);},1500);});
-window.addEventListener('load', async function(){creaStel
+        document.getElementById('nasa-apod').innerHTML='<h3 style="color:#00e5ff;">Gal
