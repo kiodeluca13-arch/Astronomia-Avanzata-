@@ -3,112 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Astronomia Avanzata</title>
+<title>Astronomia Avanzata - Il Cosmo a Portata di Click</title>
+<meta name="description" content="Astronomia Avanzata: notizie, foto e community sullo spazio">
 <style>
-* {margin:0;padding:0;box-sizing:border-box;}
-body{background:#020208 radial-gradient(1.5px 1.5px at 20px 30px,#fff,transparent) repeat;background-size:300px 300px;color:#fff;font-family:'Segoe UI',sans-serif;overflow-x:hidden;}
-section,.box-gadget-centrato{background:rgba(13,27,42,0.85);padding:30px;border-radius:12px;max-width:800px;margin:25px auto;border:1px solid #1b4965;text-align:center;backdrop-filter:blur(8px);}
-h1,h2,h3{color:#00e5ff;margin-bottom:15px;}
-p{line-height:1.6;opacity:0.9;}
-input,button{width:90%;padding:12px;margin:8px;border-radius:8px;border:1px solid #1b4965;background:#0d1b2a;color:#fff;font-size:1em;}
-button{background:#00e5ff;color:#000;font-weight:bold;cursor:pointer;transition:all 0.3s;}
-button:hover{background:#00c4e0;transform:translateY(-2px);}
-.btn-whatsapp{background:#25D366;color:#fff;margin-top:20px;border:none;}
-.logo-header{max-width:200px;height:auto;display:block;margin:0 auto 20px auto;filter:drop-shadow(0 0 20px #00e5ff);}
-nav{background:rgba(13,27,42,0.95);padding:15px;text-align:center;position:sticky;top:0;z-index:100;border-bottom:2px solid #00e5ff;}
-nav a{color:#00e5ff;margin:0 25px;text-decoration:none;font-weight:bold;font-size:1.1em;}
-.page{display:none;animation:fadeIn 0.5s;} .page.active{display:block;}
-@keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
-
-/* LOADER SISTEMA SOLARE */
+* {box-sizing: border-box; scroll-behavior: smooth;}
+body{background:#020208 radial-gradient(1.5px 1.5px at 20px 30px,#fff,transparent) repeat;background-size:300px 300px;color:#e0e0e0;margin:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+section,.box-gadget-centrato{background:rgba(13,27,42,0.88);padding:30px;border-radius:15px;max-width:900px;margin:25px auto;border:1px solid #1b4965;text-align:center;backdrop-filter:blur(8px);box-shadow:0 0 20px rgba(0,229,255,0.1);}
+h1,h2,h3{color:#00e5ff;text-shadow:0 0 8px rgba(0,229,255,0.3);}
+p{line-height:1.7;font-size:1.05em;}
+input,button{width:85%;padding:14px;margin:10px;border-radius:8px;border:1px solid #1b4965;background:#0d1b2a;color:#fff;font-size:1em;outline:none;transition:0.3s;}
+input:focus{border-color:#00e5ff;box-shadow:0 0 8px #00e5ff;}
+button{background:linear-gradient(90deg, #00e5ff, #00aaff);color:#000;font-weight:bold;cursor:pointer;transition:0.3s;border:none;}
+button:hover{transform:scale(1.05);box-shadow:0 0 15px #00e5ff;}
+.btn-whatsapp{background:linear-gradient(90deg, #25D366, #128C7E);color:#fff;margin-top:20px;font-size:1.1em;}
+.btn-admin{background:linear-gradient(90deg, #ff4500, #ff7300);color:#fff;}
+.logo-header{max-width:200px;display:block;margin:0 auto 15px auto;filter:drop-shadow(0 0 20px #00e5ff);}
+nav{background:rgba(13,27,42,0.98);padding:18px;text-align:center;position:sticky;top:0;z-index:100;border-bottom:2px solid #1b4965;}
+nav a{color:#00e5ff;margin:0 18px;text-decoration:none;font-weight:bold;font-size:1.1em;transition:0.3s;}
+nav a:hover{text-shadow:0 0 10px #00e5ff; color:#fff;}
+.page{display:none; animation: fadeIn 0.5s;} .page.active{display:block;}
+@keyframes fadeIn {from{opacity:0;} to{opacity:1;}}
 #loader-sistema{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;justify-content:center;align-items:center;flex-direction:column;}
-.sistema{position:relative;width:250px;height:250px;}
-.sole-loader{width:50px;height:50px;background:radial-gradient(circle, #ffcc00, #ff9900);border-radius:50%;box-shadow:0 0 40px #ffcc00;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
-.orbita{position:absolute;top:50%;left:50%;border:1px dashed rgba(255,255,255,0.15);border-radius:50%;transform:translate(-50%,-50%);animation:ruota linear infinite;}
-.pianeta{position:absolute;border-radius:50%;top:0;left:50%;transform:translateX(-50%);}
+.sistema{position:relative;width:220px;height:220px;}
+.sole-loader{width:45px;height:45px;background:radial-gradient(circle, #ffcc00, #ff9900);border-radius:50%;box-shadow:0 0 40px #ffcc00;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 2s infinite;}
+@keyframes pulse {0%,100%{box-shadow:0 0 40px #ffcc00;} 50%{box-shadow:0 0 60px #ffcc00;}}
+.orbita{position:absolute;top:50%;left:50%;border:1px solid rgba(255,255,255,0.15);border-radius:50%;transform:translate(-50%,-50%);animation:ruota linear infinite;}
+.pianeta{position:absolute;border-radius:50%;}
 @keyframes ruota{from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);}}
-
-#reddit-board{max-height:350px;overflow-y:auto;text-align:left;margin:20px auto;width:95%;padding:10px;}
-.reddit-post{background:rgba(255,255,255,0.05);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:15px;margin-bottom:15px;text-align:left;}
+#reddit-board{max-height:350px;overflow-y:auto;text-align:left;margin:20px auto;width:90%;padding-right:10px;}
+#reddit-board::-webkit-scrollbar{width:8px;} #reddit-board::-webkit-scrollbar-thumb{background:#00e5ff;border-radius:4px;}
+.reddit-post{background:rgba(255,255,255,0.04);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:15px;margin-bottom:15px;text-align:left;}
+.reddit-post b{color:#00e5ff;font-size:1.1em;}
+.galleria{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin-top:25px;}
+.galleria img{width:270px;border-radius:12px;border:2px solid #00e5ff;transition:0.4s;cursor:pointer;}
+.galleria img:hover{transform:scale(1.08) rotate(1deg);box-shadow:0 0 20px #00e5ff;}
+#admin-panel{display:none;background:rgba(255,69,0,0.15);border:2px dashed #ff4500;padding:25px;border-radius:12px;margin-top:25px;text-align:center;}
+footer{text-align:center;padding:20px;color:#aaa;font-size:0.9em;}
 </style>
 </head>
 <body>
 
-<!-- LOADER -->
 <div id="loader-sistema">
     <div class="sistema">
         <div class="sole-loader"></div>
-        <div class="orbita" style="width:70px;height:70px;animation-duration:2s;"><div class="pianeta" style="width:5px;height:5px;background:#aaa;"></div></div>
-        <div class="orbita" style="width:100px;height:100px;animation-duration:3s;"><div class="pianeta" style="width:8px;height:8px;background:#e6c229;"></div></div>
-        <div class="orbita" style="width:130px;height:130px;animation-duration:4s;"><div class="pianeta" style="width:8px;height:8px;background:#00aaff;"></div></div>
-        <div class="orbita" style="width:160px;height:160px;animation-duration:5s;"><div class="pianeta" style="width:6px;height:6px;background:#ff4500;"></div></div>
+        <div class="orbita" style="width:65px;height:65px;animation-duration:2.5s;"><div class="pianeta" style="width:5px;height:5px;background:#aaa;top:-2.5px;left:50%;"></div></div>
+        <div class="orbita" style="width:85px;height:85px;animation-duration:3.5s;"><div class="pianeta" style="width:7px;height:7px;background:#e6c229;top:-3.5px;left:50%;"></div></div>
+        <div class="orbita" style="width:105px;height:105px;animation-duration:4.5s;"><div class="pianeta" style="width:7px;height:7px;background:#00aaff;top:-3.5px;left:50%;"></div></div>
+        <div class="orbita" style="width:125px;height:125px;animation-duration:5.5s;"><div class="pianeta" style="width:6px;height:6px;background:#ff4500;top:-3px;left:50%;"></div></div>
     </div>
-    <p style="margin-top:50px;color:#00e5ff;font-size:1.3em;letter-spacing:3px;">Caricamento Universo...</p>
+    <p style="margin-top:50px;color:#00e5ff;font-size:1.3em;">Caricamento Universo... 🚀</p>
 </div>
 
-<header style="text-align:center;padding:40px 10px;">
+<header style="text-align:center;padding:30px 10px;">
 <img src="logo-canale.png" alt="Logo Astronomia Avanzata" class="logo-header">
 <h1>Astronomia Avanzata</h1>
-<p>L'universo alla portata di tutti</p>
 <button onclick="apriIscrizione()">✨ ISCRIVITI AL SITO</button>
-<h3 id="contatore-iscritti" style="margin-top:20px;font-size:3em;color:#ff9900;">0</h3>
+<h3 id="contatore-iscritti" style="margin-top:20px;font-size:2.8em;color:#ff9900;text-shadow:0 0 10px #ff9900;">0</h3>
 <p>Appassionati nella Community</p>
 </header>
 
 <nav>
 <a href="#" onclick="showPage('home')">🏠 Home</a>
 <a href="#" onclick="showPage('chi-siamo')">👨‍🚀 Chi Siamo</a>
+<a href="#" onclick="showPage('foto')">📸 Foto dal Creatore</a>
 <a href="#" onclick="showPage('community')">🚀 Community</a>
 </nav>
 
 <div id="home" class="page active">
-<section><h2>Benvenuto Esploratore</h2><p>Scopri le meraviglie del cosmo con noi. Nuovi video ogni settimana!</p></section>
+<section>
+    <h2>🌌 Benvenuto Esploratore</h2>
+    <p>Esplora l'universo con noi. Notizie, immagini spettacolari e curiosità dallo spazio profondo. Unisciti a migliaia di appassionati!</p>
+</section>
 </div>
 
 <div id="chi-siamo" class="page">
 <section>
     <h2>👨‍🚀 Chi Siamo</h2>
-    <img src="logo-canale.png" style="max-width:150px;margin:15px auto;">
+    <img src="logo-canale.png" style="max-width:130px;margin:15px auto;">
     <h3>Astronomia Avanzata</h3>
-    <p>Ciao! Sono un ragazzo appassionato di astronomia. Il mio obiettivo è rendere la scienza semplice e affascinante per tutti.</p>
-    <a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank">
-        <button class="btn-whatsapp">📢 UNISCITI AL CANALE WHATSAPP</button>
-    </a>
+    <p>Siamo un team di appassionati che vuole portare l'astronomia a tutti, in modo semplice, diretto e spettacolare. Dalle galassie lontane alle missioni spaziali, raccontiamo il cosmo.</p>
+    <a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank"><button class="btn-whatsapp">📢 UNISCITI AL CANALE WHATSAPP UFFICIALE</button></a>
+    <button onclick="showAdmin()" class="btn-admin" style="margin-top:15px;">🔐 Accesso Creatore</button>
+    <div id="admin-panel">
+        <h3 style="color:#ff4500;">Pannello Carica Foto</h3>
+        <p>Incolla il link diretto dell'immagine .jpg .png .webp</p>
+        <input type="text" id="url-foto" placeholder="https://i.imgur.com/xxx.jpg">
+        <button onclick="aggiungiFoto()" class="btn-admin">Carica Foto</button>
+    </div>
+</section>
+</div>
+
+<div id="foto" class="page">
+<section>
+    <h2>📸 Foto dal Creatore</h2>
+    <p>Le migliori foto e scatti spaziali selezionati personalmente da me per voi</p>
+    <div id="galleria-foto" class="galleria">Caricamento galleria...</div>
 </section>
 </div>
 
 <div id="community" class="page">
 <div class="box-gadget-centrato" style="border-color:#ff9900;">
     <h2 style="color:#ff9900;">🚀 Community del Sito</h2>
-    <p>Lascia un messaggio e parla con altri appassionati!</p>
+    <p>Parla con altri appassionati di spazio!</p>
     <div id="reddit-board">Caricamento messaggi...</div>
-    <input type="text" id="chat-nome" placeholder="u/NomeUtente" maxlength="20">
-    <input type="text" id="chat-testo" placeholder="Scrivi il tuo messaggio..." maxlength="200">
-    <button onclick="creaPostReddit()" style="background:#ff9900;width:90%;">Pubblica Messaggio</button>
+    <input type="text" id="chat-nome" placeholder="u/TuoNome">
+    <input type="text" id="chat-testo" placeholder="Scrivi il tuo messaggio...">
+    <button onclick="creaPostReddit()" style="background:linear-gradient(90deg, #ff9900, #ffcc00);">Pubblica</button>
 </div>
 </div>
+
+<footer>
+    <p>© 2026 Astronomia Avanzata - Esplora l'Infinito</p>
+</footer>
 
 <script>
-// ====== IMPORTANTE: METTI LA TUA KEY QUI SOTTO ======
-const JSONBIN_API_KEY = "INCOLLA_QUI_LA_TUA_X-MASTER-KEY";
+const JSONBIN_API_KEY = "$2a$10$Of8B49grvxrMdmYIrN9o7.BVgcF3GjHut.mQKHFy7/rNfZuMVUcse";
 const BIN_ID_CONTATORE = "6a50a1dff5f4af5e297b7932";
 const BIN_ID_COMMUNITY = "6a50a2c7da38895dfe49f226";
-// =====================================================
+const BIN_ID_FOTO = "6a50f0bcda38895dfe4b4263";
 
 const BIN_URL = "https://api.jsonbin.io/v3/b/";
-
 async function leggiDaBin(binId){
     try{
         const res = await fetch(BIN_URL + binId + "/latest", {headers: { "X-Master-Key": JSONBIN_API_KEY }});
         if(!res.ok) throw new Error("Errore lettura");
         return (await res.json()).record;
-    }catch(e){console.error("Errore DB:",e); return {iscritti:0, posts:[]};}
+    }catch(e){console.error("Errore Bin:", e); return {iscritti:0, posts:[], immagini:[]};}
 }
-
 async function salvaSuBin(binId, dati){
     try{
-        await fetch(BIN_URL + binId, {method: "PUT",headers: { "Content-Type": "application/json", "$2a$10$Of8B49grvxrMdmYIrN9o7.BVgcF3GjHut.mQKHFy7/rNfZuMVUcse": JSONBIN_API_KEY },body: JSON.stringify(dati)});
-    }catch(e){console.error("Errore salvataggio:",e);}
+        await fetch(BIN_URL + binId, {method: "PUT",headers: { "Content-Type": "application/json", "X-Master-Key": JSONBIN_API_KEY },body: JSON.stringify(dati)});
+    }catch(e){console.error("Errore Salvataggio:", e);}
 }
 
 async function caricaTutto(){
@@ -116,13 +141,13 @@ async function caricaTutto(){
     document.getElementById('contatore-iscritti').innerText = cont.iscritti || 0;
     const comm = await leggiDaBin(BIN_ID_COMMUNITY);
     const board = document.getElementById('reddit-board');
-    if(!comm.posts || comm.posts.length === 0){board.innerHTML = "<p style='text-align:center;opacity:0.6;'>Nessun post ancora. Sii il primo!</p>"} 
-    else {
-        board.innerHTML = "";
-        comm.posts.slice().reverse().forEach(p => {
-            board.innerHTML += `<div class="reddit-post"><b style="color:#00e5ff;">${p.nome}</b><p>${p.testo}</p></div>`;
-        });
-    }
+    board.innerHTML = comm.posts.length === 0 ? "<p style='text-align:center;'>Nessun post ancora. Sii il primo!</p>" : "";
+    comm.posts.slice().reverse().forEach(p => {board.innerHTML += `<div class="reddit-post"><b>${p.nome}</b><p>${p.testo}</p></div>`;});
+    
+    const foto = await leggiDaBin(BIN_ID_FOTO);
+    const galleria = document.getElementById('galleria-foto');
+    galleria.innerHTML = foto.immagini.length === 0 ? "<p>Nessuna foto ancora. Torna presto!</p>" : "";
+    foto.immagini.forEach(url => {galleria.innerHTML += `<img src="${url}" onclick="window.open('${url}')">`;});
 }
 
 async function confermaIscrizione(){
@@ -130,17 +155,15 @@ async function confermaIscrizione(){
     cont.iscritti = (cont.iscritti || 0) + 1;
     await salvaSuBin(BIN_ID_CONTATORE, cont);
     caricaTutto();
-    alert('Benvenuto nella flotta! 🌌 Il tuo iscrizione è stata salvata.');
+    alert('Benvenuto nella flotta di Astronomia Avanzata! 🌌');
 }
-
 function apriIscrizione(){ confermaIscrizione(); }
 
 async function creaPostReddit(){
     let n = document.getElementById('chat-nome').value.trim()||"Anonimo";
     let t = document.getElementById('chat-testo').value.trim();
-    if(!t) return alert("Scrivi qualcosa prima di pubblicare!");
+    if(!t) {alert("Scrivi un messaggio!"); return;}
     const comm = await leggiDaBin(BIN_ID_COMMUNITY);
-    if(!comm.posts) comm.posts = [];
     comm.posts.push({nome: n, testo: t, data: new Date().toLocaleString()});
     await salvaSuBin(BIN_ID_COMMUNITY, comm);
     document.getElementById('chat-testo').value="";
@@ -152,7 +175,26 @@ function showPage(id){
     document.getElementById(id).classList.add('active');
 }
 
-setTimeout(() => {document.getElementById('loader-sistema').style.display = 'none';}, 2500);
+function showAdmin(){
+    let pass = prompt("🔐 Inserisci password creatore:");
+    if(pass === "astro2026"){ 
+        document.getElementById('admin-panel').style.display = 'block';
+        alert("Accesso consentito ✅");
+    } else {alert("Password errata ❌");}
+}
+
+async function aggiungiFoto(){
+    let url = document.getElementById('url-foto').value.trim();
+    if(!url) {alert("Incolla un link!"); return;}
+    const foto = await leggiDaBin(BIN_ID_FOTO);
+    foto.immagini.push(url);
+    await salvaSuBin(BIN_ID_FOTO, foto);
+    document.getElementById('url-foto').value="";
+    caricaTutto();
+    alert("Foto pubblicata con successo! 📸");
+}
+
+setTimeout(() => {document.getElementById('loader-sistema').style.display = 'none';}, 2800);
 window.onload = caricaTutto;
 </script>
 </body></html>
