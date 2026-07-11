@@ -6,7 +6,7 @@
 <title>Astronomia Avanzata - L'universo alla portata di tutti</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-body{background:#000;color:#fff;overflow-x:hidden}
+body{background:#000;color:#fff;overflow-x:hidden;display:none} /* 1. SITO NASCOSTO ALL'INIZIO */
 #loader{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center, #0a1a2a 0%, #000 100%);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .sistema-solare{position:relative;width:200px;height:200px;margin:20px auto}
 .sole{position:absolute;top:50%;left:50%;width:50px;height:50px;background:radial-gradient(circle,#ffdd00,#ff9900);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 40px #ff9900}
@@ -63,10 +63,6 @@ textarea{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backg
 .link-iss{background:#ff9900;color:#000;text-decoration:none;padding:12px;border-radius:8px;font-weight:bold;display:block;margin-top:10px}
 .lancio-item{background:rgba(0,229,255,0.1);padding:10px;border-radius:6px;margin:8px 0;text-align:left;border-left:3px solid #00ff88}
 </style>
-<script>
-// KILLER 1: HEAD
-setTimeout(function(){var l=document.getElementById('loader');if(l)l.style.display='none';},1500);
-</script>
 </head>
 <body>
 
@@ -292,4 +288,4 @@ async function salvaPunteggioAutomatico(){
     await updateBin(BIN_CLASSIFICA,d);
     caricaClassifica();
 }
-async function c
+async function caricaClassifica(){let d=await getBin(BIN_CLASSIFICA);let lista=d&&d.classifica?d.classifi
