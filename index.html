@@ -63,6 +63,10 @@ textarea{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backg
 .link-iss{background:#ff9900;color:#000;text-decoration:none;padding:12px;border-radius:8px;font-weight:bold;display:block;margin-top:10px}
 .lancio-item{background:rgba(0,229,255,0.1);padding:10px;border-radius:6px;margin:8px 0;text-align:left;border-left:3px solid #00ff88}
 </style>
+<script>
+// KILLER 1: HEAD
+setTimeout(function(){var l=document.getElementById('loader');if(l)l.style.display='none';},1500);
+</script>
 </head>
 <body>
 
@@ -99,7 +103,7 @@ textarea{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backg
     <div class="box" style="border-color:#00ff88;">
         <h2 style="color:#00ff88;">🛰️ Stazione Spaziale ISS</h2>
         <p>Guarda dove si trova la ISS in tempo reale</p>
-        <a href="https://www.isslive.com/" target="_blank" class="link-iss">📡 Vedi ISS Live</a>
+        <a href="https://www.youtube.com/watch?v=DDUZWYt5hVs" target="_blank" class="link-iss">📡 Vedi ISS Live</a>
     </div>
 </div>
 
@@ -288,4 +292,4 @@ async function salvaPunteggioAutomatico(){
     await updateBin(BIN_CLASSIFICA,d);
     caricaClassifica();
 }
-async function caricaClassifica(){let d=await getBin(BIN_CLASSIFICA);let lista=d&&d.classifica?d.classifica:[];lista.sort((a,b)=>b.punteggio-a.punteggio);let html='';lista
+async function c
