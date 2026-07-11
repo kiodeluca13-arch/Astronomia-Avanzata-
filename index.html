@@ -7,8 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{background:#000;color:#fff;overflow-x:hidden}
-#loader{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center, #0a1a2a 0%, #000 100%);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.8s}
-#loader.nascosto{opacity:0;visibility:hidden;pointer-events:none}
+#loader{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center, #0a1a2a 0%, #000 100%);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .sistema-solare{position:relative;width:200px;height:200px;margin:20px auto}
 .sole{position:absolute;top:50%;left:50%;width:50px;height:50px;background:radial-gradient(circle,#ffdd00,#ff9900);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 40px #ff9900}
 .orbita{position:absolute;top:50%;left:50%;border:1px dashed rgba(0,229,255,0.3);border-radius:50%;transform:translate(-50%,-50%);animation:ruota 4s linear infinite}
@@ -277,4 +276,5 @@ function mostraDomanda(){if(domandaCorrente>=20){document.getElementById('quiz-d
 function rispondiQuiz(risposta){if(risposta===domandeUsate[domandaCorrente].r){punteggio++;}domandaCorrente++;setTimeout(mostraDomanda,500);}
 
 // CLASSIFICA
-    
+async function salvaPunteggioAutomatico(){
+    let nome = prompt("Complimenti! Inserisci i
