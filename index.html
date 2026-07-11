@@ -61,6 +61,9 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 .admin-gallery{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .admin-gallery img{width:100px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #00e5ff}
 .link-iss{background:#ff9900;color:#000;text-decoration:none;padding:12px;border-radius:8px;font-weight:bold;display:block;margin-top:10px}
+
+/* NUOVO STILE PER LANCI */
+.lancio-item{background:rgba(0,229,255,0.1);padding:10px;border-radius:6px;margin:8px 0;text-align:left;border-left:3px solid #00ff88}
 </style>
 </head>
 <body>
@@ -128,7 +131,18 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
     </div>
 </div>
 
-<div id="nasa" class="page"><div class="box"><h2>🛰️ Foto del Giorno NASA</h2><div id="nasa-apod">Caricamento automatico...</div></div></div>
+<!-- NASA CON CALENDARIO LANCI -->
+<div id="nasa" class="page">
+    <div class="box"><h2>🛰️ Foto del Giorno NASA</h2><div id="nasa-apod">Caricamento automatico...</div></div>
+    <div class="box" style="border-color:#00ff88;">
+        <h2 style="color:#00ff88;">🚀 Calendario Lanci</h2>
+        <div id="calendario-lanci">
+            <div class="lancio-item"><b>12 Ott 2026</b> - Falcon 9 | Starlink 6-45</div>
+            <div class="lancio-item"><b>18 Ott 2026</b> - Ariane 6 | Galileo FOC</div>
+            <div class="lancio-item"><b>25 Ott 2026</b> - SLS | Artemis II</div>
+        </div>
+    </div>
+</div>
 
 <div id="admin" class="page">
     <div class="box">
@@ -271,6 +285,4 @@ async function caricaClassifica(){let d=await getBin(BIN_CLASSIFICA);let lista=d
 async function caricaNASA(){try{const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);const data=await res.json();document.getElementById('nasa-apod').innerHTML=`<h3>${data.title}</h3><img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0"><p style="text-align:left;font-size:14px;">${data.explanation}</p>`;}catch(e){document.getElementById('nasa-apod').innerHTML='Errore NASA'}}
 
 window.addEventListener('load', function(){setTimeout(function(){document.getElementById('loader').style.opacity='0';setTimeout(function(){document.getElementById('loader').style.display='none';},800);},1500);});
-window.addEventListener('load', async function(){creaStelleEComete();caricaIscritti();caricaPost();caricaFoto();caricaNASA();});
-</script>
-</body></html>
+window.addEventListener('load', async function(){creaS
