@@ -203,7 +203,7 @@ const BIN_ISCRITTI = "6a50f0bcda38895dfe4b4263";
 const BIN_POST = "6a50a1dff5f4af5e297b7932";
 const BIN_FOTO = "6a50a2c7da38895dfe49f226";
 const BIN_CLASSIFICA = "6a50a3c7da38895dfe49f227";
-const BIN_ADMIN_POST = "6a50a4c7da38895dfe49f228"; // NUOVO BIN PER POST ADMIN
+const BIN_ADMIN_POST = "6a50a4c7da38895dfe49f228";
 const JSONBIN_URL = "https://api.jsonbin.io/v3/b/";
 const ADMIN_PASSWORD = "astro2026";
 const NASA_API_KEY = "DEMO_KEY";
@@ -262,16 +262,15 @@ async function creaPostAdmin(){
 
 async function caricaAdminPosts(){
     let d = await getBin(BIN_ADMIN_POST);
-    let html = d&&d.posts?d.posts:'<p>Nessun post ufficiale</p>';
-    // Aggiungo i post admin in cima alla community
+    let html = d&&d.posts?d.posts:'';
     let community = document.getElementById('reddit-board');
-    community.innerHTML = html + (community.innerHTML.includes('Sii il primo')?'':community.innerHTML);
+    let postUtenti = community.innerHTML.includes('Sii il primo')?'':community.innerHTML;
+    community.innerHTML = html + postUtenti;
 }
 
 async function eliminaPostAdmin(btn){
     if(!confirm('Eliminare questo post?'))return;
     btn.parentElement.parentElement.remove();
-    // Riscrivo tutto su jsonbin
     let html = document.getElementById('reddit-board').innerHTML;
     await updateBin(BIN_ADMIN_POST,{posts:html});
 }
@@ -328,4 +327,8 @@ function iniziaGioco(){
     document.getElementById('game-score').innerText='Punteggio: 0';
     document.getElementById('game-timer').innerText='Tempo: 20s';
     document.getElementById('game-area').innerHTML='';
-    clearInterval(gameInterval)
+    clearInterval(gameInterval);
+    gameInterval=setInterval(()=>{
+        creaOggetto();
+        gameTime--;
+        document.getElementByI
