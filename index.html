@@ -7,23 +7,16 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{background:#000;color:#fff;overflow-x:hidden}
-.sistema-solare{position:relative;width:200px;height:200px;margin:20px auto}
-.sole{position:absolute;top:50%;left:50%;width:50px;height:50px;background:radial-gradient(circle,#ffdd00,#ff9900);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 40px #ff9900}
-.orbita{position:absolute;top:50%;left:50%;border:1px dashed rgba(0,229,255,0.3);border-radius:50%;transform:translate(-50%,-50%);animation:ruota 4s linear infinite}
-.orbita1{width:80px;height:80px;animation-duration:3s}
-.orbita2{width:120px;height:120px;animation-duration:4s}
-.orbita3{width:160px;height:160px;animation-duration:5s}
-.pianeta{position:absolute;width:12px;height:12px;border-radius:50%;top:-6px}
-.p1{background:#00e5ff;left:34px}
-.p2{background:#ff9900;left:54px}
-.p3{background:#ff007f;left:74px}
-@keyframes ruota{100%{transform:translate(-50%,-50%) rotate(360deg)}}
 .spazio-sfondo-fisso{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:-2;overflow:hidden;}
 .stella-fissa{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle 3s infinite;}
 @keyframes twinkle{0%,100%{opacity:0.2}50%{opacity:1}}
 .cometa-bg{position:absolute;width:3px;height:3px;background:#00e5ff;border-radius:50%;box-shadow:0 0 10px #00e5ff;animation:caduta 5s linear infinite;}
 .cometa-bg::after{content:'';position:absolute;top:0;left:0;width:150px;height:2px;background:linear-gradient(90deg, #00e5ff, transparent);transform:rotate(45deg);transform-origin:left;}
 @keyframes caduta{0%{transform:translate(-300px,-300px) rotate(45deg);opacity:0}10%{opacity:1}100%{transform:translate(100vw,100vh) rotate(45deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="spazio-sfondo-fisso" id="sfondo-stelle"></div><style>
 .logo-header{max-width:280px;width:90%;height:auto;display:block;margin:0 auto 15px auto;filter:drop-shadow(0 0 15px #00e5ff);}
 header{text-align:center;padding:30px 20px}
 h1{color:#00e5ff;font-size:32px;margin-bottom:5px;text-shadow:0 0 10px #00e5ff}
@@ -32,101 +25,55 @@ h1{color:#00e5ff;font-size:32px;margin-bottom:5px;text-shadow:0 0 10px #00e5ff}
 .btn-whatsapp{background:#25D366;color:#fff;text-decoration:none;display:inline-block;margin-top:15px}
 nav{background:#0a1a2a;padding:12px;display:flex;justify-content:space-around;position:sticky;top:0;z-index:10;border-bottom:2px solid #00e5ff;flex-wrap:wrap}
 nav a{color:#00e5ff;text-decoration:none;font-weight:bold;font-size:14px;padding:5px;cursor:pointer}
+.box{background:#0d1b2a;margin:15px;border-radius:12px;padding:20px;border:1px solid #1b4965;text-align:center}
+.box h2{color:#00e5ff;margin-bottom:15px;font-size:22px}
 </style>
-</head>
-<body><div id="home" class="page active">
-    <div class="box">
-        <h2>Benvenuto</h2>
-        <h2 id="contatore-iscritti" style="font-size:40px;">0</h2>
-        <p>Appassionati nella Community</p>
-    </div>
-    <div class="box" style="border-color:#9b59b6;">
-        <h2 style="color:#9b59b6;">💡 Curiosità Spaziale del Giorno</h2>
-        <div id="fact-del-giorno" class="fact-box">Caricamento...</div>
-        <button class="btn-box btn-viola" onclick="nuovoFact()">Nuova Curiosità</button>
-    </div>
-    <div class="box" style="border-color:#ff9900;">
-        <h2 style="color:#ff9900;">🚀 Community Spaziale</h2>
-        <input type="text" id="chat-nome" placeholder="u/Nome" style="width:35%;display:inline-block">
-        <input type="text" id="chat-testo" placeholder="Scrivi in community..." style="width:55%;display:inline-block">
-        <button class="btn-box btn-arancione" onclick="creaPostReddit()">Invia</button>
-        <div id="reddit-board">Caricamento chat...</div>
-    </div>
-    <div class="box">
-        <h2>Quanto pesi nel Sistema Solare? 🚀</h2>
-        <input type="number" id="pesoTerraGadget" placeholder="kg">
-        <select id="pianetaPeso" style="width:90%;padding:12px;background:#091220;color:#fff">
-            <option value="0.165">Mercurio</option>
-            <option value="0.903">Venere</option>
-            <option value="1">Terra</option>
-            <option value="0.38">Marte</option>
-            <option value="2.34">Giove</option>
-            <option value="1.06">Saturno</option>
-            <option value="0.92">Urano</option>
-            <option value="1.19">Nettuno</option>
-        </select>
-        <button class="btn-box" onclick="calcolaPeso()">Calcola</button>
-        <div id="risultatoSpazioGadget"></div>
-    </div>
-    <div class="box" style="border-color:#00ff88;">
-        <h2 style="color:#00ff88;">🛰️ Stazione Spaziale ISS</h2>
-        <p>Guarda dove si trova la ISS in tempo reale</p>
-        <a href="https://www.youtube.com/watch?v=DDUZWYt5hVs" target="_blank" class="link-iss">📡 Vedi ISS Live</a>
-    </div>
+
+<header>
+    <img src="logo-astro.png" class="logo-header">
+    <h1>Astronomia Avanzata</h1>
+    <p class="slogan">L'universo alla portata di tutti</p>
+    <button class="btn-principale" onclick="apriIscrizione()">✨ ISCRIVITI AL SITO</button>
+</header>
+
+<nav>
+    <a onclick="showPage('home')">🏠 Home</a>
+    <a onclick="showPage('giochi')">🎮 Giochi</a>
+    <a onclick="showPage('nasa')">🛰️ NASA</a>
+    <a onclick="showPage('admin')">🔐 Admin</a>
+    <a onclick="showPage('chi-siamo')">👨‍🚀 Chi Siamo</a>
+</nav><style>
+input,textarea{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;background:#091220;color:#fff;font-size:15px}
+textarea{resize:none;font-family:'Segoe UI',Arial,sans-serif}
+.btn-box{background:#00e5ff;color:#000;border:none;padding:12px;border-radius:6px;width:90%;font-weight:bold;cursor:pointer;font-size:16px;margin:5px 0}
+.btn-arancione{background:#ff9900}
+.btn-verde{background:#00ff88}
+.btn-viola{background:#9b59b6}
+.btn-rosso{background:#e74c3c}
+.page{display:none}
+.page.active{display:block}
+</style>
+
+<div id="box-iscrizione" class="box" style="display:none;">
+    <h2>Diventa un Membro! 🌌</h2>
+    <input type="email" id="email-utente" placeholder="Email">
+    <button class="btn-box" onclick="confermaIscrizione()">Unisciti</button>
 </div>
 
-<style>
+<div id="home" class="page active">
+    <div class="box"><h2>Benvenuto</h2><h2 id="contatore-iscritti" style="font-size:40px;">0</h2><p>Appassionati nella Community</p></div>
+    <div class="box" style="border-color:#9b59b6;"><h2 style="color:#9b59b6;">💡 Curiosità Spaziale del Giorno</h2><div id="fact-del-giorno" class="fact-box">Caricamento...</div><button class="btn-box btn-viola" onclick="nuovoFact()">Nuova Curiosità</button></div><style>
 #reddit-board{max-height:250px;overflow-y:auto;text-align:left;margin:10px 0}
 .reddit-post{background:rgba(255,255,255,0.05);padding:10px;border-radius:6px;margin-bottom:8px;text-align:left;border-left:3px solid #ff9900}
 .reddit-post b{color:#ffcc00}
-.admin-post{border-left:3px solid #00e5ff;background:rgba(0,229,255,0.1)}
-.admin-badge{color:#00e5ff;font-weight:bold}
 .fact-box{background:rgba(0,229,255,0.1);padding:15px;border-radius:8px;margin:10px 0;border-left:4px solid #00e5ff;text-align:left}
 .link-iss{background:#ff9900;color:#000;text-decoration:none;padding:12px;border-radius:8px;font-weight:bold;display:block;margin-top:10px}
-  </style><div id="giochi" class="page">
-    <div class="box">
-        <h2>🎮 Scegli il tuo Gioco</h2>
-        <div class="btn-giochi" onclick="iniziaGioco('stelle')">⭐ Stelle</div>
-        <div class="btn-giochi" onclick="iniziaGioco('asteroidi')">☄️ Asteroidi</div>
-        <div class="btn-giochi" onclick="iniziaGioco('orbita')">🪐 Orbita</div>
-    </div>
-    <div class="box">
-        <h2 id="game-titolo">⭐ Acchiappa Stelle e Comete ⭐</h2>
-        <p id="game-desc">Stella = +10 punti | Cometa = +25 punti</p>
-        <div id="game-score">Punteggio: 0</div>
-        <div id="game-timer">Tempo: 20s</div>
-        <div id="game-area"></div>
-        <button class="btn-box btn-verde" onclick="iniziaGioco(gameCorrente)">Inizia Gioco</button>
-    </div>
-    <div class="box">
-        <h2>🎮 Quiz da 20 Domande</h2>
-        <p id="quiz-progresso">Domanda 0/20</p>
-        <h3 id="quiz-domanda">Clicca Inizia per partire</h3>
-        <div id="quiz-opzioni"></div>
-        <p id="quiz-punteggio">Punteggio: 0</p>
-        <button class="btn-box btn-verde" onclick="avviaQuiz()">Inizia Quiz</button>
-    </div>
-    <div class="box" style="border-color:#ff9900;">
-        <h2 style="color:#ff9900;">🏆 Classifica Settimanale</h2>
-        <div id="classifica-lista">Caricamento...</div>
-        <p style="font-size:12px;color:#aaa;margin-top:10px;">Si azzera ogni Lunedì - Separata per gioco</p>
-    </div>
-</div>
+</style>
 
-<div id="nasa" class="page">
-    <div class="box">
-        <h2>🛰️ Foto del Giorno NASA</h2>
-        <div id="nasa-apod">Caricamento automatico...</div>
-    </div>
-    <div class="box" style="border-color:#00ff88;">
-        <h2 style="color:#00ff88;">🚀 Calendario Lanci NASA + ESA + SpaceX</h2>
-        <div id="calendario-lanci">Caricamento lanci...</div>
-    </div>
-</div>
-
-<style>
-.page{display:none}
-.page.active{display:block}
+<div class="box" style="border-color:#ff9900;"><h2 style="color:#ff9900;">🚀 Community Spaziale</h2><input type="text" id="chat-nome" placeholder="u/Nome" style="width:35%;display:inline-block"><input type="text" id="chat-testo" placeholder="Scrivi in community..." style="width:55%;display:inline-block"><button class="btn-box btn-arancione" onclick="creaPostReddit()">Invia</button><div id="reddit-board">Caricamento chat...</div></div>
+    <div class="box"><h2>Quanto pesi nel Sistema Solare? 🚀</h2><input type="number" id="pesoTerraGadget" placeholder="kg"><select id="pianetaPeso" style="width:90%;padding:12px;background:#091220;color:#fff"><option value="0.165">Mercurio</option><option value="0.903">Venere</option><option value="1">Terra</option><option value="0.38">Marte</option><option value="2.34">Giove</option><option value="1.06">Saturno</option><option value="0.92">Urano</option><option value="1.19">Nettuno</option></select><button class="btn-box" onclick="calcolaPeso()">Calcola</button><div id="risultatoSpazioGadget"></div></div>
+    <div class="box" style="border-color:#00ff88;"><h2 style="color:#00ff88;">🛰️ Stazione Spaziale ISS</h2><p>Guarda dove si trova la ISS in tempo reale</p><a href="https://www.youtube.com/watch?v=DDUZWYt5hVs" target="_blank" class="link-iss">📡 Vedi ISS Live</a></div>
+</div><style>
 .quiz-opzione{background:#1b4965;margin:5px 0;padding:12px;border-radius:6px;cursor:pointer}
 .quiz-opzione:hover{background:#00e5ff;color:#000}
 .classifica-item{display:flex;justify-content:space-between;padding:8px;background:rgba(0,229,255,0.1);margin:5px 0;border-radius:5px}
@@ -140,38 +87,16 @@ nav a{color:#00e5ff;text-decoration:none;font-weight:bold;font-size:14px;padding
 #game-timer{font-size:16px;color:#ff9900}
 .btn-giochi{display:inline-block;width:30%;margin:5px;padding:10px;background:#1b4965;border-radius:8px;cursor:pointer;font-weight:bold}
 .btn-giochi:hover{background:#00e5ff;color:#000}
-</style><div id="admin" class="page">
-    <div class="box">
-        <h2>🔐 Pannello Admin</h2>
-        <button class="btn-box btn-rosso" onclick="apriListaIscritti()">👥 Vedi Lista Iscritti</button>
-        <h3 style="color:#00e5ff;margin:15px 0 10px 0;">📝 Scrivi Post Ufficiale</h3>
-        <textarea id="admin-post-testo" placeholder="Scrivi un annuncio ufficiale..." rows="3"></textarea>
-        <button class="btn-box btn-arancione" onclick="creaPostAdmin()">Pubblica Post</button>
-        <h3 style="color:#00e5ff;margin:15px 0 10px 0;">📤 Carica Foto</h3>
-        <button class="btn-box btn-arancione" onclick="apriUpload()">Carica Nuova Foto</button>
-        <h3 style="margin-top:15px;color:#00e5ff;">Le tue Foto Caricate:</h3>
-        <div id="admin-gallery" class="admin-gallery"></div>
-    </div>
-    <div class="box" id="box-iscritti" style="display:none;border-color:#00ff88;">
-        <h2 style="color:#00ff88;">👥 Lista Iscritti</h2>
-        <div id="lista-iscritti">Caricamento...</div>
-    </div>
-</div>
+</style>
 
-<div id="chi-siamo" class="page">
-    <div class="box">
-        <h2>👨‍🚀 Chi Siamo</h2>
-        <img id="foto-creatore" src="logo-astro.png">
-        <p>
-            <b>Ciao sono Federico</b><br>
-            <i>sono un ragazzo appassionato di astronomia con un solo obiettivo: avvicinare l'universo a tutti in modo rapido e divertente. Un passo alla volta verso le stelle</i> 🌌
-        </p>
-        <p><b>Contattami:</b> 334 899 6505</p>
-        <a href="https://whatsapp.com/channel/0029Vajx5QdDJ6Gz3m2k0I2s" class="btn-principale btn-whatsapp" target="_blank">💬 Canale WhatsApp</a>
-    </div>
-</div>
-
-<style>
+<div id="giochi" class="page">
+    <div class="box"><h2>🎮 Scegli il tuo Gioco</h2><div class="btn-giochi" onclick="iniziaGioco('stelle')">⭐ Stelle</div><div class="btn-giochi" onclick="iniziaGioco('asteroidi')">☄️ Asteroidi</div><div class="btn-giochi" onclick="iniziaGioco('orbita')">🪐 Orbita</div></div>
+    <div class="box"><h2 id="game-titolo">⭐ Acchiappa Stelle e Comete ⭐</h2><p id="game-desc">Stella = +10 punti | Cometa = +25 punti</p><div id="game-score">Punteggio: 0</div><div id="game-timer">Tempo: 20s</div><div id="game-area"></div><button class="btn-box btn-verde" onclick="iniziaGioco(gameCorrente)">Inizia Gioco</button></div>
+    <div class="box"><h2>🎮 Quiz da 20 Domande</h2><p id="quiz-progresso">Domanda 0/20</p><h3 id="quiz-domanda">Clicca Inizia per partire</h3><div id="quiz-opzioni"></div><p id="quiz-punteggio">Punteggio: 0</p><button class="btn-box btn-verde" onclick="avviaQuiz()">Inizia Quiz</button></div>
+    <div class="box" style="border-color:#ff9900;"><h2 style="color:#ff9900;">🏆 Classifica Settimanale</h2><div id="classifica-lista">Caricamento...</div><p style="font-size:12px;color:#aaa;margin-top:10px;">Si azzera ogni Lunedì - Separata per gioco</p></div>
+</div><style>
+.admin-post{border-left:3px solid #00e5ff;background:rgba(0,229,255,0.1)}
+.admin-badge{color:#00e5ff;font-weight:bold}
 #foto-creatore{max-width:180px;border-radius:10px;margin:10px auto;display:block;border:2px solid #00e5ff}
 #pwdPop,#uploadPop{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:999;align-items:center;justify-content:center}
 .popBox{background:#111;padding:25px;border-radius:12px;text-align:center;width:90%;max-width:350px;border:1px solid #333}
@@ -180,6 +105,20 @@ nav a{color:#00e5ff;text-decoration:none;font-weight:bold;font-size:14px;padding
 .lancio-item{background:rgba(0,229,255,0.1);padding:10px;border-radius:6px;margin:8px 0;text-align:left;border-left:3px solid #00ff88}
 .iscritto-item{background:rgba(0,229,255,0.1);padding:10px;border-radius:6px;margin:5px 0;text-align:left;border-left:3px solid #00ff88}
 </style>
+
+<div id="nasa" class="page">
+    <div class="box"><h2>🛰️ Foto del Giorno NASA</h2><div id="nasa-apod">Caricamento automatico...</div></div>
+    <div class="box" style="border-color:#00ff88;"><h2 style="color:#00ff88;">🚀 Calendario Lanci NASA + ESA + SpaceX</h2><div id="calendario-lanci">Caricamento lanci...</div></div>
+</div>
+
+<div id="admin" class="page">
+    <div class="box"><h2>🔐 Pannello Admin</h2><button class="btn-box btn-rosso" onclick="apriListaIscritti()">👥 Vedi Lista Iscritti</button><h3 style="color:#00e5ff;margin:15px 0 10px 0;">📝 Scrivi Post Ufficiale</h3><textarea id="admin-post-testo" placeholder="Scrivi un annuncio ufficiale..." rows="3"></textarea><button class="btn-box btn-arancione" onclick="creaPostAdmin()">Pubblica Post</button><h3 style="color:#00e5ff;margin:15px 0 10px 0;">📤 Carica Foto</h3><button class="btn-box btn-arancione" onclick="apriUpload()">Carica Nuova Foto</button><h3 style="margin-top:15px;color:#00e5ff;">Le tue Foto Caricate:</h3><div id="admin-gallery" class="admin-gallery"></div></div>
+    <div class="box" id="box-iscritti" style="display:none;border-color:#00ff88;"><h2 style="color:#00ff88;">👥 Lista Iscritti</h2><div id="lista-iscritti">Caricamento...</div></div>
+</div>
+
+<div id="chi-siamo" class="page">
+    <div class="box"><h2>👨‍🚀 Chi Siamo</h2><img id="foto-creatore" src="logo-astro.png"><p><b>Ciao sono Federico</b><br><i>sono un ragazzo appassionato di astronomia con un solo obiettivo: avvicinare l'universo a tutti in modo rapido e divertente. Un passo alla volta verso le stelle</i> 🌌</p><p><b>Contattami:</b> 334 899 6505</p><a href="https://whatsapp.com/channel/0029Vajx5QdDJ6Gz3m2k0I2s" class="btn-principale btn-whatsapp" target="_blank">💬 Canale WhatsApp</a></div>
+</div>
 
 <div id="pwdPop"><div class="popBox"><h3>🔐 Accesso Admin</h3><p style="color:#00e5ff;margin:10px 0;font-size:16px;font-weight:bold;">Inserisci password</p><input type="password" id="pwd" placeholder=""><br><button class="btn-box" onclick="checkPwd()">Entra</button></div></div>
 <div id="uploadPop"><div class="popBox"><h3>📤 Carica Foto</h3><input type="file" id="uploadFoto" accept="image/*"><br><button class="btn-box" onclick="salvaFoto()">Salva</button></div></div><script>
@@ -195,14 +134,12 @@ const ADMIN_PASSWORD = "astro2026";
 const NASA_API_KEY = "DEMO_KEY";
 
 window.addEventListener('load', function(){
-    setTimeout(function(){
-        creaStelleEComete();
-        caricaIscritti();
-        caricaPost();
-        caricaFoto();
-        caricaAdminPosts();
-        nuovoFact();
-    }, 500);
+    creaStelleEComete();
+    caricaIscritti();
+    caricaPost();
+    caricaFoto();
+    caricaAdminPosts();
+    nuovoFact();
 });
 
 function creaStelleEComete(){
@@ -244,9 +181,7 @@ async function getBin(id){
 
 async function updateBin(id, data){
     await fetch(JSONBIN_URL + id, {method: "PUT", headers: {"Content-Type": "application/json", "X-Master-Key": API_KEY}, body: JSON.stringify(data)});
-}
-
-let iscritti = 0;
+}let iscritti = 0;
 async function caricaIscritti(){
     let d = await getBin(BIN_ISCRITTI);
     iscritti = d && d.count!== undefined? d.count : 0;
@@ -321,9 +256,7 @@ async function creaPostAdmin(){
 async function caricaAdminPosts(){
     let d = await getBin(BIN_ADMIN_POST);
     if(d && d.posts) document.getElementById('reddit-board').innerHTML = d.posts + document.getElementById('reddit-board').innerHTML;
-}
-
-async function salvaFoto(){
+    }async function salvaFoto(){
     let file = document.getElementById('uploadFoto').files[0];
     if(file){
         let reader = new FileReader();
@@ -484,11 +417,52 @@ function rispondiQuiz(r){
     if(r === domandeUsate[domandaCorrente].r) punteggio++;
     domandaCorrente++;
     setTimeout(mostraDomanda, 500);
-}
-
-async function salvaPunteggioSettimanale(tipo){
+    }async function salvaPunteggioSettimanale(tipo){
     let nome = prompt("Complimenti! Inserisci il tuo nome per la classifica di " + tipo + ":");
     if(!nome) return;
     let settimana = new Date().toISOString().slice(0, 10);
     let d = await getBin(BIN_CLASSIFICA) || {classifica: []};
-    d.classifica = d.classifica.filter(p => p.settim
+    d.classifica = d.classifica.filter(p => p.settimana === settimana && p.gioco === tipo);
+    d.classifica.push({nome: nome, punteggio: gameScore, gioco: tipo, settimana: settimana});
+    await updateBin(BIN_CLASSIFICA, d);
+    caricaClassifica();
+}
+
+async function caricaClassifica(){
+    let settimana = new Date().toISOString().slice(0, 10);
+    let d = await getBin(BIN_CLASSIFICA);
+    let lista = d && d.classifica? d.classifica.filter(p => p.settimana === settimana) : [];
+    lista.sort((a, b) => b.punteggio - a.punteggio);
+    let html = '';
+    lista.slice(0, 10).forEach((p, i) => {
+        html += `<div class="classifica-item"><span>${i+1}. ${p.nome} [${p.gioco}]</span><span>${p.punteggio} pts</span></div>`;
+    });
+    document.getElementById('classifica-lista').innerHTML = html || '<p>Gioca per entrare in classifica!</p>';
+}
+
+async function caricaNASA(){
+    try{
+        const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);
+        const data = await res.json();
+        document.getElementById('nasa-apod').innerHTML = `<h3 style="color:#00e5ff">${data.title}</h3><img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0;border:2px solid #00e5ff"><p style="text-align:left;font-size:14px">${data.explanation}</p><p style="font-size:12px;color:#aaa">Data: ${data.date}</p>`;
+    }catch(e){
+        document.getElementById('nasa-apod').innerHTML = '<p>Errore nel caricamento NASA</p>'
+    }
+}
+
+function caricaCalendarioLanci(){
+    const lanci = [
+        {data:"15 Ott 2026", missione:"Falcon 9 | Starlink 6-50", agenzia:"SpaceX"},
+        {data:"22 Ott 2026", missione:"Ariane 6 | Galileo FOC 27-28", agenzia:"ESA"},
+        {data:"30 Ott 2026", missione:"Soyuz 2.1b | Progress MS-27", agenzia:"Roscosmos"},
+        {data:"05 Nov 2026", missione:"SLS | Artemis II", agenzia:"NASA"}
+    ];
+    let html = '';
+    lanci.forEach(l => {
+        html += `<div class="lancio-item"><b>${l.data}</b><br>${l.missione}<br><span style="color:#aaa;font-size:12px">${l.agenzia}</span></div>`;
+    });
+    document.getElementById('calendario-lanci').innerHTML = html;
+}
+</script>
+</body>
+</html>
