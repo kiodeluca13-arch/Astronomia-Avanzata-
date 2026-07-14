@@ -165,11 +165,13 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 <div id="uploadPop"><div class="popBox"><h3>Carica Foto</h3><input type="file" id="uploadFoto" accept="image/*"><br><button class="btn-box" onclick="salvaFoto()">Salva</button></div></div>
 
 <script>
-const API_KEY = "$2a$10$Of8B49grvxrMdmYIrN9o7.BVgcF3GjHut.mQKHFy7/rNfZuMVUcse";
-const BIN_ISCRITTI = "6a50f0bcda38895dfe4b4263";
-const BIN_POST = "6a50a1dff5f4af5e297b7932";
-const BIN_FOTO = "6a50a2c7da38895dfe49f226";
-const BIN_CLASSIFICA = "6a50a3c7da38895dfe49f227";
+// ⚠️ METTI QUI LE TUE 5 CHIAVI DI JSONBIN.IO ⚠️
+const API_KEY = "INCOLLA_QUI_LA_TUA_MASTER_KEY";
+const BIN_ISCRITTI = "INCOLLA_QUI_ID_BIN_ISCRITTI";
+const BIN_POST = "INCOLLA_QUI_ID_BIN_POST";
+const BIN_FOTO = "INCOLLA_QUI_ID_BIN_FOTO";
+const BIN_CLASSIFICA = "INCOLLA_QUI_ID_BIN_CLASSIFICA";
+
 const JSONBIN_URL = "https://api.jsonbin.io/v3/b/";
 const ADMIN_PASSWORD = "astro2026";
 const NASA_API_KEY = "DEMO_KEY";
@@ -197,21 +199,39 @@ function creaStelleEComete(){
 
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='giochi'){caricaClassifica('all')}if(id==='admin'){caricaGalleryAdmin()}if(id==='nasa'){caricaLanci()}}
 
-async function getBin(id){try{const res=await fetch(JSONBIN_URL+id+"/latest",{mode:"cors",headers:{"X-Master-Key":API_KEY}});const data=await res.json();return data.record;}catch(e){return null}}
-async function updateBin(id,data){await fetch(JSONBIN_URL+id,{method:"PUT",mode:"cors",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(data)});}
+// FIX BIN: Auto-crea se 404
+async function getBin(id){
+    try{
+        const res=await fetch(JSONBIN_URL+id+"/latest",{method:"GET",headers:{"X-Master-Key":API_KEY,"X-Bin-Versioning":false}});
+        if(!res.ok) throw new Error(res.status);
+        const data=await res.json();
+        return data.record;
+    }catch(e){
+        console.log("Bin vuoto, lo creo:",id);
+        let defaultData = {count:0};
+        if(id===BIN_POST) defaultData={posts:""};
+        if(id===BIN_FOTO) defaultData={foto:[]};
+        if(id===BIN_CLASSIFICA) defaultData={classifica:[]};
+        await updateBin(id,defaultData);
+        return defaultData;
+    }
+}
+async function updateBin(id,data){
+    await fetch(JSONBIN_URL+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(data)});
+}
 
 let iscritti=0;
-async function caricaIscritti(){let d=await getBin(BIN_ISCRITTI);if(d&&d.count!==undefined){iscritti=d.count;}else{iscritti=0; await updateBin(BIN_ISCRITTI,{count:0});}document.getElementById('contatore-iscritti').innerText=iscritti;}
+async function caricaIscritti(){let d=await getBin(BIN_ISCRITTI);iscritti=d.count||0;document.getElementById('contatore-iscritti').innerText=iscritti;}
 async function confermaIscrizione(){let e=document.getElementById('email-utente').value;if(e.includes('@')){iscritti++;await updateBin(BIN_ISCRITTI,{count:iscritti});alert('Benvenuto nella Community!');document.getElementById('box-iscrizione').style.display='none';caricaIscritti();}}
 function apriIscrizione(){let b=document.getElementById('box-iscrizione');b.style.display=b.style.display==='none'?'block':'none';}
 
 async function caricaPost(){let d=await getBin(BIN_POST);document.getElementById('reddit-board').innerHTML=d&&d.posts?d.posts:"<p>Sii il primo a scrivere!</p>";}
-async function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;let d=await getBin(BIN_POST)||{posts:""};d.posts=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_POST,d);document.getElementById('chat-testo').value="";caricaPost();}
-async function creaPostAdmin(){let t=document.getElementById('admin-testo').value.trim();if(!t)return;let d=await getBin(BIN_POST)||{posts:""};d.posts=`<div class="reddit-post admin"><b>👨‍🚀 ADMIN</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_POST,d);document.getElementById('admin-testo').value="";caricaPost();alert('Post Admin pubblicato!');}
+async function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;let d=await getBin(BIN_POST);d.posts=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_POST,d);document.getElementById('chat-testo').value="";caricaPost();}
+async function creaPostAdmin(){let t=document.getElementById('admin-testo').value.trim();if(!t)return;let d=await getBin(BIN_POST);d.posts=`<div class="reddit-post admin"><b>👨‍🚀 ADMIN</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_POST,d);document.getElementById('admin-testo').value="";caricaPost();alert('Post Admin pubblicato!');}
 
 function apriUpload(){document.getElementById('pwdPop').style.display='flex'}
 function checkPwd(){if(document.getElementById('pwd').value===ADMIN_PASSWORD){document.getElementById('pwdPop').style.display='none';document.getElementById('uploadPop').style.display='flex'}else{alert('Password errata')}}
-async function salvaFoto(){let file=document.getElementById('uploadFoto').files[0];if(file){let reader=new FileReader();reader.onload=async function(e){let d=await getBin(BIN_FOTO)||{foto:[]};d.foto.push(e.target.result);await updateBin(BIN_FOTO,d);alert('Foto caricata!');document.getElementById('uploadPop').style.display='none';caricaGalleryAdmin()};reader.readAsDataURL(file);}}
+async function salvaFoto(){let file=document.getElementById('uploadFoto').files[0];if(file){let reader=new FileReader();reader.onload=async function(e){let d=await getBin(BIN_FOTO);d.foto.push(e.target.result);await updateBin(BIN_FOTO,d);alert('Foto caricata!');document.getElementById('uploadPop').style.display='none';caricaGalleryAdmin()};reader.readAsDataURL(file);}}
 async function caricaGalleryAdmin(){let d=await getBin(BIN_FOTO);let html='';if(d&&d.foto){d.foto.forEach(f=>{html+=`<img src="${f}">`})}document.getElementById('admin-gallery').innerHTML=html||'<p>Nessuna foto</p>';}
 async function caricaFoto(){let d=await getBin(BIN_FOTO);if(d&&d.foto&&d.foto.length>0){document.getElementById('foto-creatore').src=d.foto[d.foto.length-1]}}
 
@@ -284,18 +304,11 @@ function rispondiQuiz(risposta,el){let corretta=domandeUsate[domandaCorrente].r;
 async function salvaPunteggioAutomatico(){
     let nome = prompt("Complimenti! Inserisci il tuo nome per la classifica:");
     if(!nome) return;
-    let d=await getBin(BIN_CLASSIFICA)||{classifica:[]};
+    let d=await getBin(BIN_CLASSIFICA);
     d.classifica.push({nome:nome,punteggio:gameScore,data:Date.now()});
     await updateBin(BIN_CLASSIFICA,d);
     caricaClassifica('all');
 }
 async function caricaClassifica(tipo){
     let d=await getBin(BIN_CLASSIFICA);
-    let lista=d&&d.classifica?d.classifica:[];
-    if(tipo==='weekly'){
-        const unaSettimanaFa = Date.now() - 7*24*60*60*1000;
-        lista = lista.filter(p=>p.data>unaSettimanaFa);
-    }
-    lista.sort((a,b)=>b.punteggio-a.punteggio);
-    let html='';
-    lista.slice(0,10).forEach((p,i)=>{html+=`<div class="classifica-item"><span>${i+1}. ${p.nome
+    let lista=d&&d.clas
