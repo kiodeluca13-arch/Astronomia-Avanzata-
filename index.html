@@ -50,12 +50,6 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 .admin-gallery{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .admin-gallery img{width:100px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #00e5ff}
 .link-iss{background:#ff9900;color:#000;text-decoration:none;padding:12px;border-radius:8px;font-weight:bold;display:block;margin-top:10px}
-
-/* CALENDARIO NASA */
-#calendario-nasa{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:15px}
-.giorno-cal{padding:8px;background:#1b4965;border-radius:5px;font-size:12px;cursor:pointer}
-.giorno-cal:hover{background:#00e5ff;color:#000}
-.giorno-cal.has-event{background:#ff9900;color:#000;font-weight:bold}
 </style>
 </head>
 <body>
@@ -81,7 +75,6 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 
 <div id="home" class="page active">
     <div class="box"><h2>Benvenuto</h2><h2 id="contatore-iscritti" style="font-size:40px;">0</h2><p>Appassionati nella Community</p></div>
-
     <div class="box" style="border-color:#ff9900;">
         <h2 style="color:#ff9900;">🚀 Community Spaziale</h2>
         <input type="text" id="chat-nome" placeholder="u/Nome" style="width:35%;display:inline-block">
@@ -89,9 +82,7 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
         <button class="btn-box btn-arancione" onclick="creaPostReddit()">Invia</button>
         <div id="reddit-board">Caricamento chat...</div>
     </div>
-
     <div class="box"><h2>Quanto pesi nel Sistema Solare? 🚀</h2><input type="number" id="pesoTerraGadget" placeholder="kg"><select id="pianetaPeso" style="width:90%;padding:12px;background:#091220;color:#fff"><option value="0.165">Mercurio</option><option value="0.903">Venere</option><option value="1">Terra</option><option value="0.38">Marte</option><option value="2.34">Giove</option><option value="1.06">Saturno</option><option value="0.92">Urano</option><option value="1.19">Nettuno</option></select><button class="btn-box" onclick="calcolaPeso()">Calcola</button><div id="risultatoSpazioGadget"></div></div>
-
     <div class="box" style="border-color:#00ff88;">
         <h2 style="color:#00ff88;">🛰️ Stazione Spaziale ISS</h2>
         <p>Guarda dove si trova la ISS in tempo reale</p>
@@ -124,8 +115,8 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 
 <div id="nasa" class="page">
     <div class="box"><h2>🛰️ Foto del Giorno NASA</h2><div id="nasa-apod">Caricamento automatico...</div></div>
-    <!-- NUOVO CALENDARIO NASA -->
-    <div class="box"><h2>📅 Calendario Eventi NASA</h2><div id="calendario-nasa"></div></div>
+    <!-- UNICA COSA CAMBIATA: CALENDARIO CON EVENTI SCRITTI -->
+    <div class="box"><h2>📅 Calendario Spaziale 2026</h2><div id="calendario-eventi">Caricamento...</div></div>
 </div>
 
 <div id="admin" class="page">
@@ -135,7 +126,6 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
         <h3 style="margin-top:15px;color:#00e5ff;">Le tue Foto Caricate:</h3>
         <div id="admin-gallery" class="admin-gallery"></div>
     </div>
-    <!-- NUOVI POST ADMIN -->
     <div class="box" style="border-color:#ff9900;">
         <h2 style="color:#ff9900;">📢 Post Admin</h2>
         <input type="text" id="admin-testo" placeholder="Scrivi un annuncio per la community...">
@@ -144,7 +134,6 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
     </div>
 </div>
 
-<!-- BLOCCO CHI SIAMO AGGIORNATO -->
 <div id="chi-siamo" class="page">
     <div class="box">
         <h2>👨‍🚀 Chi Siamo</h2>
@@ -158,7 +147,7 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
     </div>
 </div>
 
-<div id="pwdPop"><div class="popBox"><h3>Accesso Admin</h3><input type="password" id="pwd" placeholder="astro2026"><br><button class="btn-box" onclick="checkPwd()">Entra</button></div></div>
+<div id="pwdPop"><div class="popBox"><h3>Accesso Admin</h3><input type="password" id="pwd" placeholder="Inserisci password"><br><button class="btn-box" onclick="checkPwd()">Entra</button></div></div>
 <div id="uploadPop"><div class="popBox"><h3>Carica Foto</h3><input type="file" id="uploadFoto" accept="image/*"><br><button class="btn-box" onclick="salvaFoto()">Salva</button></div></div>
 
 <script>
@@ -167,12 +156,11 @@ const BIN_ISCRITTI = "6a50f0bcda38895dfe4b4263";
 const BIN_POST = "6a50a1dff5f4af5e297b7932";
 const BIN_FOTO = "6a50a2c7da38895dfe49f226";
 const BIN_CLASSIFICA = "6a50a3c7da38895dfe49f227";
-const BIN_ADMIN_POST = "6a50a4c7da38895dfe49f228"; // NUOVO BIN PER POST ADMIN
+const BIN_ADMIN_POST = "6a50a4c7da38895dfe49f228";
 const JSONBIN_URL = "https://api.jsonbin.io/v3/b/";
-const ADMIN_PASSWORD = "astro2026";
+const ADMIN_PASSWORD = "METTI_LA_TUA_PASSWORD_QUI";
 const NASA_API_KEY = "DEMO_KEY";
 
-// 8 COMETE
 function creaStelleEComete(){
     const sfondo = document.getElementById('sfondo-stelle');
     sfondo.innerHTML = '';
@@ -207,7 +195,6 @@ function apriIscrizione(){let b=document.getElementById('box-iscrizione');b.styl
 async function caricaPost(){let d=await getBin(BIN_POST);document.getElementById('reddit-board').innerHTML=d&&d.posts?d.posts:"<p>Sii il primo a scrivere!</p>";}
 async function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;let d=await getBin(BIN_POST)||{posts:""};d.posts=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_POST,d);document.getElementById('chat-testo').value="";caricaPost();}
 
-// NUOVE FUNZIONI POST ADMIN
 async function caricaPostAdmin(){let d=await getBin(BIN_ADMIN_POST);document.getElementById('admin-board').innerHTML=d&&d.posts?d.posts:"<p>Nessun annuncio</p>";}
 async function creaPostAdmin(){let t=document.getElementById('admin-testo').value.trim();if(!t)return;let d=await getBin(BIN_ADMIN_POST)||{posts:""};d.posts=`<div class="reddit-post" style="border-left:3px solid #00e5ff;"><b>ADMIN</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_ADMIN_POST,d);document.getElementById('admin-testo').value="";caricaPostAdmin();}
 
@@ -219,9 +206,6 @@ async function caricaFoto(){let d=await getBin(BIN_FOTO);if(d&&d.foto&&d.foto.le
 
 function calcolaPeso(){let p=parseFloat(document.getElementById('pesoTerraGadget').value);let g=parseFloat(document.getElementById('pianetaPeso').value);if(!p)return;document.getElementById('risultatoSpazioGadget').innerHTML=`Peso: <b style="color:#00e5ff;">${(p*g).toFixed(2)} kg</b>`;}
 
-// SOLO 2 FRASI
-const eventi=["🌠 Tra 2 giorni pioggia di meteore Perseidi","🪐 Giove e Saturno visibili a occhio nudo questa settimana"];
-function generaEvento(){document.getElementById('evento-sorpresa').innerText=eventi[Math.floor(Math.random()*eventi.length)];}
 function avviaContatore(){const cn=document.getElementById('contatore-iscritti');let tg=iscritti,cur=0,it=setInterval(()=>{if(cur<tg){cur+=Math.ceil(tg/40);cn.innerText=cur;}else{cn.innerText=tg;clearInterval(it);}},20);}
 
 // GIOCO
@@ -266,7 +250,7 @@ function avviaQuiz(){domandaCorrente=0;punteggio=0;domandeUsate = [...tutteDoman
 function mostraDomanda(){if(domandaCorrente>=20){document.getElementById('quiz-domanda').innerText=`Finito! ${punteggio}/20`;return;}document.getElementById('quiz-progresso').innerText=`Domanda ${domandaCorrente+1}/20`;document.getElementById('quiz-domanda').innerText=domandeUsate[domandaCorrente].d;let html='';domandeUsate[domandaCorrente].op.forEach((op,i)=>{html+=`<div class="quiz-opzione" onclick="rispondiQuiz(${i})">${op}</div>`;});document.getElementById('quiz-opzioni').innerHTML=html;document.getElementById('quiz-punteggio').innerText=`Punteggio: ${punteggio}`;}
 function rispondiQuiz(risposta){if(risposta===domandeUsate[domandaCorrente].r){punteggio++;}domandaCorrente++;setTimeout(mostraDomanda,500);}
 
-// CLASSIFICA SALVATA AUTOMATICAMENTE DAL GIOCO
+// CLASSIFICA
 async function salvaPunteggioAutomatico(){
     let nome = prompt("Complimenti! Inserisci il tuo nome per la classifica:");
     if(!nome) return;
@@ -277,21 +261,39 @@ async function salvaPunteggioAutomatico(){
 }
 async function caricaClassifica(){let d=await getBin(BIN_CLASSIFICA);let lista=d&&d.classifica?d.classifica:[];lista.sort((a,b)=>b.punteggio-a.punteggio);let html='';lista.slice(0,10).forEach((p,i)=>{html+=`<div class="classifica-item"><span>${i+1}. ${p.nome}</span><span>${p.punteggio} pts</span></div>`;});document.getElementById('classifica-lista').innerHTML=html||'<p>Gioca per entrare in classifica!</p>';}
 
-// NASA AUTOMATICA
+// NASA
 async function caricaNASA(){try{const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);const data=await res.json();document.getElementById('nasa-apod').innerHTML=`<h3>${data.title}</h3><img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0"><p style="text-align:left;font-size:14px;">${data.explanation}</p>`;}catch(e){document.getElementById('nasa-apod').innerHTML='Errore NASA'}}
 
-// NUOVO CALENDARIO NASA
-function generaCalendarioNASA(){
-    const cal = document.getElementById('calendario-nasa');
-    cal.innerHTML = '';
-    const giorni = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
-    giorni.forEach(g=>{cal.innerHTML += `<div style="font-weight:bold;color:#00e5ff">${g}</div>`});
-    for(let i=1;i<=30;i++){
-        let classe = i%7===0? 'giorno-cal has-event' : 'giorno-cal';
-        cal.innerHTML += `<div class="${classe}">${i}</div>`;
-    }
-}
+// UNICA FUNZIONE CAMBIATA: CALENDARIO CON EVENTI SCRITTI
+async function generaCalendarioNASA(){
+    const cal = document.getElementById('calendario-eventi');
 
-window.addEventListener('load', function(){creaStelleEComete();caricaIscritti();caricaPost();caricaFoto();caricaNASA();});
-</script>
-</body></html>
+    const eventiFissi = [
+        {data: "2026-01-03", evento: "🌠 Pioggia di meteore Quadrantidi - Picco massimo"},
+        {data: "2026-03-20", evento: "☀️ Equinozio di Primavera"},
+        {data: "2026-04-22", evento: "🌠 Pioggia di meteore Liridi"},
+        {data: "2026-08-12", evento: "🌠 Pioggia di meteore Perseidi - La più bella"},
+        {data: "2026-10-21", evento: "🌠 Pioggia di meteore Orionidi"},
+        {data: "2026-12-14", evento: "🌠 Pioggia di meteore Geminidi"}
+    ];
+
+    let html = '<h3 style="color:#00e5ff;margin-bottom:10px">Eventi Fissi 2026</h3>';
+
+    eventiFissi.forEach(e => {
+        const dataFormattata = new Date(e.data).toLocaleDateString('it-IT');
+        html += `
+        <div style="background:#1b4965;padding:10px;border-radius:8px;margin:6px 0;text-align:left;border-left:4px solid #00e5ff">
+            <b>${dataFormattata}</b><br>
+            <span>${e.evento}</span>
+        </div>`;
+    });
+
+    try{
+        const res = await fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5');
+        const data = await res.json();
+        html += '<h3 style="color:#ff9900;margin:15px 0 10px 0">Prossimi Lanci 🚀</h3>';
+        data.results.forEach(lancio => {
+            const dataLancio = new Date(lancio.net).toLocaleString('it-IT');
+            html += `
+            <div style="background:#2a1b00;padding:10px;border-radius:8px;margin:6px 0;text-align:left;border-left:4px solid #ff9900">
+                <b style="color:#ff990
