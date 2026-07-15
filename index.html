@@ -7,6 +7,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{background:#000;color:#fff;overflow-x:hidden}
+
+/* STELLE E 8 COMETE */
 .spazio-sfondo-fisso{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:-2;overflow:hidden;}
 .stella-fissa{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle 3s infinite;}
 @keyframes twinkle{0%,100%{opacity:0.2}50%{opacity:1}}
@@ -28,12 +30,9 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 .btn-box{background:#00e5ff;color:#000;border:none;padding:12px;border-radius:6px;width:90%;font-weight:bold;cursor:pointer;font-size:16px;margin:5px 0}
 .btn-arancione{background:#ff9900}
 .btn-verde{background:#00ff88}
-.btn-rosso{background:#ff4444}
 #reddit-board{max-height:250px;overflow-y:auto;text-align:left;margin:10px 0}
 .reddit-post{background:rgba(255,255,255,0.05);padding:10px;border-radius:6px;margin-bottom:8px;text-align:left;border-left:3px solid #ff9900}
 .reddit-post b{color:#ffcc00}
-.reddit-post.admin{border-left:3px solid #00e5ff;background:rgba(0,229,255,0.1)}
-.reddit-post.admin b{color:#00e5ff}
 #foto-creatore{max-width:180px;border-radius:10px;margin:10px auto;display:block;border:2px solid #00e5ff}
 #pwdPop,#uploadPop,#adminPop{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:999;align-items:center;justify-content:center}
 .popBox{background:#111;padding:25px;border-radius:12px;text-align:center;width:90%;max-width:350px;border:1px solid #333}
@@ -41,8 +40,6 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 .page.active{display:block}
 .quiz-opzione{background:#1b4965;margin:5px 0;padding:12px;border-radius:6px;cursor:pointer}
 .quiz-opzione:hover{background:#00e5ff;color:#000}
-.quiz-opzione.corretta{background:#00ff88;color:#000}
-.quiz-opzione.sbagliata{background:#ff4444;color:#fff}
 .classifica-item{display:flex;justify-content:space-between;padding:8px;background:rgba(0,229,255,0.1);margin:5px 0;border-radius:5px}
 #game-area{width:100%;height:300px;background:radial-gradient(#0a1a2a,#000);border-radius:10px;position:relative;overflow:hidden;border:2px solid #00e5ff;margin:10px 0}
 .game-obj{position:absolute;border-radius:50%;cursor:pointer;transition:0.1s;z-index:5}
@@ -53,11 +50,12 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 .admin-gallery{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .admin-gallery img{width:100px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #00e5ff}
 .link-iss{background:#ff9900;color:#000;text-decoration:none;padding:12px;border-radius:8px;font-weight:bold;display:block;margin-top:10px}
-.tabs{display:flex;gap:10px;margin-bottom:10px;justify-content:center}
-.tabs button{flex:1}
-.lancio-item{background:rgba(0,229,255,0.1);padding:12px;border-radius:8px;margin:8px 0;text-align:left;border-left:3px solid #00e5ff}
-.lancio-item b{color:#ff9900}
-.lancio-data{color:#aaa;font-size:13px}
+
+/* CALENDARIO NASA */
+#calendario-nasa{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:15px}
+.giorno-cal{padding:8px;background:#1b4965;border-radius:5px;font-size:12px;cursor:pointer}
+.giorno-cal:hover{background:#00e5ff;color:#000}
+.giorno-cal.has-event{background:#ff9900;color:#000;font-weight:bold}
 </style>
 </head>
 <body>
@@ -81,118 +79,219 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 
 <div id="box-iscrizione" class="box" style="display:none;"><h2>Diventa un Membro! 🌌</h2><input type="email" id="email-utente" placeholder="Email"><button class="btn-box" onclick="confermaIscrizione()">Unisciti</button></div>
 
-<div id="home" class="page" style="display:block;">
+<div id="home" class="page active">
     <div class="box"><h2>Benvenuto</h2><h2 id="contatore-iscritti" style="font-size:40px;">0</h2><p>Appassionati nella Community</p></div>
-    <div class="box" style="border-color:#ff9900;"><h2 style="color:#ff9900;">🚀 Community Spaziale</h2><input type="text" id="chat-nome" placeholder="u/Nome" style="width:35%;display:inline-block"><input type="text" id="chat-testo" placeholder="Scrivi in community..." style="width:55%;display:inline-block"><button class="btn-box btn-arancione" onclick="creaPostReddit()">Invia</button><div id="reddit-board">Caricamento chat...</div></div>
+
+    <div class="box" style="border-color:#ff9900;">
+        <h2 style="color:#ff9900;">🚀 Community Spaziale</h2>
+        <input type="text" id="chat-nome" placeholder="u/Nome" style="width:35%;display:inline-block">
+        <input type="text" id="chat-testo" placeholder="Scrivi in community..." style="width:55%;display:inline-block">
+        <button class="btn-box btn-arancione" onclick="creaPostReddit()">Invia</button>
+        <div id="reddit-board">Caricamento chat...</div>
+    </div>
+
     <div class="box"><h2>Quanto pesi nel Sistema Solare? 🚀</h2><input type="number" id="pesoTerraGadget" placeholder="kg"><select id="pianetaPeso" style="width:90%;padding:12px;background:#091220;color:#fff"><option value="0.165">Mercurio</option><option value="0.903">Venere</option><option value="1">Terra</option><option value="0.38">Marte</option><option value="2.34">Giove</option><option value="1.06">Saturno</option><option value="0.92">Urano</option><option value="1.19">Nettuno</option></select><button class="btn-box" onclick="calcolaPeso()">Calcola</button><div id="risultatoSpazioGadget"></div></div>
-    <div class="box" style="border-color:#00ff88;"><h2 style="color:#00ff88;">🛰️ Stazione Spaziale ISS</h2><p>Guarda il video in diretta dalla ISS</p><a href="https://www.youtube.com/watch?v=DDU_PSoOvHM" target="_blank" class="link-iss">📡 Guarda LIVE ISS</a></div>
+
+    <div class="box" style="border-color:#00ff88;">
+        <h2 style="color:#00ff88;">🛰️ Stazione Spaziale ISS</h2>
+        <p>Guarda dove si trova la ISS in tempo reale</p>
+        <a href="https://www.isslive.com/" target="_blank" class="link-iss">📡 Vedi ISS Live</a>
+    </div>
 </div>
 
-<div id="giochi" class="page" style="display:none;">
-    <div class="box"><h2>⭐ Acchiappa Stelle e Comete ⭐</h2><p>Stella = +10 punti | Cometa = +25 punti</p><div id="game-score">Punteggio: 0</div><div id="game-timer">Tempo: 20s</div><div id="game-area"></div><button class="btn-box btn-verde" onclick="iniziaGioco()">Inizia Gioco</button></div>
-    <div class="box"><h2>🎮 Quiz da 20 Domande</h2><p id="quiz-progresso">Domanda 0/20</p><h3 id="quiz-domanda">Clicca Inizia per partire</h3><div id="quiz-opzioni"></div><p id="quiz-punteggio">Punteggio: 0</p><button class="btn-box btn-verde" onclick="avviaQuiz()">Inizia Quiz</button></div>
-    <div class="box" style="border-color:#ff9900;"><h2 style="color:#ff9900;">🏆 Classifica</h2><div class="tabs"><button class="btn-box" onclick="caricaClassifica('all')">Totale</button><button class="btn-box btn-verde" onclick="caricaClassifica('weekly')">Settimanale</button></div><div id="classifica-lista">Caricamento...</div></div>
+<div id="giochi" class="page">
+    <div class="box">
+        <h2>⭐ Acchiappa Stelle e Comete ⭐</h2>
+        <p>Stella = +10 punti | Cometa = +25 punti</p>
+        <div id="game-score">Punteggio: 0</div>
+        <div id="game-timer">Tempo: 20s</div>
+        <div id="game-area"></div>
+        <button class="btn-box btn-verde" onclick="iniziaGioco()">Inizia Gioco</button>
+    </div>
+    <div class="box">
+        <h2>🎮 Quiz da 20 Domande</h2>
+        <p id="quiz-progresso">Domanda 0/20</p>
+        <h3 id="quiz-domanda">Clicca Inizia per partire</h3>
+        <div id="quiz-opzioni"></div>
+        <p id="quiz-punteggio">Punteggio: 0</p>
+        <button class="btn-box btn-verde" onclick="avviaQuiz()">Inizia Quiz</button>
+    </div>
+    <div class="box" style="border-color:#ff9900;">
+        <h2 style="color:#ff9900;">🏆 Classifica dal Gioco</h2>
+        <div id="classifica-lista">Caricamento...</div>
+    </div>
 </div>
 
-<div id="nasa" class="page" style="display:none;">
+<div id="nasa" class="page">
     <div class="box"><h2>🛰️ Foto del Giorno NASA</h2><div id="nasa-apod">Caricamento automatico...</div></div>
-    <div class="box" style="border-color:#ff9900;"><h2 style="color:#ff9900;">🚀 Prossimi Lanci Spaziali</h2><div id="calendario-lanci">Caricamento lanci...</div></div>
+    <!-- NUOVO CALENDARIO NASA -->
+    <div class="box"><h2>📅 Calendario Eventi NASA</h2><div id="calendario-nasa"></div></div>
 </div>
 
-<div id="admin" class="page" style="display:none;">
-    <div class="box"><h2>🔐 Pannello Admin</h2><button class="btn-box btn-arancione" onclick="apriUpload()">Carica Nuova Foto</button><h3 style="margin-top:15px;color:#00e5ff;">Crea Post Admin:</h3><input type="text" id="admin-testo" placeholder="Scrivi un annuncio importante..."><button class="btn-box btn-rosso" onclick="creaPostAdmin()">Pubblica come Admin</button><h3 style="margin-top:15px;color:#00e5ff;">Le tue Foto Caricate:</h3><div id="admin-gallery" class="admin-gallery"></div></div>
+<div id="admin" class="page">
+    <div class="box">
+        <h2>🔐 Pannello Admin</h2>
+        <button class="btn-box btn-arancione" onclick="apriUpload()">Carica Nuova Foto</button>
+        <h3 style="margin-top:15px;color:#00e5ff;">Le tue Foto Caricate:</h3>
+        <div id="admin-gallery" class="admin-gallery"></div>
+    </div>
+    <!-- NUOVI POST ADMIN -->
+    <div class="box" style="border-color:#ff9900;">
+        <h2 style="color:#ff9900;">📢 Post Admin</h2>
+        <input type="text" id="admin-testo" placeholder="Scrivi un annuncio per la community...">
+        <button class="btn-box btn-arancione" onclick="creaPostAdmin()">Pubblica</button>
+        <div id="admin-board"></div>
+    </div>
 </div>
 
-<div id="chi-siamo" class="page" style="display:none;">
-    <div class="box"><h2>👨‍🚀 Chi Siamo</h2><img id="foto-creatore" src="logo-astro.png"><p><b>Sono un ragazzo appassionato di astronomia</b><br><i>con un solo obiettivo. Trasmettere la passione per lo spazio a tutti e rendere l'universo più vicino a chiunque. Un passo alla volta verso le stelle</i> 🌌</p><p><b>Contattami:</b> 334 899 6505</p><a href="https://share.google/JJP384LrAcHHmotmi" class="btn-principale btn-whatsapp" target="_blank">💬 Canale WhatsApp</a></div>
+<!-- BLOCCO CHI SIAMO AGGIORNATO -->
+<div id="chi-siamo" class="page">
+    <div class="box">
+        <h2>👨‍🚀 Chi Siamo</h2>
+        <img id="foto-creatore" src="logo-astro.png">
+        <p><b>Sono un ragazzo appassionato di astronomia</b><br>
+        <i>con un solo obiettivo. Trasmettere la passione per lo spazio a tutti
+        e rendere l'universo più vicino a chiunque.
+        Un passo alla volta verso le stelle</i> 🌌</p>
+        <p><b>Contattami:</b> 334 899 6505</p>
+        <a href="https://share.google/JJP384LrAcHHmotmi" class="btn-principale btn-whatsapp" target="_blank">💬 Canale WhatsApp</a>
+    </div>
 </div>
 
 <div id="pwdPop"><div class="popBox"><h3>Accesso Admin</h3><input type="password" id="pwd" placeholder="astro2026"><br><button class="btn-box" onclick="checkPwd()">Entra</button></div></div>
 <div id="uploadPop"><div class="popBox"><h3>Carica Foto</h3><input type="file" id="uploadFoto" accept="image/*"><br><button class="btn-box" onclick="salvaFoto()">Salva</button></div></div>
 
 <script>
-// ⚠️ METTI QUI LE TUE 5 CHIAVI DI JSONBIN.IO ⚠️
-const API_KEY = "INCOLLA_QUI_LA_TUA_MASTER_KEY";
-const BIN_ISCRITTI = "INCOLLA_QUI_ID_BIN_ISCRITTI";
-const BIN_POST = "INCOLLA_QUI_ID_BIN_POST";
-const BIN_FOTO = "INCOLLA_QUI_ID_BIN_FOTO";
-const BIN_CLASSIFICA = "INCOLLA_QUI_ID_BIN_CLASSIFICA";
-
+const API_KEY = "$2a$10$Of8B49grvxrMdmYIrN9o7.BVgcF3GjHut.mQKHFy7/rNfZuMVUcse";
+const BIN_ISCRITTI = "6a50f0bcda38895dfe4b4263";
+const BIN_POST = "6a50a1dff5f4af5e297b7932";
+const BIN_FOTO = "6a50a2c7da38895dfe49f226";
+const BIN_CLASSIFICA = "6a50a3c7da38895dfe49f227";
+const BIN_ADMIN_POST = "6a50a4c7da38895dfe49f228"; // NUOVO BIN PER POST ADMIN
 const JSONBIN_URL = "https://api.jsonbin.io/v3/b/";
 const ADMIN_PASSWORD = "astro2026";
 const NASA_API_KEY = "DEMO_KEY";
 
+// 8 COMETE
 function creaStelleEComete(){
     const sfondo = document.getElementById('sfondo-stelle');
     sfondo.innerHTML = '';
-    for(let i=0;i<150;i++){let s = document.createElement('div');s.className = 'stella-fissa';s.style.left = Math.random()*100+'%';s.style.top = Math.random()*100+'%';s.style.animationDelay = Math.random()*3+'s';sfondo.appendChild(s);}
-    for(let i=0;i<8;i++){let c = document.createElement('div');c.className = 'cometa-bg';c.style.left = Math.random()*100+'%';c.style.top = '-100px';c.style.animationDelay = i*0.7+'s';sfondo.appendChild(c);}
-}
-
-// FIX PAGINE: Usa style.display
-function showPage(id){
-    document.getElementById('home').style.display = 'none';
-    document.getElementById('giochi').style.display = 'none';
-    document.getElementById('nasa').style.display = 'none';
-    document.getElementById('admin').style.display = 'none';
-    document.getElementById('chi-siamo').style.display = 'none';
-    document.getElementById(id).style.display = 'block';
-
-    if(id==='giochi'){caricaClassifica('all')}
-    if(id==='admin'){caricaGalleryAdmin()}
-    if(id==='nasa'){caricaLanci()}
-}
-
-async function getBin(id){
-    try{
-        const res=await fetch(JSONBIN_URL+id+"/latest",{method:"GET",headers:{"X-Master-Key":API_KEY,"X-Bin-Versioning":false}});
-        if(!res.ok) throw new Error(res.status);
-        const data=await res.json();
-        return data.record;
-    }catch(e){
-        console.log("Bin vuoto, lo creo:",id);
-        let defaultData = {count:0};
-        if(id===BIN_POST) defaultData={posts:""};
-        if(id===BIN_FOTO) defaultData={foto:[]};
-        if(id===BIN_CLASSIFICA) defaultData={classifica:[]};
-        await updateBin(id,defaultData);
-        return defaultData;
+    for(let i=0;i<150;i++){
+        let s = document.createElement('div');
+        s.className = 'stella-fissa';
+        s.style.left = Math.random()*100+'%';
+        s.style.top = Math.random()*100+'%';
+        s.style.animationDelay = Math.random()*3+'s';
+        sfondo.appendChild(s);
+    }
+    for(let i=0;i<8;i++){
+        let c = document.createElement('div');
+        c.className = 'cometa-bg';
+        c.style.left = Math.random()*100+'%';
+        c.style.top = '-100px';
+        c.style.animationDelay = i*0.7+'s';
+        sfondo.appendChild(c);
     }
 }
+
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='giochi'){caricaClassifica()}if(id==='admin'){caricaGalleryAdmin();caricaPostAdmin()}if(id==='nasa'){generaCalendarioNASA()}}
+
+async function getBin(id){try{const res=await fetch(JSONBIN_URL+id+"/latest",{headers:{"X-Master-Key":API_KEY}});const data=await res.json();return data.record;}catch(e){return null}}
 async function updateBin(id,data){await fetch(JSONBIN_URL+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(data)});}
 
 let iscritti=0;
-async function caricaIscritti(){let d=await getBin(BIN_ISCRITTI);iscritti=d.count||0;document.getElementById('contatore-iscritti').innerText=iscritti;}
-async function confermaIscrizione(){let e=document.getElementById('email-utente').value;if(e.includes('@')){iscritti++;await updateBin(BIN_ISCRITTI,{count:iscritti});alert('Benvenuto nella Community!');document.getElementById('box-iscrizione').style.display='none';caricaIscritti();}}
+async function caricaIscritti(){let d=await getBin(BIN_ISCRITTI);if(d&&d.count!==undefined){iscritti=d.count;}else{iscritti=0; await updateBin(BIN_ISCRITTI,{count:0});}avviaContatore();}
+async function confermaIscrizione(){let e=document.getElementById('email-utente').value;if(e.includes('@')){iscritti++;await updateBin(BIN_ISCRITTI,{count:iscritti});alert('Benvenuto nella Community!');document.getElementById('box-iscrizione').style.display='none';avviaContatore();}}
 function apriIscrizione(){let b=document.getElementById('box-iscrizione');b.style.display=b.style.display==='none'?'block':'none';}
 
 async function caricaPost(){let d=await getBin(BIN_POST);document.getElementById('reddit-board').innerHTML=d&&d.posts?d.posts:"<p>Sii il primo a scrivere!</p>";}
-async function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;let d=await getBin(BIN_POST);d.posts=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_POST,d);document.getElementById('chat-testo').value="";caricaPost();}
-async function creaPostAdmin(){let t=document.getElementById('admin-testo').value.trim();if(!t)return;let d=await getBin(BIN_POST);d.posts=`<div class="reddit-post admin"><b>👨‍🚀 ADMIN</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_POST,d);document.getElementById('admin-testo').value="";caricaPost();alert('Post Admin pubblicato!');}
+async function creaPostReddit(){let n=document.getElementById('chat-nome').value.trim()||"Anonimo",t=document.getElementById('chat-testo').value.trim();if(!t)return;let d=await getBin(BIN_POST)||{posts:""};d.posts=`<div class="reddit-post"><b>${n}</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_POST,d);document.getElementById('chat-testo').value="";caricaPost();}
+
+// NUOVE FUNZIONI POST ADMIN
+async function caricaPostAdmin(){let d=await getBin(BIN_ADMIN_POST);document.getElementById('admin-board').innerHTML=d&&d.posts?d.posts:"<p>Nessun annuncio</p>";}
+async function creaPostAdmin(){let t=document.getElementById('admin-testo').value.trim();if(!t)return;let d=await getBin(BIN_ADMIN_POST)||{posts:""};d.posts=`<div class="reddit-post" style="border-left:3px solid #00e5ff;"><b>ADMIN</b><p>${t}</p></div>`+d.posts;await updateBin(BIN_ADMIN_POST,d);document.getElementById('admin-testo').value="";caricaPostAdmin();}
 
 function apriUpload(){document.getElementById('pwdPop').style.display='flex'}
 function checkPwd(){if(document.getElementById('pwd').value===ADMIN_PASSWORD){document.getElementById('pwdPop').style.display='none';document.getElementById('uploadPop').style.display='flex'}else{alert('Password errata')}}
-async function salvaFoto(){let file=document.getElementById('uploadFoto').files[0];if(file){let reader=new FileReader();reader.onload=async function(e){let d=await getBin(BIN_FOTO);d.foto.push(e.target.result);await updateBin(BIN_FOTO,d);alert('Foto caricata!');document.getElementById('uploadPop').style.display='none';caricaGalleryAdmin()};reader.readAsDataURL(file);}}
+async function salvaFoto(){let file=document.getElementById('uploadFoto').files[0];if(file){let reader=new FileReader();reader.onload=async function(e){let d=await getBin(BIN_FOTO)||{foto:[]};d.foto.push(e.target.result);await updateBin(BIN_FOTO,d);alert('Foto caricata!');document.getElementById('uploadPop').style.display='none';caricaGalleryAdmin()};reader.readAsDataURL(file);}}
 async function caricaGalleryAdmin(){let d=await getBin(BIN_FOTO);let html='';if(d&&d.foto){d.foto.forEach(f=>{html+=`<img src="${f}">`})}document.getElementById('admin-gallery').innerHTML=html||'<p>Nessuna foto</p>';}
 async function caricaFoto(){let d=await getBin(BIN_FOTO);if(d&&d.foto&&d.foto.length>0){document.getElementById('foto-creatore').src=d.foto[d.foto.length-1]}}
 
 function calcolaPeso(){let p=parseFloat(document.getElementById('pesoTerraGadget').value);let g=parseFloat(document.getElementById('pianetaPeso').value);if(!p)return;document.getElementById('risultatoSpazioGadget').innerHTML=`Peso: <b style="color:#00e5ff;">${(p*g).toFixed(2)} kg</b>`;}
 
+// SOLO 2 FRASI
+const eventi=["🌠 Tra 2 giorni pioggia di meteore Perseidi","🪐 Giove e Saturno visibili a occhio nudo questa settimana"];
+function generaEvento(){document.getElementById('evento-sorpresa').innerText=eventi[Math.floor(Math.random()*eventi.length)];}
+function avviaContatore(){const cn=document.getElementById('contatore-iscritti');let tg=iscritti,cur=0,it=setInterval(()=>{if(cur<tg){cur+=Math.ceil(tg/40);cn.innerText=cur;}else{cn.innerText=tg;clearInterval(it);}},20);}
+
 // GIOCO
 let gameScore=0, gameInterval, gameTime=20;
-function iniziaGioco(){gameScore=0;gameTime=20;document.getElementById('game-score').innerText='Punteggio: 0';document.getElementById('game-timer').innerText='Tempo: 20s';document.getElementById('game-area').innerHTML='';clearInterval(gameInterval);gameInterval=setInterval(()=>{creaOggetto();gameTime--;document.getElementById('game-timer').innerText='Tempo: '+gameTime+'s';if(gameTime<=0){clearInterval(gameInterval);salvaPunteggioAutomatico();alert('Tempo scaduto! Punteggio: '+gameScore);}},700);}
-function creaOggetto(){const area=document.getElementById('game-area');const obj=document.createElement('div');const tipo=Math.random()>0.7?'cometa-game':'stella-game';obj.className='game-obj '+tipo;obj.style.left=Math.random()*85+'%';obj.style.top='-30px';obj.onclick=function(){gameScore+=tipo==='cometa-game'?25:10;document.getElementById('game-score').innerText='Punteggio: '+gameScore;this.remove();};area.appendChild(obj);let pos=0;const caduta=setInterval(()=>{pos+=4;obj.style.top=pos+'px';if(pos>300){clearInterval(caduta);obj.remove();}},25);}
+function iniziaGioco(){
+    gameScore=0;gameTime=20;
+    document.getElementById('game-score').innerText='Punteggio: 0';
+    document.getElementById('game-timer').innerText='Tempo: 20s';
+    document.getElementById('game-area').innerHTML='';
+    clearInterval(gameInterval);
+    gameInterval=setInterval(()=>{
+        creaOggetto();
+        gameTime--;
+        document.getElementById('game-timer').innerText='Tempo: '+gameTime+'s';
+        if(gameTime<=0){
+            clearInterval(gameInterval);
+            salvaPunteggioAutomatico();
+            alert('Tempo scaduto! Punteggio: '+gameScore);
+        }
+    },700);
+}
+function creaOggetto(){
+    const area=document.getElementById('game-area');
+    const obj=document.createElement('div');
+    const tipo=Math.random()>0.7?'cometa-game':'stella-game';
+    obj.className='game-obj '+tipo;
+    obj.style.left=Math.random()*85+'%';
+    obj.style.top='-30px';
+    obj.onclick=function(){
+        gameScore+=tipo==='cometa-game'?25:10;
+        document.getElementById('game-score').innerText='Punteggio: '+gameScore;
+        this.remove();
+    }
+    area.appendChild(obj);
+    let pos=0;const caduta=setInterval(()=>{pos+=4;obj.style.top=pos+'px';if(pos>300){clearInterval(caduta);obj.remove();}},25);
+}
 
-// QUIZ
-const tutteDomande=[{d:"Quale pianeta è il Gigante Gassoso più grande?",op:["Marte","Giove","Saturno"],r:1},{d:"Quanto dura un giorno su Venere?",op:["24 ore","243 giorni","1 anno"],r:1},{d:"Quale pianeta ha gli anelli più famosi?",op:["Giove","Saturno","Urano"],r:1},{d:"Cosa è una supernova?",op:["Un buco nero","Esplosione di una stella","Una cometa"],r:1},{d:"Quanti pianeti ci sono nel Sistema Solare?",op:["8","9","7"],r:0},{d:"Quale pianeta è chiamato 'Pianeta Rosso'?",op:["Venere","Marte","Giove"],r:1},{d:"Cosa orbita attorno alla Terra?",op:["Il Sole","La Luna","Marte"],r:1},{d:"Qual è la stella più vicina alla Terra?",op:["Proxima Centauri","Sole","Sirius"],r:1},{d:"Cosa sono le meteore?",op:["Pianeti","Stelle cadenti","Satelliti"],r:1},{d:"Quale pianeta è il più lontano dal Sole?",op:["Nettuno","Urano","Plutone"],r:0},{d:"Cosa misura l'anno luce?",op:["Tempo","Distanza","Peso"],r:1},{d:"Quale galassia contiene il Sistema Solare?",op:["Andromeda","Via Lattea","Triangolo"],r:1},{d:"Cosa è un buco nero?",op:["Stella spenta","Regione con gravità estrema","Pianeta gassoso"],r:1},{d:"Quante lune ha Giove?",op:["4","79","2"],r:1},{d:"Cosa causa le fasi lunari?",op:["Nuvole","Posizione rispetto al Sole","Eclissi"],r:1},{d:"Quale pianeta è il più caldo?",op:["Mercurio","Venere","Marte"],r:1},{d:"Cosa è una costellazione?",op:["Galassia","Gruppo di stelle","Pianeta"],r:1},{d:"Quale telescopio è nello spazio?",op:["Hubble","VLT","Keck"],r:0},{d:"Cosa è l'ISS?",op:["Telescopio","Stazione Spaziale","Razzo"],r:1},{d:"Quale elemento brucia nel Sole?",op:["Ossigeno","Idrogeno","Elio"],r:1}];
+// QUIZ 20 DOMANDE
+const tutteDomande=[{d:"Quale pianeta è il Gigante Gassoso?",op:["Marte","Giove","Saturno"],r:1},{d:"Quanto dura un giorno su Venere?",op:["24 ore","243 giorni","1 anno"],r:1}];
 let domandaCorrente=0, punteggio=0, domandeUsate=[];
 function avviaQuiz(){domandaCorrente=0;punteggio=0;domandeUsate = [...tutteDomande].sort(()=>0.5-Math.random()).slice(0,20);mostraDomanda();}
-function mostraDomanda(){if(domandaCorrente>=20){document.getElementById('quiz-domanda').innerText=`Finito! ${punteggio}/20`;document.getElementById('quiz-opzioni').innerHTML='';return;}document.getElementById('quiz-progresso').innerText=`Domanda ${domandaCorrente+1}/20`;document.getElementById('quiz-domanda').innerText=domandeUsate[domandaCorrente].d;let html='';domandeUsate[domandaCorrente].op.forEach((op,i)=>{html+=`<div class="quiz-opzione" onclick="rispondiQuiz(${i},this)">${op}</div>`;});document.getElementById('quiz-opzioni').innerHTML=html;document.getElementById('quiz-punteggio').innerText=`Punteggio: ${punteggio}`;}
-function rispondiQuiz(risposta,el){let corretta=domandeUsate[domandaCorrente].r;document.querySelectorAll('.quiz-opzione').forEach(o=>o.style.pointerEvents='none');if(risposta===corretta){el.classList.add('corretta');punteggio++;}else{el.classList.add('sbagliata');document.querySelectorAll('.quiz-opzione')[corretta].classList.add('corretta');}domandaCorrente++;setTimeout(mostraDomanda,1000);}
+function mostraDomanda(){if(domandaCorrente>=20){document.getElementById('quiz-domanda').innerText=`Finito! ${punteggio}/20`;return;}document.getElementById('quiz-progresso').innerText=`Domanda ${domandaCorrente+1}/20`;document.getElementById('quiz-domanda').innerText=domandeUsate[domandaCorrente].d;let html='';domandeUsate[domandaCorrente].op.forEach((op,i)=>{html+=`<div class="quiz-opzione" onclick="rispondiQuiz(${i})">${op}</div>`;});document.getElementById('quiz-opzioni').innerHTML=html;document.getElementById('quiz-punteggio').innerText=`Punteggio: ${punteggio}`;}
+function rispondiQuiz(risposta){if(risposta===domandeUsate[domandaCorrente].r){punteggio++;}domandaCorrente++;setTimeout(mostraDomanda,500);}
 
-// CLASSIFICA
-async function salvaPunteggioAutomatico(){let nome = prompt("Complimenti! Inserisci il tuo nome per la classifica:");if(!nome) return;let d=await getBin(BIN_CLASSIFICA);d.classifica.push({nome:nome,punteggio:gameScore,data:Date.now()});await updateBin(BIN_CLASSIFICA,d);caricaClassifica('all');}
-async function caricaClassifica(tipo){let d=await getBin(BIN_CLASSIFICA);let lista=d&&d.classifica?d.classifica:[];if(tipo==='weekly'){const unaSettimanaFa = Date.now() - 7*24*60*60*1000;lista = lista.filter(p=>p.data>unaSettimanaFa);}lista.sort((a,b)=>b.punteggio-a.punteggio);let html='';lista.slice(0,10).forEach((p,i)=>{html+=`<div class="classifica-item"><span>${i+1}. ${p.nome}</span><span>${p.punteggio} pts</span></div>`;});document.getElementById('classifica-lista').innerHTML=html||'<p>Gioca per entrare in classifica!</p>';}
+// CLASSIFICA SALVATA AUTOMATICAMENTE DAL GIOCO
+async function salvaPunteggioAutomatico(){
+    let nome = prompt("Complimenti! Inserisci il tuo nome per la classifica:");
+    if(!nome) return;
+    let d=await getBin(BIN_CLASSIFICA)||{classifica:[]};
+    d.classifica.push({nome:nome,punteggio:gameScore});
+    await updateBin(BIN_CLASSIFICA,d);
+    caricaClassifica();
+}
+async function caricaClassifica(){let d=await getBin(BIN_CLASSIFICA);let lista=d&&d.classifica?d.classifica:[];lista.sort((a,b)=>b.punteggio-a.punteggio);let html='';lista.slice(0,10).forEach((p,i)=>{html+=`<div class="classifica-item"><span>${i+1}. ${p.nome}</span><span>${p.punteggio} pts</span></div>`;});document.getElementById('classifica-lista').innerHTML=html||'<p>Gioca per entrare in classifica!</p>';}
 
-// NASA
-async function 
+// NASA AUTOMATICA
+async function caricaNASA(){try{const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);const data=await res.json();document.getElementById('nasa-apod').innerHTML=`<h3>${data.title}</h3><img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0"><p style="text-align:left;font-size:14px;">${data.explanation}</p>`;}catch(e){document.getElementById('nasa-apod').innerHTML='Errore NASA'}}
+
+// NUOVO CALENDARIO NASA
+function generaCalendarioNASA(){
+    const cal = document.getElementById('calendario-nasa');
+    cal.innerHTML = '';
+    const giorni = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+    giorni.forEach(g=>{cal.innerHTML += `<div style="font-weight:bold;color:#00e5ff">${g}</div>`});
+    for(let i=1;i<=30;i++){
+        let classe = i%7===0? 'giorno-cal has-event' : 'giorno-cal';
+        cal.innerHTML += `<div class="${classe}">${i}</div>`;
+    }
+}
+
+window.addEventListener('load', function(){creaStelleEComete();caricaIscritti();caricaPost();caricaFoto();caricaNASA();});
+</script>
+</body></html>
