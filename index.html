@@ -111,9 +111,17 @@ const NASA_API_KEY = "DEMO_KEY";
 async function getBin(id){try{const res=await fetch(JSONBIN_URL+id+"/latest",{headers:{"X-Master-Key":API_KEY}});if(!res.ok) return null;return (await res.json()).record;}catch(e){return null}}
 async function updateBin(id,data){try{await fetch(JSONBIN_URL+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(data)});}catch(e){}}
 
+// FIX PAGINE - ORA FUNZIONA
 function showPage(id){
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+    });
+    const pagina = document.getElementById(id);
+    if(pagina){
+        pagina.classList.add('active');
+        pagina.style.display = 'block';
+    }
     if(id==='giochi') setTimeout(caricaClassifica,200);
     if(id==='admin') setTimeout(()=>{caricaGalleryAdmin();caricaPostAdmin()},200);
     if(id==='nasa') setTimeout(generaCalendarioNASA,200);
@@ -174,7 +182,4 @@ async function caricaClassifica(){
 }
 
 async function caricaNASA(){try{const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);const data=await res.json();document.getElementById('nasa-apod').innerHTML=`<h3>${data.title}</h3><img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0"><p style="text-align:left;font-size:14px;">${data.explanation}</p>`;}catch(e){document.getElementById('nasa-apod').innerHTML='<p>Foto non disponibile</p>'}}
-async function generaCalendarioNASA(){const cal = document.getElementById('calendario-eventi');const eventiFissi = [{data: "2026-01-03", evento: "🌠 Quadrantidi"},{data: "2026-08-12", evento: "🌠 Perseidi"},{data: "2026-12-14", evento: "🌠 Geminidi"}];let html = '<h3 style="color:#00e5ff;">Eventi 2026</h3>';eventiFissi.forEach(e => {const dataFormattata = new Date(e.data).toLocaleDateString('it-IT');html += `<div style="background:#1b4965;padding:10px;border-radius:8px;margin:6px 0;text-align:left;"><b>${dataFormattata}</b><br><span>${e.evento}</span></div>`;});try{const res = await fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=3');const data = await res.json();html += '<h3 style="color:#ff9900;margin-top:15px;">Prossimi Lanci 🚀</h3>';data.results.forEach(lancio => {const dataLancio = new Date(lancio.net).toLocaleString('it-IT');html += `<div style="background:#2a1b00;padding:10px;border-radius:8px;margin:6px 0;text-align:left;"><b style="color:#ff9900">${lancio.name}</b><br><span style="font-size:13px">📅 ${dataLancio}</span></div>`;});}catch(e){}cal.innerHTML = html;}
-
-window.addEventListener('load', function(){
-    cr
+async function generaCalendarioNASA(){const cal = document.getElementById('calendario-eventi');const eventiFissi = [{data: "2026-01-03", evento: "🌠 Quadrantidi"},{data: "2026-08-12", evento: "🌠 Perseidi"},{data: "2026-12-14", evento: "🌠 Geminidi"}];let html = '<h3 style="color:#00e5ff;">Eventi 2026</h3>';eventiFissi.forEach(e => {const dataFormattata = new Date(e.data).toLocaleDateString('it-IT');html += `<div style="background:#1b4965;padding:10px;border-radius:8px;margin:6px 0;text-align:left;"><b>${dataFormattata}</b><br><span>${e.evento}</span></div>`;});try{const res = await fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=3');const data = await res.json();html += '<h3 style="color:#ff9900;margin-top:15px;">Prossimi Lanci 🚀</h3>';data.results.forEach(lancio => {const dataLancio = new Date(lancio.net).toLocaleString('it-IT');html += `<div style="background:#2a1b00;padding:10px;border-radius:8px;margin:6px 0;text-align:left;"><b style="color:#ff9
