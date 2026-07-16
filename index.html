@@ -34,7 +34,7 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 .reddit-post{background:rgba(255,255,255,0.05);padding:10px;border-radius:6px;margin-bottom:8px;text-align:left;border-left:3px solid #ff9900}
 .reddit-post b{color:#ffcc00}
 #foto-creatore{max-width:180px;border-radius:10px;margin:10px auto;display:block;border:2px solid #00e5ff}
-#pwdPop,#uploadPop,#adminPop{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:999;align-items:center;justify-content:center}
+#pwdPop,#uploadPop{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:999;align-items:center;justify-content:center}
 .popBox{background:#111;padding:25px;border-radius:12px;text-align:center;width:90%;max-width:350px;border:1px solid #333}
 .page{display:none}
 .page.active{display:block}
@@ -115,7 +115,6 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
 
 <div id="nasa" class="page">
     <div class="box"><h2>🛰️ Foto del Giorno NASA</h2><div id="nasa-apod">Caricamento automatico...</div></div>
-    <!-- UNICA COSA CAMBIATA: CALENDARIO CON EVENTI SCRITTI -->
     <div class="box"><h2>📅 Calendario Spaziale 2026</h2><div id="calendario-eventi">Caricamento...</div></div>
 </div>
 
@@ -264,36 +263,31 @@ async function caricaClassifica(){let d=await getBin(BIN_CLASSIFICA);let lista=d
 // NASA
 async function caricaNASA(){try{const res=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);const data=await res.json();document.getElementById('nasa-apod').innerHTML=`<h3>${data.title}</h3><img src="${data.url}" style="max-width:100%;border-radius:8px;margin:10px 0"><p style="text-align:left;font-size:14px;">${data.explanation}</p>`;}catch(e){document.getElementById('nasa-apod').innerHTML='Errore NASA'}}
 
-// UNICA FUNZIONE CAMBIATA: CALENDARIO CON EVENTI SCRITTI
+// CALENDARIO CON EVENTI
 async function generaCalendarioNASA(){
     const cal = document.getElementById('calendario-eventi');
-
     const eventiFissi = [
-        {data: "2026-01-03", evento: "🌠 Pioggia di meteore Quadrantidi - Picco massimo"},
-        {data: "2026-03-20", evento: "☀️ Equinozio di Primavera"},
-        {data: "2026-04-22", evento: "🌠 Pioggia di meteore Liridi"},
-        {data: "2026-08-12", evento: "🌠 Pioggia di meteore Perseidi - La più bella"},
-        {data: "2026-10-21", evento: "🌠 Pioggia di meteore Orionidi"},
+        {data: "2026-01-03", evento: "🌠 Pioggia di meteore Quadrantidi"},
+        {data: "2026-08-12", evento: "🌠 Pioggia di meteore Perseidi"},
         {data: "2026-12-14", evento: "🌠 Pioggia di meteore Geminidi"}
     ];
-
-    let html = '<h3 style="color:#00e5ff;margin-bottom:10px">Eventi Fissi 2026</h3>';
-
+    let html = '<h3 style="color:#00e5ff;margin-bottom:10px">Eventi 2026</h3>';
     eventiFissi.forEach(e => {
         const dataFormattata = new Date(e.data).toLocaleDateString('it-IT');
-        html += `
-        <div style="background:#1b4965;padding:10px;border-radius:8px;margin:6px 0;text-align:left;border-left:4px solid #00e5ff">
-            <b>${dataFormattata}</b><br>
-            <span>${e.evento}</span>
-        </div>`;
+        html += `<div style="background:#1b4965;padding:10px;border-radius:8px;margin:6px 0;text-align:left;border-left:4px solid #00e5ff"><b>${dataFormattata}</b><br><span>${e.evento}</span></div>`;
     });
-
     try{
         const res = await fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5');
         const data = await res.json();
         html += '<h3 style="color:#ff9900;margin:15px 0 10px 0">Prossimi Lanci 🚀</h3>';
         data.results.forEach(lancio => {
             const dataLancio = new Date(lancio.net).toLocaleString('it-IT');
-            html += `
-            <div style="background:#2a1b00;padding:10px;border-radius:8px;margin:6px 0;text-align:left;border-left:4px solid #ff9900">
-                <b style="color:#ff990
+            html += `<div style="background:#2a1b00;padding:10px;border-radius:8px;margin:6px 0;text-align:left;border-left:4px solid #ff9900"><b style="color:#ff9900">${lancio.name}</b><br><span style="font-size:13px">📅 ${dataLancio}</span></div>`;
+        });
+    }catch(e){}
+    cal.innerHTML = html;
+}
+
+window.addEventListener('load', function(){creaStelleEComete();caricaIscritti();caricaPost();caricaFoto();caricaNASA();});
+</script>
+</body></html>
