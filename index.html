@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Astronomia Avanzata - L'universo alla portata di tutti</title>
 <style>
+/* TUTTO UGUALE */
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{background:#000;color:#fff;overflow-x:hidden}
 #loader{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center, #0a1a2a 0%, #000 100%);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.8s}
@@ -157,12 +158,12 @@ input{width:90%;padding:12px;margin:8px 0;border-radius:6px;border:none;backgrou
     </div>
 </div>
 
-<!-- POPUP ADMIN FINALE - NIENTE PASSWORD SCRITTA -->
+<!-- POPUP ADMIN FIXATO -->
 <div id="pwdPop">
     <div class="popBox">
         <h3>🔐 Accesso Admin</h3>
-        <p style="color:#00e5ff;margin:10px 0;font-size:16px;font-weight:bold;">Inserisci password</p>
-        <input type="password" id="pwd" placeholder=""><br>
+        <p style="color:#ff9900;margin:10px 0;font-size:14px;">Password: <b>astro2026</b></p>
+        <input type="password" id="pwd" placeholder="Inserisci password"><br>
         <button class="btn-box" onclick="checkPwd()">Entra</button>
     </div>
 </div>
@@ -297,4 +298,4 @@ async function caricaNASA(){
 }
 
 window.addEventListener('load', function(){setTimeout(function(){document.getElementById('loader').style.opacity='0';setTimeout(function(){document.getElementById('loader').style.display='none';},800);},1500);});
-window.addEventListener('load', async function(){creaStel
+window.addEventListener('load', async function(){creaSt    
