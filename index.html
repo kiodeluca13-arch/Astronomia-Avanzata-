@@ -108,11 +108,11 @@ const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
 const LANCI_DB={2026:["15 Gen: Artemis II","28 Feb: Crew-10 ISS","20 Mar: Europa Clipper","10 Apr: Starship 10"],2027:["10 Gen: Artemis III","15 Mar: Crew-11"],2028:["08 Gen: Artemis IV"]};
 
 function chiudiLoader(){let l=document.getElementById('loader'); l.classList.add('hide'); setTimeout(()=>{l.style.display='none';},500);}
-function apriAdmin(){chiudiLoader(); document.getElementById('pwdPop').classList.add('show');}
-function showPage(id){chiudiLoader(); document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0);}
+function apriAdmin(){chiudiLoader(); document.getElementById('pwdPop').classList.add('show'); setTimeout(()=>document.getElementById('pwd').focus(),200);}
 function toggleIsc(){let b=document.getElementById('boxIsc'); b.style.display=b.style.display=='none'?'block':'none';}
-setTimeout(()=>chiudiLoader(),1500);
+setTimeout(()=>chiudiLoader(),1200);
 
+// DATABASE FIX - FUNZIONA ANCHE SE PIENO
 async function getBin(id){
   try{
     let r=await fetch(URLB+id+"/latest",{headers:{"X-Master-Key":API_KEY}});
@@ -122,52 +122,104 @@ async function getBin(id){
     return j.record;
   }catch{
     let b=localStorage.getItem("backup_"+id);
-    if(b) return JSON.parse(b);
+    if(b) try{ return JSON.parse(b); }catch{}
     return null;
   }
 }
 async function putBin(id,d){
   localStorage.setItem("backup_"+id, JSON.stringify(d));
+  if(id===BIN.F){
+    let foto = d.foto || [];
+    localStorage.setItem("fotoBackup", JSON.stringify(foto));
+  }
   try{
     let r=await fetch(URLB+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)});
     return true;
   }catch{ return true; }
 }
 async function riparaTutto(){
-  if(!confirm("Svuoto e riparo?")) return;
+  if(!confirm("Svuoto e riparo per 100+ foto?")) return;
   let vuotoFoto={foto:[]}, vuotoPost={posts:""};
   localStorage.setItem("backup_"+BIN.F, JSON.stringify(vuotoFoto));
   localStorage.setItem("backup_"+BIN.P, JSON.stringify(vuotoPost));
   localStorage.setItem("backup_"+BIN.A, JSON.stringify(vuotoPost));
   localStorage.setItem("backup_"+BIN.C, JSON.stringify({classifica:[]}));
   localStorage.setItem("backup_"+BIN.I, JSON.stringify({count:0}));
+  localStorage.setItem("fotoBackup", JSON.stringify([]));
   try{
     await fetch(URLB+BIN.F,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(vuotoFoto)});
     await fetch(URLB+BIN.P,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(vuotoPost)});
     await fetch(URLB+BIN.A,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(vuotoPost)});
   }catch{}
-  alert("✅ RIPARATO! Ora funziona.");
+  alert("✅ RIPARATO!");
   location.reload();
 }
 
-function mostraFoto(lista){if(!lista||!lista.length){document.getElementById('gal').innerHTML="Nessuna foto";document.getElementById('fotoChi').innerHTML="<p style='opacity:.5'>Nessuna foto</p>";return;}document.getElementById('gal').innerHTML=lista.map((u,i)=>`<div style="position:relative"><img src="${u}"><button onclick="delFoto(${i})" style="position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:none;border-radius:50%;width:20px;height:20px">x</button></div>`).join('');document.getElementById('fotoChi').innerHTML=lista.map(u=>`<img src="${u}">`).join('');}
-async function loadAll(){
-let i=await getBin(BIN.I); if(i) document.getElementById('cont').innerText=i.count||0;
-let p=await getBin(BIN.P); document.getElementById('board').innerHTML=p?.posts||"<p>Sii il primo!</p>";
-let a=await getBin(BIN.A); if(a?.posts){document.getElementById('aBoard').innerHTML=a.posts; document.getElementById('annChi').innerHTML=a.posts;}
-let f=await getBin(BIN.F); if(f?.foto){let pulite=f.foto.filter(u=>u.startsWith('http')); mostraFoto(pulite);}
-let c=await getBin(BIN.C); document.getElementById('class').innerHTML=(c?.classifica||[]).map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);margin:3px 0;border-radius:5px"><span>${i+1}. ${x.nome}</span><b>${x.punteggio}</b></div>`).join('')||"Nessuno";
-try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();document.getElementById('apod').innerHTML=`<img src="${d.url}" style="max-width:100%;border-radius:8px"><h3>${d.title}</h3>`;}catch{}
+// FOTO FIXATE - SI VEDONO SIA IN ADMIN CHE IN CHI SIAMO
+function mostraFoto(lista){
+  if(!lista) lista=[];
+  lista = lista.filter(u=>u && typeof u==="string" && u.startsWith("http"));
+  localStorage.setItem("fotoBackup", JSON.stringify(lista));
+
+  let gal=document.getElementById('gal');
+  let chi=document.getElementById('fotoChi');
+
+  if(lista.length===0){
+    if(gal) gal.innerHTML="Nessuna foto";
+    if(chi) chi.innerHTML="<p style='opacity:.5'>Nessuna foto caricata</p>";
+    return;
+  }
+  if(gal) gal.innerHTML=lista.map((u,i)=>`<div style="position:relative"><img src="${u}" loading="lazy"><button onclick="delFoto(${i})" style="position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-weight:bold">x</button></div>`).join('');
+  if(chi) chi.innerHTML=lista.map(u=>`<img src="${u}" loading="lazy">`).join('');
 }
-async function delFoto(i){let d=await getBin(BIN.F); d.foto.splice(i,1); await putBin(BIN.F,d); loadAll();}
+
+function showPage(id){
+  chiudiLoader();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='chi'){
+    let b=localStorage.getItem("fotoBackup");
+    if(b){
+      try{ mostraFoto(JSON.parse(b)); }catch{}
+    }
+    // ricarica anche da jsonbin in background
+    getBin(BIN.F).then(f=>{
+      if(f?.foto) mostraFoto(f.foto);
+    });
+  }
+}
+
+async function loadAll(){
+  let i=await getBin(BIN.I); if(i) document.getElementById('cont').innerText=i.count||0;
+  let p=await getBin(BIN.P); document.getElementById('board').innerHTML=p?.posts||"<p>Sii il primo a scrivere!</p>";
+  let a=await getBin(BIN.A); if(a?.posts){document.getElementById('aBoard').innerHTML=a.posts; document.getElementById('annChi').innerHTML=a.posts;}
+  let f=await getBin(BIN.F);
+  if(f?.foto && f.foto.length>0){
+    mostraFoto(f.foto);
+  } else {
+    let b=localStorage.getItem("fotoBackup");
+    if(b) try{ mostraFoto(JSON.parse(b)); }catch{ mostraFoto([]); }
+    else mostraFoto([]);
+  }
+  let c=await getBin(BIN.C); document.getElementById('class').innerHTML=(c?.classifica||[]).map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);margin:3px 0;border-radius:5px"><span>${i+1}. ${x.nome}</span><b>${x.punteggio}</b></div>`).join('')||"Nessuno";
+  try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();document.getElementById('apod').innerHTML=`<img src="${d.url}" style="max-width:100%;border-radius:8px"><h3>${d.title}</h3><p style="font-size:12px;margin-top:5px;opacity:.7">${d.explanation?d.explanation.substring(0,200)+"...":""}</p>`;}catch{ document.getElementById('apod').innerHTML="NASA non disponibile"; }
+}
+
+async function delFoto(i){
+  let d=await getBin(BIN.F);
+  if(!d ||!d.foto) d={foto: JSON.parse(localStorage.getItem("fotoBackup")||"[]")};
+  d.foto.splice(i,1);
+  await putBin(BIN.F,d);
+  mostraFoto(d.foto);
+}
 async function iscriviti(){let e=document.getElementById('email').value.trim(); if(!e.includes('@')) return alert('Email non valida'); let d=await getBin(BIN.I); let c=(d?.count||0)+1; if(await putBin(BIN.I,{count:c})){document.getElementById('cont').innerText=c; document.getElementById('boxIsc').style.display='none';}}
-async function posta(){let n=document.getElementById('nome').value||"Anonimo"; let t=document.getElementById('txt').value; if(!t.trim()) return; let d=await getBin(BIN.P)||{posts:""}; d.posts=`<div class="post"><b>${n}</b><p>${t}</p></div>`+d.posts; if(await putBin(BIN.P,d)){document.getElementById('txt').value=""; loadAll();}}
-async function pulisciBoard(){if(!confirm("Pulisci community?")) return; if(await putBin(BIN.P,{posts:""})) loadAll();}
-async function pubblicaAnnuncio(){let t=document.getElementById('aTxt').value; if(!t.trim()) return; let d=await getBin(BIN.A)||{posts:""}; d.posts=`<div class="post post-admin"><b>ADMIN</b><p>${t}</p></div>`+d.posts; if(await putBin(BIN.A,d)){document.getElementById('aTxt').value=""; loadAll();}}
-async function resetFoto(){if(!confirm("Reset foto?")) return; if(await putBin(BIN.F,{foto:[]})) loadAll();}
+async function posta(){let n=document.getElementById('nome').value||"Anonimo"; let t=document.getElementById('txt').value; if(!t.trim()) return; let d=await getBin(BIN.P)||{posts:""}; d.posts=`<div class="post"><b>${n}</b><p>${t}</p></div>`+d.posts; if(await putBin(BIN.P,d)){document.getElementById('txt').value=""; document.getElementById('board').innerHTML=d.posts;}}
+async function pulisciBoard(){if(!confirm("Pulisci community?")) return; if(await putBin(BIN.P,{posts:""})){document.getElementById('board').innerHTML="<p>Svuotato</p>";}}
+async function pubblicaAnnuncio(){let t=document.getElementById('aTxt').value; if(!t.trim()) return; let d=await getBin(BIN.A)||{posts:""}; d.posts=`<div class="post post-admin"><b>ADMIN</b><p>${t}</p></div>`+d.posts; if(await putBin(BIN.A,d)){document.getElementById('aTxt').value=""; document.getElementById('aBoard').innerHTML=d.posts; document.getElementById('annChi').innerHTML=d.posts;}}
+async function resetFoto(){if(!confirm("Reset foto?")) return; if(await putBin(BIN.F,{foto:[]})) mostraFoto([]);}
 function calcolaPeso(){let p=parseFloat(document.getElementById('peso').value); let g=parseFloat(document.getElementById('pianeta').value); if(!p) return; let nome=document.getElementById('pianeta').options[document.getElementById('pianeta').selectedIndex].text; document.getElementById('risPeso').innerHTML=`Su ${nome} pesi <b style="color:#00e5ff">${(p*g).toFixed(1)} kg</b>`;}
 
-// FIX PASSWORD - NON DICE PIU' LA PASSWORD NELL'ALERT
 function checkPwd(){
   let v=document.getElementById('pwd').value.trim().toLowerCase();
   if(v===PWD){
@@ -180,15 +232,30 @@ function checkPwd(){
   }
 }
 
-async function salvaFoto(){let files=document.getElementById('file').files; if(!files.length) return; let prog=document.getElementById('prog'); prog.innerText="Carico..."; let existing=await getBin(BIN.F)||{foto:[]}; let pulite=existing.foto.filter(u=>u.startsWith('http')); let nuove=[]; for(let i=0;i<files.length;i++){let fd=new FormData(); fd.append('reqtype','fileupload'); fd.append('fileToUpload',files[i]); try{let r=await fetch('https://catbox.moe/user/api.php',{method:'POST',body:fd}); let url=(await r.text()).trim(); if(url.startsWith('https')) nuove.push(url);}catch{}} await putBin(BIN.F,{foto:pulite.concat(nuove)}); prog.innerText="Fatto ✅ "+nuove.length+" foto"; mostraFoto(pulite.concat(nuove)); setTimeout(()=>{document.getElementById('upPop').classList.remove('show'); prog.innerText="";},800);}
+async function salvaFoto(){
+  let files=document.getElementById('file').files; if(!files.length) return alert("Scegli foto");
+  let prog=document.getElementById('prog'); prog.innerText="Carico "+files.length+" foto...";
+  let existing=await getBin(BIN.F)||{foto: JSON.parse(localStorage.getItem("fotoBackup")||"[]")};
+  let pulite=(existing.foto||[]).filter(u=>u && u.startsWith('http'));
+  let nuove=[];
+  for(let i=0;i<files.length;i++){
+    let fd=new FormData(); fd.append('reqtype','fileupload'); fd.append('fileToUpload',files[i]);
+    try{
+      let r=await fetch('https://catbox.moe/user/api.php',{method:'POST',body:fd});
+      let url=(await r.text()).trim();
+      if(url.startsWith('https')) nuove.push(url);
+    }catch{}
+  }
+  let totale=pulite.concat(nuove);
+  await putBin(BIN.F,{foto:totale});
+  mostraFoto(totale);
+  prog.innerText="Fatto ✅ "+nuove.length+" foto caricate!";
+  setTimeout(()=>{document.getElementById('upPop').classList.remove('show'); prog.innerText="";},1200);
+}
+
 function aggiornaLanci(){let anno=new Date().getFullYear(); let am=LANCI_DB[anno]?anno:2026; document.getElementById('annoLanci').innerText=am; document.getElementById('listaLanci').innerHTML=LANCI_DB[am].map(l=>`• ${l}`).join('<br>');}
 let quiz=[], qi=0, qp=0; const banca=[{q:"Qual è il pianeta più grande?",o:["Marte","Giove","Saturno"],r:1}];
 async function caricaQuiz(){try{let r=await fetch('https://opentdb.com/api.php?amount=5&category=17&type=multiple'); let d=await r.json(); quiz=d.results.map(q=>{let c=q.correct_answer, opts=[...q.incorrect_answers,c].sort(()=>Math.random()-0.5); return {q:q.question,o:opts,r:opts.indexOf(c)}});}catch{quiz=banca;} mostraQuiz();}
 function mostraQuiz(){let d=quiz[qi]; if(!d) return; document.getElementById('quizQ').innerText=(qi+1)+"/5 - "+d.q; document.getElementById('quizO').innerHTML=d.o.map((o,i)=>`<button class="quiz-opt" onclick="checkQuiz(${i})">${o}</button>`).join('');}
 function checkQuiz(i){let d=quiz[qi]; document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true); if(i==d.r) qp++; document.getElementById('quizProg').innerText=qp+"/5";}
-function nextQuiz(){qi++; if(qi>=quiz.length) qi=0; mostraQuiz();}
-let sc=0,tm,ti=20; function startGame(){sc=0;ti=20;document.getElementById('game-area').innerHTML='';clearInterval(tm);tm=setInterval(()=>{let ar=document.getElementById('game-area');let o=document.createElement('div');o.style.left=Math.random()*80+'%';o.style.top='-20px';o.style.position='absolute';o.style.width='20px';o.style.height='20px';o.style.background='#00e5ff';o.style.borderRadius='50%';o.onclick=function(){sc+=10;document.getElementById('score').innerText='Punteggio:'+sc;this.remove();};ar.appendChild(o);let pos=0;let it=setInterval(()=>{pos+=4;o.style.top=pos+'px';if(pos>250){clearInterval(it);o.remove();}},20);ti--;document.getElementById('time').innerText='Tempo:'+ti+'s';if(ti<=0){clearInterval(tm);alert('Finito! '+sc);}},600);}
-window.onload=()=>{loadAll();caricaQuiz();aggiornaLanci();}
-</script>
-</body>
-</html>
+function nextQuiz(){qi+
