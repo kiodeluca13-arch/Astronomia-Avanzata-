@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Astronomia Avanzata</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#000;color:#fff;min-height:100vh}
+#loader{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+#loader.hide{opacity:0;pointer-events:none;transition:opacity.5s}
+.sistema{position:relative;width:240px;height:240px;margin-bottom:15px}
+.sole{position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:radial-gradient(#fff8d6,#ffcc33 60%,#ff9900);box-shadow:0 0 30px 10px rgba(255,153,0,.8)}
+.orb{position:absolute;top:50%;left:50%;border:1px solid rgba(0,229,255,.3);border-radius:50%;transform:translate(-50%,-50%);animation:ruota linear infinite}
+.orb span{position:absolute;border-radius:50%;top:50%;left:100%;transform:translate(-50%,-50%)}
+.o1{width:70px;height:70px;animation-duration:2.5s}.o1 span{width:7px;height:7px;background:#9adfff;box-shadow:0 0 8px #9adfff}
+.o2{width:115px;height:115px;animation-duration:4s}.o2 span{width:10px;height:10px;background:#00e5ff;box-shadow:0 0 8px #00e5ff}
+.o3{width:165px;height:165px;animation-duration:6.5s}.o3 span{width:9px;height:9px;background:#ff9900;box-shadow:0 0 8px #ff9900}
+.o4{width:220px;height:220px;animation-duration:9s}.o4 span{width:8px;height:8px;background:#00ff88;box-shadow:0 0 8px #00ff88}
+@keyframes ruota{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.titolo-azzurro{color:#00e5ff;font-size:32px;font-weight:bold;text-align:center}
+.sottotitolo{font-size:14px;opacity:.7;margin-top:6px;text-align:center}
+header{text-align:center;padding:20px}
+.box{background:#0d1b2a;margin:12px;padding:15px;border-radius:10px;border:1px solid #1b4965;text-align:center}
+input,select{width:90%;padding:10px;margin:6px 0;border-radius:6px;border:none;background:#091220;color:#fff}
+.btn{width:90%;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;margin:5px 0}
+.cyan{background:#00e5ff;color:#000}.orange{background:#ff9900;color:#000}.green{background:#00ff88;color:#000}.red{background:#ff3b3b;color:#fff}
+nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:12px;position:sticky;top:0;z-index:20;border-bottom:2px solid #00e5ff}
+.nav-btn{background:none;border:none;color:#00e5ff;font-weight:bold;cursor:pointer;font-size:14px;padding:8px}
+.page{display:none;padding-bottom:20px}.page.active{display:block}
+.post{background:rgba(255,255,255,.08);padding:8px;border-radius:6px;margin:6px 0;border-left:3px solid #ff9900;text-align:left}
+.post-admin{border-left-color:#00e5ff;background:rgba(0,229,255,.15)}
+.gallery{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.gallery img{width:110px;height:110px;object-fit:cover;border-radius:8px;border:2px solid #00e5ff}
+.pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;align-items:center;justify-content:center}
+.pop.show{display:flex}
+.popBox{background:#111;padding:20px;border-radius:10px;width:90%;max-width:320px;text-align:center;border:1px solid #333}
+.link{display:block;background:#ff9900;color:#000;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin:6px auto;width:90%}
+.quiz-opt{display:block;width:90%;margin:6px auto;padding:10px;background:#091220;border:1px solid #1b4965;border-radius:6px;color:#fff;cursor:pointer;text-align:left}
+</style>
+</head>
+<body>
+
+<div id="loader" onclick="chiudiLoader()">
+<div class="sistema"><div class="sole"></div><div class="orb o1"><span></span></div><div class="orb o2"><span></span></div><div class="orb o3"><span></span></div><div class="orb o4"><span></span></div></div>
+<div class="titolo-azzurro">Astronomia Avanzata</div>
+<div class="sottotitolo">l'universo alla portata di tutti</div>
+<p style="font-size:11px;opacity:.4;margin-top:15px">tocca per entrare</p>
+</div>
+
+<header>
+<div style="display:flex;flex-direction:column;align-items:center">
+<div class="sistema" style="width:160px;height:160px;margin-bottom:10px;transform:scale(0.7)"><div class="sole"></div><div class="orb o1"><span></span></div><div class="orb o2"><span></span></div><div class="orb o3"><span></span></div><div class="orb o4"><span></span></div></div>
+<h1 style="color:#00e5ff">Astronomia Avanzata</h1>
+<p style="font-size:12px;opacity:.7">l'universo alla portata di tutti</p>
+<button class="btn cyan" style="margin-top:10px" onclick="toggleIsc()">✨ ISCRIVITI</button>
+</div>
+</header>
+
+<nav>
+<button class="nav-btn" onclick="showPage('home')">Home</button>
+<button class="nav-btn" onclick="showPage('giochi')">Giochi</button>
+<button class="nav-btn" onclick="showPage('nasa')">NASA</button>
+<button class="nav-btn" onclick="apriAdmin()">Admin</button>
+<button class="nav-btn" onclick="showPage('chi')">Chi Siamo</button>
+</nav>
+
+<div id="boxIsc" class="box" style="display:none"><input id="email" placeholder="Email"><button class="btn cyan" onclick="iscriviti()">Unisciti ONLINE</button></div>
+
+<div id="home" class="page active">
+<div class="box"><h2 id="cont" style="font-size:38px;color:#00e5ff">0</h2><p>Iscritti ONLINE</p></div>
+<div class="box" style="border-color:#ff9900"><h2 style="color:#ff9900">🚀 Community ONLINE</h2><input id="nome" placeholder="Nome" style="width:30%;display:inline-block"><input id="txt" placeholder="Scrivi..." style="width:55%;display:inline-block"><button class="btn orange" onclick="posta()">Invia</button><div id="board" style="max-height:300px;overflow-y:auto;text-align:left;margin-top:10px"></div></div>
+<div class="box"><h2>⚖️ Peso su TUTTI i pianeti</h2><input type="number" id="peso" placeholder="kg Terra"><select id="pianeta"><option value="0.38">☿ Mercurio</option><option value="0.91">♀ Venere</option><option value="1">🌍 Terra</option><option value="0.166">🌙 Luna</option><option value="0.38">♂ Marte</option><option value="2.34">♃ Giove</option><option value="1.06">♄ Saturno</option><option value="0.92">♅ Urano</option><option value="1.19">♆ Nettuno</option><option value="0.06">♇ Plutone</option></select><button class="btn cyan" onclick="calcolaPeso()">Calcola</button><div id="risPeso"></div></div>
+<div class="box" style="border-color:#00ff88"><h2 style="color:#00ff88">🛰️ ISS Live</h2><a class="link" href="https://www.nasa.gov/nasalive" target="_blank">📡 NASA LIVE</a><a class="link" style="background:#00e5ff" href="https://ustream.tv/channel/live-iss-stream" target="_blank">🌍 ISS HD</a></div>
+</div>
+
+<div id="giochi" class="page">
+<div class="box"><h2>⭐ Acchiappa Stelle</h2><div id="score">Punteggio:0</div><div id="time">Tempo:20s</div><div id="game-area" style="width:100%;height:260px;background:#0a1a2a;border:2px solid #00e5ff;border-radius:10px;position:relative;overflow:hidden;margin:10px 0"></div><button class="btn green" onclick="startGame()">Inizia Gioco</button></div>
+<div class="box" style="border-color:#ffcc33"><h2 style="color:#ffcc33">🧠 Quiz del Giorno</h2><div id="quizQ" style="margin:10px 0;font-weight:bold">Carico quiz...</div><div id="quizO"></div><div id="quizProg" style="margin-top:10px"></div><button class="btn cyan" onclick="nextQuiz()" style="margin-top:10px">Prossima Domanda</button></div>
+<div class="box"><h2>🏆 Classifica</h2><div id="class"></div></div>
+</div>
+
+<div id="nasa" class="page">
+<div class="box"><h2>🛰️ Foto NASA del Giorno</h2><div id="apod">Carico NASA...</div></div>
+<div class="box" style="border-color:#ff9900"><h2 style="color:#ff9900">🚀 Lanci <span id="annoLanci"></span></h2><div id="listaLanci" style="text-align:left;line-height:1.8"></div></div>
+</div>
+
+<div id="admin" class="page">
+<div class="box"><h2>🔐 Admin</h2><button class="btn orange" onclick="document.getElementById('upPop').classList.add('show')">Carica Foto ONLINE (fino a 20)</button><div id="gal" class="gallery" style="margin-top:10px"></div></div>
+<div class="box"><input id="aTxt" placeholder="Annuncio per Chi Siamo..."><button class="btn orange" onclick="pubblicaAnnuncio()">Pubblica ONLINE</button><div id="aBoard" style="margin-top:10px;text-align:left"></div><button class="btn red" onclick="pulisciBoard()">Pulisci Community</button><button class="btn red" style="background:#555" onclick="resetFoto()">Reset Foto</button><button class="btn" style="background:yellow;color:#000;margin-top:15px;border:2px solid red;font-weight:bold" onclick="riparaTutto()">🔧 RIPARA DATABASE</button></div>
+</div>
+
+<div id="chi" class="page">
+<div class="box"><h2>👨‍🚀 Chi Siamo</h2><p>Ragazzo appassionato di astronomia 🌌</p><a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank" style="display:block;background:#25D366;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:10px">💬 WHATSAPP</a></div>
+<div class="box"><h2 style="color:#00e5ff">📸 Le Mie Foto</h2><div id="fotoChi" class="gallery"></div></div>
+<div class="box"><h2 style="color:#00e5ff">📢 Annunci</h2><div id="annChi" style="text-align:left"></div></div>
+</div>
+
+<div id="pwdPop" class="pop"><div class="popBox"><h3>Password Admin</h3><input type="password" id="pwd" placeholder="Password"><button class="btn cyan" onclick="checkPwd()">ENTRA</button><button class="btn" style="background:#333;color:#fff" onclick="document.getElementById('pwdPop').classList.remove('show')">CHIUDI</button></div></div>
+<div id="upPop" class="pop"><div class="popBox"><h3>Carica fino a 20 Foto</h3><input type="file" id="file" accept="image/*" multiple><button class="btn orange" onclick="salvaFoto()">Carica su Server</button><button class="btn" style="background:#333;color:#fff" onclick="document.getElementById('upPop').classList.remove('show')">CHIUDI</button><div id="prog" style="margin-top:8px;color:#00e5ff;font-weight:bold"></div></div></div>
+
+<script>
+const API_KEY="$2a$10$uEQ8LSpDAVOSMjtKbPUi8edTMRoJhyMR8Hvd8y44HgJM8lM24r5mO";
+const BIN={I:"6a50f0bcda38895dfe4b4263",P:"6a50a1dff5f4af5e297b7932",F:"6a50a2c7da38895dfe49f226",C:"6a50a3c7da38895dfe49f227",A:"6a50a4c7da38895dfe49f228"};
+const URLB="https://api.jsonbin.io/v3/b/";
+const PWD="astro2026";
+const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
+const LANCI_DB={2026:["15 Gen: Artemis II","28 Feb: Crew-10 ISS","20 Mar: Europa Clipper","10 Apr: Starship 10"],2027:["10 Gen: Artemis III","15 Mar: Crew-11"],2028:["08 Gen: Artemis IV"]};
+
+let loaderChiuso=false;
+function chiudiLoader(){
+  if(loaderChiuso) return;
+  loaderChiuso=true;
+  let l=document.getElementById('loader');
+  l.classList.add('hide');
+  setTimeout(()=>{l.style.display='none';},600);
+}
+function apriAdmin(){chiudiLoader(); document.getElementById('pwdPop').classList.add('show');}
+function toggleIsc(){let b=document.getElementById('boxIsc'); b.style.display=b.style.display=='none'?'block':'none';}
+setTimeout(()=>{ chiudiLoader(); }, 1500);
+
+async function getBin(id){
+  try{
+    let r=await fetch(URLB+id+"/latest",{headers:{"X-Master-Key":API_KEY}});
+    if(!r.ok) throw "pieno";
+    let j=await r.json();
+    localStorage.setItem("backup_"+id, JSON.stringify(j.record));
+    return j.record;
+  }catch{
+    let b=localStorage.getItem("backup_"+id);
+    if(b) try{ return JSON.parse(b); }catch{}
+    return null;
+  }
+}
+async function putBin(id,d){
+  localStorage.setItem("backup_"+id, JSON.stringify(d));
+  if(id===BIN.F) localStorage.setItem("fotoBackup", JSON.stringify(d.foto||[]));
+  try{ await fetch(URLB+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)}); }catch{}
+  return true;
+}
+async function riparaTutto(){
+  if(!confirm("Riparare database?")) return;
+  let vuotoFoto={foto:[]}, vuotoPost={posts:""};
+  localStorage.setItem("backup_"+BIN.F, JSON.stringify(vuotoFoto));
+  localStorage.setItem("fotoBackup", JSON.stringify([]));
+  localStorage.setItem("backup_"+BIN.P, JSON.stringify(vuotoPost));
+  localStorage.setItem("backup_"+BIN.A, JSON.stringify(vuotoPost));
+  try{
+    await fetch(URLB+BIN.F,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(vuotoFoto)});
+    await fetch(URLB+BIN.P,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(vuotoPost)});
+    await fetch(URLB+BIN.A,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(vuotoPost)});
+  }catch{}
+  alert("✅ RIPARATO");
+  location.reload();
+}
+
+function mostraFoto(lista){
+  if(!lista) lista=[];
+  lista = lista.filter(u=>u && typeof u==="string" && (u.startsWith("http") || u.startsWith("data:image")));
+  localStorage.setItem("fotoBackup", JSON.stringify(lista));
+  let gal=document.getElementById('gal');
+  let chi=document.getElementById('fotoChi');
+  if(lista.length===0){
+    if(gal) gal.innerHTML="Nessuna foto";
+    if(chi) chi.innerHTML="<p style='opacity:.5'>Nessuna foto</p>";
+    return;
+  }
+  if(gal) gal.innerHTML=lista.map((u,i)=>`<div style="position:relative"><img src="${u}"><button onclick="delFoto(${i})" style="position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:none;border-radius:50%;width:22px;height:22px">x</button></div>`).join('');
+  if(chi) chi.innerHTML=lista.map(u=>`<img src="${u}">`).join('');
+}
+
+function showPage(id){
+  chiudiLoader();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='chi'){
+    let b=localStorage.getItem("fotoBackup");
+    if(b){ try{ mostraFoto(JSON.parse(b)); }catch{} }
+    getBin(BIN.F).then(f=>{ if(f?.foto) mostraFoto(f.foto); });
+  }
+}
+
+async function loadAll(){
+  let i=await getBin(BIN.I); if(i) document.getElementById('cont').innerText=i.count||0;
+  let p=await getBin(BIN.P); document.getElementById('board').innerHTML=p?.posts||"<p>Sii il primo!</p>";
+  let a=await getBin(BIN.A); if(a?.posts){document.getElementById('aBoard').innerHTML=a.posts; document.getElementById('annChi').innerHTML=a.posts;}
+  let f=await getBin(BIN.F);
+  if(f?.foto && f.foto.length>0) mostraFoto(f.foto);
+  else {
+    let b=localStorage.getItem("fotoBackup");
+    if(b) try{ mostraFoto(JSON.parse(b)); }catch{ mostraFoto([]); }
+    else mostraFoto([]);
+  }
+  let c=await getBin(BIN.C); document.getElementById('class').innerHTML=(c?.classifica||[]).map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);margin:3px 0;border-radius:5px"><span>${i+1}. ${x.nome}</span><b>${x.punteggio}</b></div>`).join('')||"Nessuno";
+  try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();document.getElementById('apod').innerHTML=`<img src="${d.url}" style="max-width:100%;border-radius:8px"><h3>${d.title}</h3>`;}catch{}
+}
+async function delFoto(i){let d=await getBin(BIN.F); if(!d||!d.foto) d={foto: JSON.parse(localStorage.getItem("fotoBackup")||"[]")}; d.foto.splice(i,1); await putBin(BIN.F,d); mostraFoto(d.foto);}
+async function iscriviti(){let e=document.getElementById('email').value.trim(); if(!e.includes('@')) return alert('Email non valida'); let d=await getBin(BIN.I); let c=(d?.count||0)+1; if(await putBin(BIN.I,{count:c})){document.getElementById('cont').innerText=c; document.getElementById('boxIsc').style.display='none';}}
+async function posta(){let n=document.getElementById('nome').value||"Anonimo"; let t=document.getElementById('txt').value; if(!t.trim()) return; let d=await getBin(BIN.P)||{posts:""}; d.posts=`<div class="post"><b>${n}</b><p>${t}</p></div>`+d.posts; if(await putBin(BIN.P,d)){document.getElementById('txt').value=""; document.getElementById('board').innerHTML=d.posts;}}
+async function pulisciBoard(){if(!confirm("Pulisci?")) return; if(await putBin(BIN.P,{posts:""})) document.getElementById('board').innerHTML="<p>Svuotato</p>";}
+async function pubblicaAnnuncio(){let t=document.getElementById('aTxt').value; if(!t.trim()) return; let d=await getBin(BIN.A)||{posts:""}; d.posts=`<div class="post post-admin"><b>ADMIN</b><p>${t}</p></div>`+d.posts; if(await putBin(BIN.A,d)){document.getElementById('aTxt').value=""; document.getElementById('aBoard').innerHTML=d.posts; document.getElementById('annChi').innerHTML=d.posts;}}
+async function resetFoto(){if(!confirm("Reset foto?")) return; if(await putBin(BIN.F,{foto:[]})) mostraFoto([]);}
+function calcolaPeso(){let p=parseFloat(document.getElementById('peso').value); let g=parseFloat(document.getElementById('pianeta').value); if(!p) return; let nome=document.getElementById('pianeta').options[document.getElementById('pianeta').selectedIndex].text; document.getElementById('risPeso').innerHTML=`Su ${nome} pesi <b style="color:#00e5ff">${(p*g).toFixed(1)} kg</b>`;}
+function checkPwd(){let v=document.getElementById('pwd').value.trim().toLowerCase(); if(v===PWD){document.getElementById('pwdPop').classList.remove('show'); document.getElementById('pwd').value=""; showPage('admin');} else {alert('Password errata'); document.getElementById('pwd').value="";}}
+
+// FIX 20 FOTO - NON FA PIU' FATTO 0
+async function salvaFoto(){
+  let files=document.getElementById('file').files;
+  if(!files.length) return alert("Scegli le foto");
+  if(files.length>20) return alert("Max 20 alla volta, seleziona 20");
+
+  let prog=document.getElementById('prog');
+  let existing=await getBin(BIN.F)||{foto: JSON.parse(localStorage.getItem("fotoBackup")||"[]")};
+  let pulite=(existing.foto||[]).filter(u=>u && (u.startsWith('http') || u.startsWith('data:image')));
+  let nuove=[];
+
+  for(let i=0;i<files.length;i++){
+    prog.innerText=`Carico ${i+1}/${files.length}...`;
+    let url="";
+    let ok=false;
+
+    try{
+      let fd=new FormData(); fd.append('reqtype','fileupload'); fd.append('fileToUpload',files[i]);
+      let r=await fetch('https://catbox.moe/user/api.php',{method:'POST',body:fd});
+      let t=(await r.text()).trim();
+      if(t.startsWith('https')){ url=t; ok=true; }
+    }catch{}
+
+    if(!ok){
+      try{
+        let fd2=new FormData(); fd2.append('file',files[i]);
+        let r2=await fetch('https://0x0.st',{method:'POST',body:fd2});
+        let t2=(await r2.text()).trim();
+        if(t2.startsWith('https')){ url=t2; ok=true; }
+      }catch{}
+    }
+
+    if(!ok){
+      let b64 = await new Promise(res=>{
+        let reader=new FileReader();
+        reader.onload=e=>res(e.target.result);
+        reader.readAsDataURL(files[i]);
+      });
+      url=b64;
+    }
+
+    if(url) nuove.push(url);
+    await new Promise(r=>setTimeout(r,300));
+  }
+
+  let totale=pulite.concat(nuove);
+  if(totale.length>100) totale=totale.slice(-100);
+
+  await putBin(BIN.F,{foto:totale});
+  mostraFoto(totale);
+  prog.innerText=`Fatto ✅ ${nuove.length}/${files.length} foto caricate!`;
+  setTimeout(()=>{document.getElementById('upPop').classList.remove('show'); prog.innerText=""; document.getElementById('file').value="";},1500);
+}
+
+function aggiornaLanci(){let anno=new Date().getFullYear(); let am=LANCI_DB[anno]?anno:2026; document.getElementById('annoLanci').innerText=am; document.getElementById('listaLanci').innerHTML=LANCI_DB[am].map(l=>`• ${l}`).join('<br>');}
+let quiz=[], qi=0, qp=0; const banca=[{q:"Qual è il pianeta più grande?",o:["Marte","Giove","Saturno"],r:1}];
+async function caricaQuiz(){try{let r=await fetch('https://opentdb.com/api.php?amount=5&category=17&type=multiple'); let d=await r.json(); quiz=d.results.map(q=>{let c=q.correct_answer, opts=[...q.incorrect_answers,c].sort(()=>Math.random()-0.5); return {q:q.question,o:opts,r:opts.indexOf(c)}});}catch{quiz=banca;} mostraQuiz();}
+function mostraQuiz(){let d=quiz[qi]; if(!d) return; document.getElementById('quizQ').innerText=(qi+1)+"/5 - "+d.q; document.getElementById('quizO').innerHTML=d.o.map((o,i)=>`<button class="quiz-opt" onclick="checkQuiz(${i})">${o}</button>`).join('');}
+function checkQuiz(i){document.querySelectorAll('.quiz-opt').fo
