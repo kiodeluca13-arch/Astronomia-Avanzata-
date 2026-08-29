@@ -6,16 +6,15 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#000;color:#fff;min-height:100vh}
-#loader{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.5s ease}
-#loader.hide{opacity:0;pointer-events:none}
+#loader{position:fixed;inset:0;background:#000;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.6s}
 .sistema{position:relative;width:240px;height:240px;margin-bottom:15px}
 .sole{position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:radial-gradient(#fff8d6,#ffcc33 60%,#ff9900);box-shadow:0 0 30px 10px rgba(255,153,0,.8)}
 .orb{position:absolute;top:50%;left:50%;border:1px solid rgba(0,229,255,.3);border-radius:50%;transform:translate(-50%,-50%);animation:ruota linear infinite}
 .orb span{position:absolute;border-radius:50%;top:50%;left:100%;transform:translate(-50%,-50%)}
-.o1{width:70px;height:70px;animation-duration:2.5s}.o1 span{width:7px;height:7px;background:#9adfff;box-shadow:0 0 8px #9adfff}
-.o2{width:115px;height:115px;animation-duration:4s}.o2 span{width:10px;height:10px;background:#00e5ff;box-shadow:0 0 8px #00e5ff}
-.o3{width:165px;height:165px;animation-duration:6.5s}.o3 span{width:9px;height:9px;background:#ff9900;box-shadow:0 0 8px #ff9900}
-.o4{width:220px;height:220px;animation-duration:9s}.o4 span{width:8px;height:8px;background:#00ff88;box-shadow:0 0 8px #00ff88}
+.o1{width:70px;height:70px;animation-duration:2.5s}.o1 span{width:7px;height:7px;background:#9adfff}
+.o2{width:115px;height:115px;animation-duration:4s}.o2 span{width:10px;height:10px;background:#00e5ff}
+.o3{width:165px;height:165px;animation-duration:6.5s}.o3 span{width:9px;height:9px;background:#ff9900}
+.o4{width:220px;height:220px;animation-duration:9s}.o4 span{width:8px;height:8px;background:#00ff88}
 @keyframes ruota{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
 .titolo-azzurro{color:#00e5ff;font-size:32px;font-weight:bold;text-align:center}
 .sottotitolo{font-size:14px;opacity:.7;margin-top:6px;text-align:center}
@@ -40,12 +39,27 @@ nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:12px;po
 </head>
 <body>
 
-<div id="loader" onclick="chiudiLoader()">
+<div id="loader" onclick="this.style.opacity='0';setTimeout(()=>this.remove(),500)">
 <div class="sistema"><div class="sole"></div><div class="orb o1"><span></span></div><div class="orb o2"><span></span></div><div class="orb o3"><span></span></div><div class="orb o4"><span></span></div></div>
 <div class="titolo-azzurro">Astronomia Avanzata</div>
 <div class="sottotitolo">l'universo alla portata di tutti</div>
-<p style="font-size:11px;opacity:.4;margin-top:15px">tocca per entrare - sparisce in 1.5s</p>
+<p style="font-size:11px;opacity:.4;margin-top:15px">sparisce da solo in 1.5s - tocca per chiudere subito</p>
 </div>
+
+<script>
+// LOADER FORZATO - SPARISCE COMUNQUE DOPO 1.5s ANCHE SE C'E' ERRORE
+setTimeout(function(){
+  var l=document.getElementById('loader');
+  if(l){
+    l.style.opacity='0';
+    setTimeout(function(){ if(l) l.remove(); },600);
+  }
+},1500);
+function chiudiLoader(){
+  var l=document.getElementById('loader');
+  if(l){ l.style.opacity='0'; setTimeout(function(){ if(l) l.remove(); },400); }
+}
+</script>
 
 <header>
 <div style="display:flex;flex-direction:column;align-items:center">
@@ -106,15 +120,8 @@ const PWD="astro2026";
 const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
 const LANCI_DB={2026:["15 Gen: Artemis II","28 Feb: Crew-10 ISS","20 Mar: Europa Clipper","10 Apr: Starship 10"],2027:["10 Gen: Artemis III","15 Mar: Crew-11"],2028:["08 Gen: Artemis IV"]};
 
-function chiudiLoader(){
-  let l=document.getElementById('loader');
-  if(!l) return;
-  l.classList.add('hide');
-  setTimeout(()=>{ l.style.display='none'; },600);
-}
 function apriAdmin(){chiudiLoader(); document.getElementById('pwdPop').classList.add('show');}
 function toggleIsc(){let b=document.getElementById('boxIsc'); b.style.display=b.style.display=='none'?'block':'none';}
-setTimeout(()=>{ chiudiLoader(); }, 1500);
 
 async function getBin(id){
   try{
@@ -150,7 +157,6 @@ async function riparaTutto(){
   alert("✅ RIPARATO");
   location.reload();
 }
-
 function mostraFoto(lista){
   if(!lista) lista=[];
   lista = lista.filter(u=>u && typeof u==="string" && (u.startsWith("http") || u.startsWith("data:image")));
@@ -165,7 +171,6 @@ function mostraFoto(lista){
   if(gal) gal.innerHTML=lista.map((u,i)=>`<div style="position:relative"><img src="${u}"><button onclick="delFoto(${i})" style="position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:none;border-radius:50%;width:22px;height:22px">x</button></div>`).join('');
   if(chi) chi.innerHTML=lista.map(u=>`<img src="${u}">`).join('');
 }
-
 function showPage(id){
   chiudiLoader();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -177,7 +182,6 @@ function showPage(id){
     getBin(BIN.F).then(f=>{ if(f?.foto) mostraFoto(f.foto); });
   }
 }
-
 async function loadAll(){
   let i=await getBin(BIN.I); if(i) document.getElementById('cont').innerText=i.count||0;
   let p=await getBin(BIN.P); document.getElementById('board').innerHTML=p?.posts||"<p>Sii il primo!</p>";
@@ -200,7 +204,6 @@ async function pubblicaAnnuncio(){let t=document.getElementById('aTxt').value; i
 async function resetFoto(){if(!confirm("Reset foto?")) return; if(await putBin(BIN.F,{foto:[]})) mostraFoto([]);}
 function calcolaPeso(){let p=parseFloat(document.getElementById('peso').value); let g=parseFloat(document.getElementById('pianeta').value); if(!p) return; let nome=document.getElementById('pianeta').options[document.getElementById('pianeta').selectedIndex].text; document.getElementById('risPeso').innerHTML=`Su ${nome} pesi <b style="color:#00e5ff">${(p*g).toFixed(1)} kg</b>`;}
 function checkPwd(){let v=document.getElementById('pwd').value.trim().toLowerCase(); if(v===PWD){document.getElementById('pwdPop').classList.remove('show'); document.getElementById('pwd').value=""; showPage('admin');} else {alert('Password errata'); document.getElementById('pwd').value="";}}
-
 async function salvaFoto(){
   let files=document.getElementById('file').files;
   if(!files.length) return alert("Scegli le foto");
@@ -244,9 +247,8 @@ async function salvaFoto(){
   prog.innerText=`Fatto ✅ ${nuove.length}/${files.length} foto caricate!`;
   setTimeout(()=>{document.getElementById('upPop').classList.remove('show'); prog.innerText=""; document.getElementById('file').value="";},1500);
 }
-
 function aggiornaLanci(){let anno=new Date().getFullYear(); let am=LANCI_DB[anno]?anno:2026; document.getElementById('annoLanci').innerText=am; document.getElementById('listaLanci').innerHTML=LANCI_DB[am].map(l=>`• ${l}`).join('<br>');}
 let quiz=[], qi=0, qp=0; const banca=[{q:"Qual è il pianeta più grande?",o:["Marte","Giove","Saturno"],r:1}];
 async function caricaQuiz(){try{let r=await fetch('https://opentdb.com/api.php?amount=5&category=17&type=multiple'); let d=await r.json(); quiz=d.results.map(q=>{let c=q.correct_answer, opts=[...q.incorrect_answers,c].sort(()=>Math.random()-0.5); return {q:q.question,o:opts,r:opts.indexOf(c)}});}catch{quiz=banca;} mostraQuiz();}
 function mostraQuiz(){let d=quiz[qi]; if(!d) return; document.getElementById('quizQ').innerText=(qi+1)+"/5 - "+d.q; document.getElementById('quizO').innerHTML=d.o.map((o,i)=>`<button class="quiz-opt" onclick="checkQuiz(${i})">${o}</button>`).join('');}
-function checkQuiz(i){document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true); if(i==quiz[qi].r) qp++; document.getElementById('quizProg').inn
+function checkQuiz(i){document.querySelectorAll('.quiz-op
