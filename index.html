@@ -55,7 +55,7 @@ nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;po
 <div id="home" class="page active">
 <div class="box"><h2 id="cont" style="font-size:38px;color:#00e5ff">0</h2><p>Iscritti</p></div>
 <div class="box" style="border-color:#ff9900"><h2 style="color:#ff9900">🚀 Community ONLINE</h2><input id="nome" placeholder="Nome" style="width:30%;display:inline-block"><input id="txt" placeholder="Scrivi..." style="width:55%;display:inline-block"><button class="btn orange" id="bPost">Invia</button><div id="board" class="reddit"></div></div>
-<div class="box"><h2>⚖️ Peso Spazio</h2><input type="number" id="peso" placeholder="kg"><select id="pianeta"><option value="0.38">Marte</option><option value="0.166">Luna</option><option value="2.34">Giove</option></select><button class="btn cyan" id="bPeso">Calcola</button><div id="risPeso"></div></div>
+<div class="box"><h2>⚖️ Peso Spazio</h2><input type="number" id="peso" placeholder="kg"><select id="pianeta"><option value="0.38">Mercurio</option><option value="0.91">Venere</option><option value="1">Terra</option><option value="0.166">Luna</option><option value="0.38">Marte</option><option value="2.34">Giove</option><option value="1.06">Saturno</option><option value="0.92">Urano</option><option value="1.19">Nettuno</option><option value="0.06">Plutone</option></select><button class="btn cyan" id="bPeso">Calcola</button><div id="risPeso"></div></div>
 <div class="box" style="border-color:#00ff88"><h2 style="color:#00ff88">🛰️ ISS Live</h2><a class="link" href="https://www.nasa.gov/nasalive" target="_blank">📡 NASA LIVE</a><a class="link" style="background:#00e5ff" href="https://ustream.tv/channel/live-iss-stream" target="_blank">🌍 ISS HD</a></div>
 </div>
 
@@ -70,7 +70,7 @@ nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;po
 <div id="admin" class="page"><div class="box"><h2>🔐 Admin</h2><button class="btn orange" id="bUp">Carica Foto (1, 3, 10... quante vuoi)</button><div id="gal" class="gallery" style="margin-top:10px"></div></div><div class="box"><input id="aTxt" placeholder="Annuncio per Chi Siamo..."><button class="btn orange" id="bAdmin">Pubblica</button><div id="aBoard" style="margin-top:10px;text-align:left"></div><button class="btn red" id="bClear">Pulisci Community</button></div></div>
 
 <div id="chi" class="page">
-<div class="box"><h2>👨‍🚀 Chi Siamo</h2><p>Ragazzo appassionato di astronomia 🌌<br>Questo sito è per tutti gli amanti dello spazio</p><a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank" style="display:block;background:#25D366;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:10px">💬 WHATSAPP</a></div>
+<div class="box"><h2>👨‍🚀 Chi Siamo</h2><p style="line-height:1.6">Progetto nato nel 2026 da un giovane appassionato.<br><br>Obiettivo: rendere l'astronomia semplice, divertente e accessibile a tutti, senza paroloni difficili. 🚀</p><a href="https://whatsapp.com/channel/0029Vb7XyoID8SDyJ6wiCt1H" target="_blank" style="display:block;background:#25D366;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:10px">💬 WHATSAPP</a></div>
 <div class="box" id="boxFotoChi"><h2 style="color:#00e5ff">📸 Le Mie Foto Spaziali</h2><div id="fotoChi" class="gallery"><p style="opacity:.5">Carico foto...</p></div></div>
 <div class="box" id="boxAnnChi"><h2 style="color:#00e5ff">📢 I Miei Annunci</h2><div id="annChi" style="text-align:left"><p style="opacity:.5">Carico...</p></div></div>
 </div>
@@ -84,15 +84,12 @@ const BIN={I:"6a50f0bcda38895dfe4b4263",P:"6a50a1dff5f4af5e297b7932",F:"6a50a2c7
 const URLB="https://api.jsonbin.io/v3/b/";
 const PWD="astro2026";
 const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
-
 setTimeout(()=>document.getElementById('loader').classList.add('hide'),500);
 document.getElementById('loader').onclick=()=>document.getElementById('loader').classList.add('hide');
-
 async function getBin(id){try{let c=new AbortController();setTimeout(()=>c.abort(),4000);let r=await fetch(URLB+id+"/latest",{headers:{"X-Master-Key":API_KEY},signal:c.signal});if(!r.ok)return null;return (await r.json()).record}catch{return null}}
 async function putBin(id,d){try{await fetch(URLB+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)})}catch{}}
 function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');}
 let iscritti=0;
-
 function mostraFotoDaLista(lista){
   if(!lista ||!lista.length) return;
   let hAdmin=""; lista.forEach((u,idx)=>hAdmin+=`<div style="position:relative"><img src="${u}"><button onclick="delF(${idx})" style="position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:none;border-radius:50%;width:18px;height:18px">x</button></div>`);
@@ -100,7 +97,6 @@ function mostraFotoDaLista(lista){
   document.getElementById('fotoChi').innerHTML=lista.map(u=>`<img src="${u}" style="width:110px;height:110px;object-fit:cover;border-radius:8px;border:2px solid #00e5ff">`).join('');
   document.getElementById('boxFotoChi').style.display='block';
 }
-
 async function loadAll(){
  let i=await getBin(BIN.I); if(i){iscritti=i.count||0; document.getElementById('cont').innerText=iscritti;}
  let p=await getBin(BIN.P);
@@ -127,20 +123,17 @@ async function loadAll(){
  let c=await getBin(BIN.C); document.getElementById('class').innerHTML=(c?.classifica||[]).map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);margin:3px 0;border-radius:5px"><span>${i+1}. ${x.nome}</span><b>${x.punteggio}</b></div>`).join('')||"Nessuno";
  try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();document.getElementById('apod').innerHTML=`<img src="${d.url}" style="max-width:100%;border-radius:8px"><p>${d.title}</p>`}catch{}
 }
-
 async function delF(i){
   let lista=[]; try{lista=JSON.parse(localStorage.getItem('admin_foto')||'[]')}catch{lista=[]}
   if(lista.length){lista.splice(i,1); localStorage.setItem('admin_foto', JSON.stringify(lista)); if(lista.length) mostraFotoDaLista(lista); else {document.getElementById('gal').innerHTML="<p>Nessuna foto</p>"; document.getElementById('fotoChi').innerHTML="<p style='opacity:.5'>Nessuna foto</p>";}}
   let d=await getBin(BIN.F); if(d && d.foto){d.foto.splice(i,1); await putBin(BIN.F,d);} loadAll();
 }
-
 window.addEventListener('DOMContentLoaded',()=>{
   let cacheF=localStorage.getItem('admin_foto'); if(cacheF){try{mostraFotoDaLista(JSON.parse(cacheF));}catch{}}
   let cacheA=localStorage.getItem('admin_posts'); if(cacheA){document.getElementById('aBoard').innerHTML=cacheA; document.getElementById('annChi').innerHTML=cacheA; document.getElementById('boxAnnChi').style.display='block';}
   let cacheP=localStorage.getItem('board_posts'); if(cacheP){document.getElementById('board').innerHTML=cacheP;}
   loadAll(); loadQuiz();
 });
-
 const domande=[
 {q:"Qual è il pianeta più grande?",o:["Marte","Giove","Saturno"],r:1},
 {q:"Quante lune ha Marte?",o:["0","1","2"],r:2},
@@ -152,7 +145,6 @@ let qi=0;
 function loadQuiz(){let d=domande[qi];document.getElementById('quizQ').innerText=d.q;document.getElementById('quizO').innerHTML=d.o.map((o,i)=>`<button class="quiz-opt" onclick="checkQ(${i})">${o}</button>`).join('');document.getElementById('quizR').innerText="";}
 function checkQ(i){let d=domande[qi];document.getElementById('quizR').innerHTML=i==d.r?"<b style='color:#00ff88'>✅ Giusto!</b>":"<b style='color:#ff3b3b'>❌ Sbagliato!</b> Risposta: "+d.o[d.r];}
 document.getElementById('bQuiz').onclick=()=>{qi=(qi+1)%domande.length;loadQuiz();};
-
 document.getElementById('bIsc').onclick=()=>{let b=document.getElementById('boxIsc');b.style.display=b.style.display=='none'?'block':'none';}
 document.getElementById('bJoin').onclick=async()=>{let e=document.getElementById('email').value;if(!e.includes('@'))return alert('Email no');iscritti++;await putBin(BIN.I,{count:iscritti});document.getElementById('cont').innerText=iscritti;document.getElementById('boxIsc').style.display='none';}
 document.getElementById('bPost').onclick=async()=>{let n=document.getElementById('nome').value||"Anonimo";let t=document.getElementById('txt').value;if(!t)return;let d=await getBin(BIN.P)||{posts:""};d.posts=`<div class="post"><b>${n}</b><p>${t}</p></div>`+d.posts;localStorage.setItem('board_posts', d.posts);await putBin(BIN.P,d);document.getElementById('txt').value="";loadAll();}
