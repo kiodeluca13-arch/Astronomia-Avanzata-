@@ -65,7 +65,7 @@ nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;po
 <div class="box"><h2>🏆 Classifica</h2><div id="class"></div></div>
 </div>
 
-<div id="nasa" class="page"><div class="box"><h2>🛰️ Foto NASA</h2><div id="apod">Carico...</div></div><div class="box"><h2>🚀 Lanci 2026</h2><p style="text-align:left">15 Gen: Artemis II<br>28 Feb: Crew-10<br>20 Mar: Europa Clipper<br>10 Apr: Starship</p></div></div>
+<div id="nasa" class="page"><div class="box"><h2>🛰️ Foto NASA</h2><div id="apod">Carico foto NASA...</div></div><div class="box"><h2>🚀 Lanci 2026</h2><p style="text-align:left">15 Gen: Artemis II<br>28 Feb: Crew-10<br>20 Mar: Europa Clipper<br>10 Apr: Starship</p></div></div>
 
 <div id="admin" class="page"><div class="box"><h2>🔐 Admin</h2><button class="btn orange" id="bUp">Carica Foto (1, 3, 10... quante vuoi)</button><div id="gal" class="gallery" style="margin-top:10px"></div></div><div class="box"><input id="aTxt" placeholder="Annuncio per Chi Siamo..."><button class="btn orange" id="bAdmin">Pubblica</button><div id="aBoard" style="margin-top:10px;text-align:left"></div><button class="btn red" id="bClear">Pulisci Community</button></div></div>
 
@@ -84,84 +84,93 @@ const BIN={I:"6a50f0bcda38895dfe4b4263",P:"6a50a1dff5f4af5e297b7932",F:"6a50a2c7
 const URLB="https://api.jsonbin.io/v3/b/";
 const PWD="astro2026";
 const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
+
 setTimeout(()=>document.getElementById('loader').classList.add('hide'),500);
 document.getElementById('loader').onclick=()=>document.getElementById('loader').classList.add('hide');
-async function getBin(id){try{let c=new AbortController();setTimeout(()=>c.abort(),4000);let r=await fetch(URLB+id+"/latest",{headers:{"X-Master-Key":API_KEY},signal:c.signal});if(!r.ok)return null;return (await r.json()).record}catch{return null}}
-async function putBin(id,d){try{await fetch(URLB+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)})}catch{}}
+
+async function getBin(id){try{let c=new AbortController();setTimeout(()=>c.abort(),5000);let r=await fetch(URLB+id+"/latest",{headers:{"X-Master-Key":API_KEY,"X-Bin-Meta":false},signal:c.signal});if(!r.ok)return null;let j=await r.json();return j.record||j;}catch(e){console.log("BIN errore",id,e);return null}}
+async function putBin(id,d){try{let r=await fetch(URLB+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)});return r.ok;}catch{return false;}}
 function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');}
 let iscritti=0;
+
 function mostraFotoDaLista(lista){
-  if(!lista ||!lista.length) return;
-  let hAdmin=""; lista.forEach((u,idx)=>hAdmin+=`<div style="position:relative"><img src="${u}"><button onclick="delF(${idx})" style="position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:none;border-radius:50%;width:18px;height:18px">x</button></div>`);
+  if(!lista ||!lista.length){document.getElementById('gal').innerHTML="<p style='opacity:.5'>Nessuna foto ancora</p>";document.getElementById('fotoChi').innerHTML="<p style='opacity:.5'>Nessuna foto ancora</p>";return;}
+  let hAdmin=""; lista.forEach((u,idx)=>hAdmin+=`<div style="position:relative"><img src="${u}"><button onclick="delF(${idx})" style="position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:none;border-radius:50%;width:18px;height:18px;cursor:pointer">x</button></div>`);
   document.getElementById('gal').innerHTML=hAdmin;
   document.getElementById('fotoChi').innerHTML=lista.map(u=>`<img src="${u}" style="width:110px;height:110px;object-fit:cover;border-radius:8px;border:2px solid #00e5ff">`).join('');
   document.getElementById('boxFotoChi').style.display='block';
 }
+
 async function loadAll(){
- let i=await getBin(BIN.I); if(i){iscritti=i.count||0; document.getElementById('cont').innerText=iscritti;}
- let p=await getBin(BIN.P);
- if(p && p.posts){document.getElementById('board').innerHTML=p.posts; localStorage.setItem('board_posts', p.posts);}
- else {let cache=localStorage.getItem('board_posts'); if(cache) document.getElementById('board').innerHTML=cache; else document.getElementById('board').innerHTML="<p>Sii il primo!</p>";}
- let a=await getBin(BIN.A);
- if(a && a.posts && a.posts.trim()!=""){
-   document.getElementById('aBoard').innerHTML=a.posts;
-   document.getElementById('annChi').innerHTML=a.posts;
-   document.getElementById('boxAnnChi').style.display='block';
-   localStorage.setItem('admin_posts', a.posts);
- } else {
-   let cacheA=localStorage.getItem('admin_posts');
-   if(cacheA){document.getElementById('aBoard').innerHTML=cacheA; document.getElementById('annChi').innerHTML=cacheA; document.getElementById('boxAnnChi').style.display='block';}
- }
- let f=await getBin(BIN.F);
- if(f && f.foto && f.foto.length>0){
-   mostraFotoDaLista(f.foto);
-   localStorage.setItem('admin_foto', JSON.stringify(f.foto));
- } else {
-   let cacheF=localStorage.getItem('admin_foto');
-   if(cacheF){try{mostraFotoDaLista(JSON.parse(cacheF));}catch{}}
- }
- let c=await getBin(BIN.C); document.getElementById('class').innerHTML=(c?.classifica||[]).map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);margin:3px 0;border-radius:5px"><span>${i+1}. ${x.nome}</span><b>${x.punteggio}</b></div>`).join('')||"Nessuno";
- try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();document.getElementById('apod').innerHTML=`<img src="${d.url}" style="max-width:100%;border-radius:8px"><p>${d.title}</p>`}catch{}
+ try{
+  let i=await getBin(BIN.I); if(i && typeof i.count!=="undefined"){iscritti=i.count||0; document.getElementById('cont').innerText=iscritti;}
+  let p=await getBin(BIN.P);
+  if(p && p.posts && p.posts.trim()!==""){document.getElementById('board').innerHTML=p.posts; localStorage.setItem('board_posts', p.posts);}
+  else {let cache=localStorage.getItem('board_posts'); if(cache) document.getElementById('board').innerHTML=cache; else document.getElementById('board').innerHTML="<p>Sii il primo a scrivere!</p>";}
+  let a=await getBin(BIN.A);
+  if(a && a.posts && a.posts.trim()!==""){document.getElementById('aBoard').innerHTML=a.posts;document.getElementById('annChi').innerHTML=a.posts;document.getElementById('boxAnnChi').style.display='block';localStorage.setItem('admin_posts', a.posts);}
+  else {let cacheA=localStorage.getItem('admin_posts'); if(cacheA){document.getElementById('aBoard').innerHTML=cacheA;document.getElementById('annChi').innerHTML=cacheA;document.getElementById('boxAnnChi').style.display='block';}}
+  let f=await getBin(BIN.F);
+  if(f && f.foto && f.foto.length>0){mostraFotoDaLista(f.foto);localStorage.setItem('admin_foto', JSON.stringify(f.foto));}
+  else {let cacheF=localStorage.getItem('admin_foto'); if(cacheF){try{mostraFotoDaLista(JSON.parse(cacheF));}catch{}}}
+  let c=await getBin(BIN.C); if(c && c.classifica){document.getElementById('class').innerHTML=c.classifica.map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);margin:3px 0;border-radius:5px"><span>${i+1}. ${x.nome}</span><b>${x.punteggio}</b></div>`).join('')||"Nessuno in classifica";} else {document.getElementById('class').innerHTML="Nessuno in classifica";}
+ }catch(e){console.log("loadAll errore",e);}
+ // NASA FIX
+ try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();let imgUrl=d.hdurl||d.url||"";if(d.media_type=="video"){document.getElementById('apod').innerHTML=`<iframe src="${d.url}" style="width:100%;height:200px;border:none;border-radius:8px"></iframe><p style="margin-top:6px;font-weight:bold">${d.title}</p>`}else if(imgUrl){document.getElementById('apod').innerHTML=`<img src="${imgUrl}" style="max-width:100%;border-radius:8px" onerror="this.onerror=null;this.src='${d.url}'"><p style="margin-top:6px;font-weight:bold">${d.title}</p><p style="font-size:11px;opacity:.6;margin-top:4px">${d.explanation?d.explanation.substring(0,180)+"...":""}</p>`}else{document.getElementById('apod').innerHTML=`<p>${d.title||"Foto NASA"}</p>`}}catch{ document.getElementById('apod').innerHTML="<p style='opacity:.7'>Foto NASA non disponibile oggi 🌙 - riprova più tardi<br><a href='https://apod.nasa.gov/' target='_blank' style='color:#00e5ff'>Vai su APOD</a></p>"}
 }
+
 async function delF(i){
   let lista=[]; try{lista=JSON.parse(localStorage.getItem('admin_foto')||'[]')}catch{lista=[]}
-  if(lista.length){lista.splice(i,1); localStorage.setItem('admin_foto', JSON.stringify(lista)); if(lista.length) mostraFotoDaLista(lista); else {document.getElementById('gal').innerHTML="<p>Nessuna foto</p>"; document.getElementById('fotoChi').innerHTML="<p style='opacity:.5'>Nessuna foto</p>";}}
+  if(lista.length){lista.splice(i,1); localStorage.setItem('admin_foto', JSON.stringify(lista)); mostraFotoDaLista(lista);}
   let d=await getBin(BIN.F); if(d && d.foto){d.foto.splice(i,1); await putBin(BIN.F,d);} loadAll();
 }
+
 window.addEventListener('DOMContentLoaded',()=>{
   let cacheF=localStorage.getItem('admin_foto'); if(cacheF){try{mostraFotoDaLista(JSON.parse(cacheF));}catch{}}
   let cacheA=localStorage.getItem('admin_posts'); if(cacheA){document.getElementById('aBoard').innerHTML=cacheA; document.getElementById('annChi').innerHTML=cacheA; document.getElementById('boxAnnChi').style.display='block';}
   let cacheP=localStorage.getItem('board_posts'); if(cacheP){document.getElementById('board').innerHTML=cacheP;}
   loadAll(); loadQuiz();
 });
+
+// QUIZ FIX - NON GIRA INFINITO
 const domande=[
-{q:"Qual è il pianeta più grande?",o:["Marte","Giove","Saturno"],r:1},
+{q:"Qual è il pianeta più grande del sistema solare?",o:["Marte","Giove","Saturno"],r:1},
 {q:"Quante lune ha Marte?",o:["0","1","2"],r:2},
-{q:"Cos'è la ISS?",o:["Un razzo","Stazione Spaziale","Telescopio"],r:1},
-{q:"Primo uomo sulla Luna?",o:["Gagarin","Armstrong","Aldrin"],r:1},
-{q:"Cosa causa le maree?",o:["Il Sole","La Luna","Venere"],r:1}
+{q:"Cos'è la ISS?",o:["Un razzo","Stazione Spaziale Internazionale","Telescopio"],r:1},
+{q:"Chi è stato il primo uomo sulla Luna?",o:["Gagarin","Armstrong","Aldrin"],r:1},
+{q:"Cosa causa le maree sulla Terra?",o:["Il Sole","La Luna","Venere"],r:1}
 ];
 let qi=0;
-function loadQuiz(){let d=domande[qi];document.getElementById('quizQ').innerText=d.q;document.getElementById('quizO').innerHTML=d.o.map((o,i)=>`<button class="quiz-opt" onclick="checkQ(${i})">${o}</button>`).join('');document.getElementById('quizR').innerText="";}
-function checkQ(i){let d=domande[qi];document.getElementById('quizR').innerHTML=i==d.r?"<b style='color:#00ff88'>✅ Giusto!</b>":"<b style='color:#ff3b3b'>❌ Sbagliato!</b> Risposta: "+d.o[d.r];}
-document.getElementById('bQuiz').onclick=()=>{qi=(qi+1)%domande.length;loadQuiz();};
+function loadQuiz(){
+ if(qi>=domande.length){
+  document.getElementById('quizQ').innerText="🎉 Quiz Completato!";
+  document.getElementById('quizO').innerHTML="";
+  document.getElementById('quizR').innerHTML=`<b style='color:#00ff88'>Hai finito tutte le ${domande.length} domande!</b><br><button class='btn cyan' onclick='qi=0;loadQuiz()' style='margin-top:10px;width:90%'>🔄 Ricomincia Quiz</button>`;
+  document.getElementById('bQuiz').style.display='none';
+  return;
+ }
+ document.getElementById('bQuiz').style.display='block';
+ let d=domande[qi];
+ document.getElementById('quizQ').innerText=(qi+1)+"/"+domande.length+" - "+d.q;
+ document.getElementById('quizO').innerHTML=d.o.map((o,i)=>`<button class="quiz-opt" onclick="checkQ(${i})">${o}</button>`).join('');
+ document.getElementById('quizR').innerText="";
+}
+function checkQ(i){let d=domande[qi];document.getElementById('quizR').innerHTML=i==d.r?"<b style='color:#00ff88'>✅ Giusto! Bravo!</b>":"<b style='color:#ff3b3b'>❌ Sbagliato!</b> Risposta corretta: <b>"+d.o[d.r]+"</b>";}
+document.getElementById('bQuiz').onclick=()=>{
+ if(qi>=domande.length-1){qi=domande.length; loadQuiz(); return;}
+ qi++; loadQuiz();
+};
+
 document.getElementById('bIsc').onclick=()=>{let b=document.getElementById('boxIsc');b.style.display=b.style.display=='none'?'block':'none';}
-document.getElementById('bJoin').onclick=async()=>{let e=document.getElementById('email').value;if(!e.includes('@'))return alert('Email no');iscritti++;await putBin(BIN.I,{count:iscritti});document.getElementById('cont').innerText=iscritti;document.getElementById('boxIsc').style.display='none';}
-document.getElementById('bPost').onclick=async()=>{let n=document.getElementById('nome').value||"Anonimo";let t=document.getElementById('txt').value;if(!t)return;let d=await getBin(BIN.P)||{posts:""};d.posts=`<div class="post"><b>${n}</b><p>${t}</p></div>`+d.posts;localStorage.setItem('board_posts', d.posts);await putBin(BIN.P,d);document.getElementById('txt').value="";loadAll();}
-document.getElementById('bClear').onclick=async()=>{if(!confirm("Pulisci?"))return;localStorage.removeItem('board_posts');await putBin(BIN.P,{posts:""});loadAll();}
-document.getElementById('bAdmin').onclick=async()=>{let t=document.getElementById('aTxt').value;if(!t)return;let d=await getBin(BIN.A)||{posts:""};d.posts=`<div class="post post-admin"><b style="color:#00e5ff">ADMIN</b><p>${t}</p></div>`+d.posts;localStorage.setItem('admin_posts', d.posts);await putBin(BIN.A,d);document.getElementById('aTxt').value="";loadAll();}
+document.getElementById('bJoin').onclick=async()=>{let e=document.getElementById('email').value.trim();if(!e.includes('@')||!e.includes('.'))return alert('Email non valida');let d=await getBin(BIN.I);let count=(d?.count||iscritti)+1;let ok=await putBin(BIN.I,{count:count});if(ok||true){iscritti=count;document.getElementById('cont').innerText=iscritti;document.getElementById('boxIsc').style.display='none';document.getElementById('email').value="";alert("Iscritto! Grazie 🚀");}}
+document.getElementById('bPost').onclick=async()=>{let n=document.getElementById('nome').value.trim()||"Anonimo";let t=document.getElementById('txt').value.trim();if(!t)return alert('Scrivi qualcosa');let d=await getBin(BIN.P)||{posts:""};let nuovo=`<div class="post"><b>${n}</b><p>${t}</p><small style="opacity:.5">${new Date().toLocaleDateString()}</small></div>`;d.posts=nuovo+d.posts;localStorage.setItem('board_posts', d.posts);document.getElementById('board').innerHTML=d.posts;await putBin(BIN.P,d);document.getElementById('txt').value="";}
+document.getElementById('bClear').onclick=async()=>{if(!confirm("Vuoi pulire TUTTA la community?"))return;localStorage.removeItem('board_posts');await putBin(BIN.P,{posts:""});document.getElementById('board').innerHTML="<p>Pulito!</p>";}
+document.getElementById('bAdmin').onclick=async()=>{let t=document.getElementById('aTxt').value.trim();if(!t)return;let d=await getBin(BIN.A)||{posts:""};d.posts=`<div class="post post-admin"><b style="color:#00e5ff">ADMIN • ${new Date().toLocaleDateString()}</b><p>${t}</p></div>`+d.posts;localStorage.setItem('admin_posts', d.posts);document.getElementById('aBoard').innerHTML=d.posts;document.getElementById('annChi').innerHTML=d.posts;document.getElementById('boxAnnChi').style.display='block';await putBin(BIN.A,d);document.getElementById('aTxt').value="";alert("Annuncio pubblicato!");}
 document.getElementById('bUp').onclick=()=>document.getElementById('upPop').style.display='flex';
 document.getElementById('bClose').onclick=()=>document.getElementById('upPop').style.display='none';
 document.getElementById('bSave').onclick=async()=>{
-  let files=document.getElementById('file').files;if(!files.length)return alert('Scegli foto');let prog=document.getElementById('prog');prog.innerText="Carico "+files.length+"...";let existing=await getBin(BIN.F)||{foto:[]};try{let cf=JSON.parse(localStorage.getItem('admin_foto')||'[]'); if(cf.length>existing.foto.length) existing.foto=cf;}catch{} let nuove=[];let done=0;
-  for(let f of files){await new Promise(res=>{let img=new Image();img.onload=()=>{let cv=document.getElementById('cvs');let m=350,w=img.width,h=img.height;if(w>m||h>m){if(w>h){h*=m/w;w=m}else{w*=m/h;h=m}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);nuove.push(cv.toDataURL('image/jpeg',0.4));done++;prog.innerText=done+"/"+files.length;res();};img.src=URL.createObjectURL(f);});}
-  existing.foto=existing.foto.concat(nuove); localStorage.setItem('admin_foto', JSON.stringify(existing.foto)); mostraFotoDaLista(existing.foto); await putBin(BIN.F,existing); prog.innerText="Fatto! "+nuove.length+" foto"; setTimeout(()=>{document.getElementById('upPop').style.display='none';prog.innerText="";},800); loadAll();
+  let files=document.getElementById('file').files;if(!files.length)return alert('Scegli almeno 1 foto');let prog=document.getElementById('prog');prog.innerText="Carico "+files.length+" foto...";let existing=await getBin(BIN.F)||{foto:[]};try{let cf=JSON.parse(localStorage.getItem('admin_foto')||'[]'); if(cf.length>existing.foto.length) existing.foto=cf;}catch{} let nuove=[];let done=0;
+  for(let f of files){await new Promise(res=>{let img=new Image();img.onload=()=>{let cv=document.getElementById('cvs');let m=400,w=img.width,h=img.height;if(w>m||h>m){if(w>h){h*=m/w;w=m}else{w*=m/h;h=m}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);nuove.push(cv.toDataURL('image/jpeg',0.45));done++;prog.innerText=done+"/"+files.length+" fatte";res();};img.onerror=()=>{done++;res();};img.src=URL.createObjectURL(f);});}
+  existing.foto=existing.foto.concat(nuove); localStorage.setItem('admin_foto', JSON.stringify(existing.foto)); mostraFotoDaLista(existing.foto); let ok=await putBin(BIN.F,existing); prog.innerText=ok?"Fatto! "+nuove.length+" foto salvate online ✅":"Salvate localmente, online tra poco"; setTimeout(()=>{document.getElementById('upPop').style.display='none';prog.innerText="";},1000);
 };
-document.getElementById('bPeso').onclick=()=>{let p=parseFloat(document.getElementById('peso').value);let g=parseFloat(document.getElementById('pianeta').value);if(!p)return;document.getElementById('risPeso').innerHTML=`Pesi <b style="color:#00e5ff">${(p*g).toFixed(1)} kg</b>`;}
-let sc=0,tm,ti=20;
-document.getElementById('bGame').onclick=()=>{sc=0;ti=20;document.getElementById('score').innerText='Punteggio:0';document.getElementById('game-area').innerHTML='';clearInterval(tm);tm=setInterval(()=>{let ar=document.getElementById('game-area');let o=document.createElement('div');let tp=Math.random()>.6?'co':'st';o.className='obj '+tp;o.style.left=Math.random()*80+'%';o.style.top='-20px';o.onclick=function(){sc+=tp=='co'?25:10;document.getElementById('score').innerText='Punteggio:'+sc;this.remove();};ar.appendChild(o);let pos=0;let it=setInterval(()=>{pos+=4;o.style.top=pos+'px';if(pos>250){clearInterval(it);o.remove();}},20);ti--;document.getElementById('time').innerText='Tempo:'+ti+'s';if(ti<=0){clearInterval(tm);let n=prompt('Nome:');if(n){getBin(BIN.C).then(d=>{d=d||{classifica:[]};d.classifica.push({nome:n,punteggio:sc});d.classifica.sort((a,b)=>b.punteggio-a.punteggio);putBin(BIN.C,d).then(loadAll);});}alert('Finito:'+sc);}},600);};
-document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=e=>{let p=e.target.dataset.p;if(p=='admin')document.getElementById('pwdPop').style.display='flex';else show(p);});
-document.getElementById('bPwd').onclick=()=>{if(document.getElementById('pwd').value==PWD){document.getElementById('pwdPop').style.display='none';show('admin');}else alert('Errata');}
-</script>
-</body>
-</html>
+document.getElementById('bPeso').onclick=()=>{let p=parseFloat(document.getElementById('peso').value);let g=parseFloat(document.getElementById('pianeta').value);let nome=document.getElementById('pianeta').options[document.getElementById('pianeta').selectedIndex].text;if(!p||p<=0)return alert('Inserisci peso');document.getElementById('risPeso').innerHTML=`Su <b>${nome}</b> pesi <
