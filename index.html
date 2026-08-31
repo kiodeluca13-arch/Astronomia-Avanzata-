@@ -34,8 +34,12 @@ input,select{width:90%;padding:10px;margin:6px 0;border-radius:6px;border:none;b
 nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;position:sticky;top:0;z-index:20;border-bottom:2px solid #00e5ff}
 .nav-btn{background:none;border:none;color:#00e5ff;font-weight:bold;cursor:pointer}
 .page{display:none}.page.active{display:block}
-.reddit{max-height:350px;overflow-y:auto;text-align:left}
-.post{background:rgba(255,255,255,.06);padding:8px;border-radius:6px;margin:6px 0;border-left:3px solid #ff9900;text-align:left}
+/* FIX COMMUNITY - ORA VEDE TUTTI I POST */
+.reddit{max-height:600px;overflow-y:auto;text-align:left;padding-right:5px}
+.reddit::-webkit-scrollbar{width:6px}
+.reddit::-webkit-scrollbar-thumb{background:#00e5ff;border-radius:3px}
+.post{background:rgba(255,255,255,.06);padding:10px;border-radius:6px;margin:8px 0;border-left:3px solid #ff9900;text-align:left;word-wrap:break-word}
+.post b{display:block;margin-bottom:4px;color:#ff9900}
 .post-admin{border-left:3px solid #00e5ff;background:rgba(0,229,255,.12)}
 .gallery{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .gallery img{width:90px;height:90px;object-fit:cover;border-radius:8px;border:2px solid #00e5ff}
@@ -92,7 +96,6 @@ const URLB="https://api.jsonbin.io/v3/b/";
 const PWD="astro2026";
 const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
 
-// LOADER FIX - ORA VA SICURO
 function hideLoader(){let l=document.getElementById('loader');l.classList.add('hide');setTimeout(()=>{l.style.display='none';},600);}
 setTimeout(hideLoader,800);
 document.getElementById('loader').addEventListener('click',hideLoader);
@@ -112,8 +115,14 @@ function mostraFotoDaLista(lista){
 async function loadAll(){
  let i=await getBin(BIN.I); if(i){iscritti=i.count||0; document.getElementById('cont').innerText=iscritti;}
  let p=await getBin(BIN.P);
- if(p && p.posts){document.getElementById('board').innerHTML=p.posts; localStorage.setItem('board_posts', p.posts);}
- else {let cache=localStorage.getItem('board_posts'); if(cache) document.getElementById('board').innerHTML=cache; else document.getElementById('board').innerHTML="<p>Sii il primo!</p>";}
+ if(p && p.posts && p.posts.trim()!=""){
+   document.getElementById('board').innerHTML=p.posts;
+   localStorage.setItem('board_posts', p.posts);
+ } else {
+   let cache=localStorage.getItem('board_posts');
+   if(cache && cache.trim()!="") document.getElementById('board').innerHTML=cache;
+   else document.getElementById('board').innerHTML="<p>Sii il primo!</p>";
+ }
  let a=await getBin(BIN.A);
  if(a && a.posts && a.posts.trim()!=""){
    document.getElementById('aBoard').innerHTML=a.posts;
@@ -159,8 +168,24 @@ function checkQ(i){let d=domande[qi];document.getElementById('quizR').innerHTML=
 document.getElementById('bQuiz').onclick=()=>{qi=(qi+1)%domande.length;loadQuiz();};
 document.getElementById('bIsc').onclick=()=>{let b=document.getElementById('boxIsc');b.style.display=b.style.display=='none'?'block':'none';}
 document.getElementById('bJoin').onclick=async()=>{let e=document.getElementById('email').value;if(!e.includes('@'))return alert('Email no');iscritti++;await putBin(BIN.I,{count:iscritti});document.getElementById('cont').innerText=iscritti;document.getElementById('boxIsc').style.display='none';}
-document.getElementById('bPost').onclick=async()=>{let n=document.getElementById('nome').value||"Anonimo";let t=document.getElementById('txt').value;if(!t)return;let d=await getBin(BIN.P)||{posts:""};d.posts=`<div class="post"><b>${n}</b><p>${t}</p></div>`+d.posts;localStorage.setItem('board_posts', d.posts);await putBin(BIN.P,d);document.getElementById('txt').value="";loadAll();}
-document.getElementById('bClear').onclick=async()=>{if(!confirm("Pulisci?"))return;localStorage.removeItem('board_posts');await putBin(BIN.P,{posts:""});loadAll();}
+document.getElementById('bPost').onclick=async()=>{
+  let n=document.getElementById('nome').value||"Anonimo";
+  let t=document.getElementById('txt').value;
+  if(!t)return;
+  let current=document.getElementById('board').innerHTML;
+  if(current.includes("Sii il primo")) current="";
+  let nuovo=`<div class="post"><b>${n}</b><p>${t}</p></div>`+current;
+  document.getElementById('board').innerHTML=nuovo;
+  localStorage.setItem('board_posts', nuovo);
+  document.getElementById('txt').value="";
+  try{
+    let d=await getBin(BIN.P)||{posts:""};
+    d.posts=nuovo;
+    await putBin(BIN.P,d);
+  }catch{}
+  loadAll();
+};
+document.getElementById('bClear').onclick=async()=>{if(!confirm("Pulisci?"))return;localStorage.removeItem('board_posts');await putBin(BIN.P,{posts:""});document.getElementById('board').innerHTML="<p>Sii il primo!</p>";};
 document.getElementById('bAdmin').onclick=async()=>{let t=document.getElementById('aTxt').value;if(!t)return;let d=await getBin(BIN.A)||{posts:""};d.posts=`<div class="post post-admin"><b style="color:#00e5ff">ADMIN</b><p>${t}</p></div>`+d.posts;localStorage.setItem('admin_posts', d.posts);await putBin(BIN.A,d);document.getElementById('aTxt').value="";loadAll();}
 document.getElementById('bUp').onclick=()=>document.getElementById('upPop').style.display='flex';
 document.getElementById('bClose').onclick=()=>document.getElementById('upPop').style.display='none';
