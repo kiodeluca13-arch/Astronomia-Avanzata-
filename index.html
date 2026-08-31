@@ -84,12 +84,15 @@ const BIN={I:"6a50f0bcda38895dfe4b4263",P:"6a50a1dff5f4af5e297b7932",F:"6a50a2c7
 const URLB="https://api.jsonbin.io/v3/b/";
 const PWD="astro2026";
 const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
+
 setTimeout(()=>document.getElementById('loader').classList.add('hide'),500);
 document.getElementById('loader').onclick=()=>document.getElementById('loader').classList.add('hide');
+
 async function getBin(id){try{let c=new AbortController();setTimeout(()=>c.abort(),4000);let r=await fetch(URLB+id+"/latest",{headers:{"X-Master-Key":API_KEY},signal:c.signal});if(!r.ok)return null;return (await r.json()).record}catch{return null}}
 async function putBin(id,d){try{await fetch(URLB+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)})}catch{}}
 function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');}
 let iscritti=0;
+
 function mostraFotoDaLista(lista){
   if(!lista ||!lista.length) return;
   let hAdmin=""; lista.forEach((u,idx)=>hAdmin+=`<div style="position:relative"><img src="${u}"><button onclick="delF(${idx})" style="position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:none;border-radius:50%;width:18px;height:18px">x</button></div>`);
@@ -97,6 +100,7 @@ function mostraFotoDaLista(lista){
   document.getElementById('fotoChi').innerHTML=lista.map(u=>`<img src="${u}" style="width:110px;height:110px;object-fit:cover;border-radius:8px;border:2px solid #00e5ff">`).join('');
   document.getElementById('boxFotoChi').style.display='block';
 }
+
 async function loadAll(){
  let i=await getBin(BIN.I); if(i){iscritti=i.count||0; document.getElementById('cont').innerText=iscritti;}
  let p=await getBin(BIN.P);
@@ -121,19 +125,24 @@ async function loadAll(){
    if(cacheF){try{mostraFotoDaLista(JSON.parse(cacheF));}catch{}}
  }
  let c=await getBin(BIN.C); document.getElementById('class').innerHTML=(c?.classifica||[]).map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);margin:3px 0;border-radius:5px"><span>${i+1}. ${x.nome}</span><b>${x.punteggio}</b></div>`).join('')||"Nessuno";
- try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();document.getElementById('apod').innerHTML=`<img src="${d.url}" style="max-width:100%;border-radius:8px"><p>${d.title}</p>`}catch{}
+ // FIX SOLO NASA
+ try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();let imgUrl=d.hdurl||d.url||"";if(d.media_type=="video"){document.getElementById('apod').innerHTML=`<iframe src="${d.url}" style="width:100%;height:220px;border:none;border-radius:8px"></iframe><p style="margin-top:6px">${d.title}</p>`}else{ document.getElementById('apod').innerHTML=`<img src="${imgUrl}" style="max-width:100%;border-radius:8px" onerror="this.src='${d.url}'"><p style="margin-top:6px">${d.title}</p>`}}catch{ document.getElementById('apod').innerHTML="<p>Foto NASA non disponibile oggi 🌙</p>"}
 }
+
 async function delF(i){
   let lista=[]; try{lista=JSON.parse(localStorage.getItem('admin_foto')||'[]')}catch{lista=[]}
   if(lista.length){lista.splice(i,1); localStorage.setItem('admin_foto', JSON.stringify(lista)); if(lista.length) mostraFotoDaLista(lista); else {document.getElementById('gal').innerHTML="<p>Nessuna foto</p>"; document.getElementById('fotoChi').innerHTML="<p style='opacity:.5'>Nessuna foto</p>";}}
   let d=await getBin(BIN.F); if(d && d.foto){d.foto.splice(i,1); await putBin(BIN.F,d);} loadAll();
 }
+
 window.addEventListener('DOMContentLoaded',()=>{
   let cacheF=localStorage.getItem('admin_foto'); if(cacheF){try{mostraFotoDaLista(JSON.parse(cacheF));}catch{}}
   let cacheA=localStorage.getItem('admin_posts'); if(cacheA){document.getElementById('aBoard').innerHTML=cacheA; document.getElementById('annChi').innerHTML=cacheA; document.getElementById('boxAnnChi').style.display='block';}
   let cacheP=localStorage.getItem('board_posts'); if(cacheP){document.getElementById('board').innerHTML=cacheP;}
   loadAll(); loadQuiz();
 });
+
+// FIX SOLO QUIZ - FINISCE
 const domande=[
 {q:"Qual è il pianeta più grande?",o:["Marte","Giove","Saturno"],r:1},
 {q:"Quante lune ha Marte?",o:["0","1","2"],r:2},
@@ -142,9 +151,24 @@ const domande=[
 {q:"Cosa causa le maree?",o:["Il Sole","La Luna","Venere"],r:1}
 ];
 let qi=0;
-function loadQuiz(){let d=domande[qi];document.getElementById('quizQ').innerText=d.q;document.getElementById('quizO').innerHTML=d.o.map((o,i)=>`<button class="quiz-opt" onclick="checkQ(${i})">${o}</button>`).join('');document.getElementById('quizR').innerText="";}
+function loadQuiz(){
+ if(qi>=domande.length){
+  document.getElementById('quizQ').innerText="🎉 Quiz finito! Hai completato tutte le domande!";
+  document.getElementById('quizO').innerHTML=`<button class="btn cyan" onclick="qi=0;loadQuiz()" style="width:90%">🔄 Ricomincia da capo</button>`;
+  document.getElementById('quizR').innerText="";
+  return;
+ }
+ let d=domande[qi];
+ document.getElementById('quizQ').innerText=(qi+1)+"/"+domande.length+" - "+d.q;
+ document.getElementById('quizO').innerHTML=d.o.map((o,i)=>`<button class="quiz-opt" onclick="checkQ(${i})">${o}</button>`).join('');
+ document.getElementById('quizR').innerText="";
+}
 function checkQ(i){let d=domande[qi];document.getElementById('quizR').innerHTML=i==d.r?"<b style='color:#00ff88'>✅ Giusto!</b>":"<b style='color:#ff3b3b'>❌ Sbagliato!</b> Risposta: "+d.o[d.r];}
-document.getElementById('bQuiz').onclick=()=>{qi=(qi+1)%domande.length;loadQuiz();};
+document.getElementById('bQuiz').onclick=()=>{
+ if(qi>=domande.length-1){ qi=domande.length; loadQuiz(); return; }
+ qi++; loadQuiz();
+};
+
 document.getElementById('bIsc').onclick=()=>{let b=document.getElementById('boxIsc');b.style.display=b.style.display=='none'?'block':'none';}
 document.getElementById('bJoin').onclick=async()=>{let e=document.getElementById('email').value;if(!e.includes('@'))return alert('Email no');iscritti++;await putBin(BIN.I,{count:iscritti});document.getElementById('cont').innerText=iscritti;document.getElementById('boxIsc').style.display='none';}
 document.getElementById('bPost').onclick=async()=>{let n=document.getElementById('nome').value||"Anonimo";let t=document.getElementById('txt').value;if(!t)return;let d=await getBin(BIN.P)||{posts:""};d.posts=`<div class="post"><b>${n}</b><p>${t}</p></div>`+d.posts;localStorage.setItem('board_posts', d.posts);await putBin(BIN.P,d);document.getElementById('txt').value="";loadAll();}
