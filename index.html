@@ -6,7 +6,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#000;color:#fff}
-#loader{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease;cursor:pointer}
+#loader{position:fixed;inset:0;background:#000;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
 .sistema{position:relative;width:220px;height:220px;margin-bottom:20px}
 .sole{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:radial-gradient(#fff8d6,#ffcc33 60%,#ff9900);box-shadow:0 0 25px 8px rgba(255,153,0,.7)}
 .orb{position:absolute;top:50%;left:50%;border:1px solid rgba(0,229,255,.25);border-radius:50%;transform:translate(-50%,-50%);animation:ruota linear infinite}
@@ -30,8 +30,8 @@ header{text-align:center;padding:15px 20px 20px}h1{color:#00e5ff}
 input,select{width:90%;padding:10px;margin:6px 0;border-radius:6px;border:none;background:#091220;color:#fff}
 .btn{width:90%;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;margin:5px 0}
 .cyan{background:#00e5ff;color:#000}.orange{background:#ff9900;color:#000}.green{background:#00ff88;color:#000}.red{background:#ff3b3b;color:#fff}
-nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;position:sticky;top:0;z-index:20;border-bottom:2px solid #00e5ff}
-.nav-btn{background:none;border:none;color:#00e5ff;font-weight:bold;cursor:pointer}
+nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;position:sticky;top:0;z-index:30;border-bottom:2px solid #00e5ff}
+.nav-btn{background:none;border:none;color:#00e5ff;font-weight:bold;cursor:pointer;padding:8px}
 .page{display:none}.page.active{display:block}
 .reddit{max-height:350px;overflow-y:auto;text-align:left}
 .post{background:rgba(255,255,255,.06);padding:8px;border-radius:6px;margin:6px 0;border-left:3px solid #ff9900;text-align:left}
@@ -41,7 +41,7 @@ nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;po
 #game-area{width:100%;height:260px;background:#0a1a2a;border:2px solid #00e5ff;border-radius:10px;position:relative;overflow:hidden;margin:10px 0}
 .obj{position:absolute;border-radius:50%;cursor:pointer}
 .st{width:18px;height:18px;background:#00e5ff}.co{width:22px;height:22px;background:#ff9900}
-.pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:50;align-items:center;justify-content:center}
+.pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;align-items:center;justify-content:center}
 .popBox{background:#111;padding:20px;border-radius:10px;width:90%;max-width:320px;text-align:center;border:1px solid #333}
 .link{display:block;background:#ff9900;color:#000;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin:6px auto;width:90%}
 .quiz-opt{display:block;width:90%;margin:6px auto;padding:10px;background:#091220;border:1px solid #1b4965;border-radius:6px;color:#fff;cursor:pointer;text-align:left}
@@ -49,19 +49,10 @@ nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;po
 </head>
 <body>
 
-<div id="loader" onclick="this.style.display='none'">
+<div id="loader">
 <div class="sistema"><div class="sole"></div><div class="orb o1"><span></span></div><div class="orb o2"><span></span></div><div class="orb o3"><span></span></div><div class="orb o4"><span></span></div></div>
 <h1 style="color:#00e5ff">Astronomia Avanzata</h1>
-<p style="font-size:12px;opacity:.6;margin-top:8px">tocca ovunque per entrare</p>
-<script>
-(function(){
-  var l=document.getElementById('loader');
-  function hide(){ if(!l) return; l.style.transition='opacity .6s'; l.style.opacity='0'; setTimeout(function(){ l.style.display='none'; },700); }
-  setTimeout(hide, 1800);
-  l.addEventListener('click', hide);
-  l.addEventListener('touchstart', hide);
-})();
-</script>
+<p style="font-size:12px;opacity:.6;margin-top:8px">tocca per entrare</p>
 </div>
 
 <header>
@@ -113,9 +104,33 @@ const URLB="https://api.jsonbin.io/v3/b/";
 const PWD="astro2026";
 const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
 
+// LOADER FIX DEFINITIVO
+(function(){
+  var loader=document.getElementById('loader');
+  function killLoader(){
+    if(!loader) return;
+    loader.style.transition='opacity 0.5s ease';
+    loader.style.opacity='0';
+    loader.style.pointerEvents='none';
+    setTimeout(function(){ loader.style.display='none'; },600);
+  }
+  // si toglie da solo
+  setTimeout(killLoader, 1600);
+  // si toglie al tocco/click
+  loader.addEventListener('click', killLoader);
+  loader.addEventListener('touchstart', killLoader, {passive:true});
+  // sicurezza: dopo 3 sec sparisce comunque
+  setTimeout(function(){ if(loader) loader.style.display='none'; },3000);
+})();
+
 async function getBin(id){try{let c=new AbortController();setTimeout(()=>c.abort(),4000);let r=await fetch(URLB+id+"/latest",{headers:{"X-Master-Key":API_KEY},signal:c.signal});if(!r.ok)return null;return (await r.json()).record}catch{return null}}
 async function putBin(id,d){try{await fetch(URLB+id,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)})}catch{}}
-function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');}
+function show(p){
+  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
+  var el=document.getElementById(p);
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+}
 let iscritti=0;
 function mostraFotoDaLista(lista){
   if(!lista||!lista.length)return;
@@ -158,5 +173,4 @@ document.getElementById('bClear').onclick=async()=>{if(!confirm("Pulisci?"))retu
 document.getElementById('bAdmin').onclick=async()=>{let t=document.getElementById('aTxt').value;if(!t)return;let d=await getBin(BIN.A)||{posts:""};d.posts=`<div class="post post-admin"><b style="color:#00e5ff">ADMIN</b><p>${t}</p></div>`+d.posts;localStorage.setItem('admin_posts', d.posts);await putBin(BIN.A,d);document.getElementById('aTxt').value="";loadAll();}
 document.getElementById('bUp').onclick=()=>document.getElementById('upPop').style.display='flex';
 document.getElementById('bClose').onclick=()=>document.getElementById('upPop').style.display='none';
-document.getElementById('bSave').onclick=async()=>{ let files=document.getElementById('file').files;if(!files.length)return alert('Scegli foto');let prog=document.getElementById('prog');prog.innerText="Carico "+files.length+"...";let existing=await getBin(BIN.F)||{foto:[]};try{let cf=JSON.parse(localStorage.getItem('admin_foto')||'[]'); if(cf.length>existing.foto.length) existing.foto=cf;}catch{} let nuove=[];let done=0; for(let f of files){await new Promise(res=>{let img=new Image();img.onload=()=>{let cv=document.getElementById('cvs');let m=350,w=img.width,h=img.height;if(w>m||h>m){if(w>h){h*=m/w;w=m}else{w*=m/h;h=m}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);nuove.push(cv.toDataURL('image/jpeg',0.4));done++;prog.innerText=done+"/"+files.length;res();};img.src=URL.createObjectURL(f);});} existing.foto=existing.foto.concat(nuove); localStorage.setItem('admin_foto', JSON.stringify(existing.foto)); mostraFotoDaLista(existing.foto); await putBin(BIN.F,existing); prog.innerText="Fatto! "+nuove.length+" foto"; setTimeout(()=>{document.getElementById('upPop').style.display='none';prog.innerText="";},800); loadAll();};
-document.getElementById('bPeso').onclick=()=>{let p=parseFloat(document
+document.getElementById('bSave').onclick=async()=>{ let files=document.getElementById('file').files;if(!files.length)return alert('Scegli foto');let prog=document.getElementById('prog');prog.innerText="Carico "+files.length+"...";let existing=await getBin(BIN.F)||{foto:[]};try{let cf=JSON.parse(localStorage.getItem('admin_foto')||'[]'); if(cf.length>existing.foto.length) existing.foto=cf;}catch{} let nuove=[];let done=0; for(let f of files){await new Promise(res=>{let img=new Image();img.onload=()=>{let cv=document.getElementById('cvs');let m=350,w=img.width,h=img.height;if(w>m||h>m){if(w>h){h*=m/w;w=m}else{w*=m/h;h=m}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);nuove.push(cv.toDataURL('image/jpeg',0.4));done++;prog.innerText=done+"/"+files.length;res();};img.src=URL.createObjectURL(f);});} existing.foto=existing.foto.concat(nuove); localStorage.setItem('admin_foto', JSON.stringif
