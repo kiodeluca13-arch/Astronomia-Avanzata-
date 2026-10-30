@@ -34,7 +34,6 @@ input,select{width:90%;padding:10px;margin:6px 0;border-radius:6px;border:none;b
 nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;position:sticky;top:0;z-index:20;border-bottom:2px solid #00e5ff}
 .nav-btn{background:none;border:none;color:#00e5ff;font-weight:bold;cursor:pointer}
 .page{display:none}.page.active{display:block}
-/* FIX COMMUNITY - ORA VEDE TUTTI I POST */
 .reddit{max-height:600px;overflow-y:auto;text-align:left;padding-right:5px}
 .reddit::-webkit-scrollbar{width:6px}
 .reddit::-webkit-scrollbar-thumb{background:#00e5ff;border-radius:3px}
@@ -92,16 +91,10 @@ nav{display:flex;justify-content:space-around;background:#0a1a2a;padding:10px;po
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://tuo-progetto.supabase.co";
-const SUPABASE_ANON_KEY = "tuo_anon_key";
-const SUPABASE_TABLES = {
-  I: "iscritti",
-  P: "community_posts",
-  A: "admin_posts",
-  F: "admin_foto",
-  C: "classifica"
-};
-const supabase = (window.supabase && SUPABASE_URL && SUPABASE_URL.includes("supabase.co") && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes("tuo_")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+const SUPABASE_URL = "https://pshzfcxgymzjvobhfqfs.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzaHpmY3hneW16anZvYmhmcWZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNjYxMTgsImV4cCI6MjEwODk0MjExOH0.KCehrjyTDYVyJ7ZtD0xlWezouWjEm7ByPkWlL_8H-E8";
+const BIN = { I:"iscritti", P:"community_posts", F:"admin_foto", C:"classifica", A:"admin_posts" };
+const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const PWD="astro2026";
 const NASA_KEY="i1tRmP427djhL0LdsWKadewHtAwvt2OBYSfgRtlE";
 
@@ -112,17 +105,18 @@ document.getElementById('loader').addEventListener('touchstart',hideLoader);
 
 async function getBin(id){
   if(!supabase){return null;}
-  const table = SUPABASE_TABLES[id] || id;
+  const table = BIN[id] || id;
   try{
-    const { data, error } = await supabase.from(table).select('*').limit(1);
-    if(error || !data || !data.length) return null;
+    const { data, error } = await supabase.from(table).select('*').eq('id', 1).limit(1);
+    if(error && error.code !== 'PGRST116') console.error(error);
+    if(!data || !data.length) return null;
     return data[0];
   }catch{return null;}
 }
 
 async function putBin(id,d){
   if(!supabase){return;}
-  const table = SUPABASE_TABLES[id] || id;
+  const table = BIN[id] || id;
   const payload = { ...(d || {}), id: d?.id ?? 1, updated_at: new Date().toISOString() };
   try{
     const { error } = await supabase.from(table).upsert(payload, { onConflict: 'id' });
@@ -140,8 +134,8 @@ function mostraFotoDaLista(lista){
   document.getElementById('boxFotoChi').style.display='block';
 }
 async function loadAll(){
- let i=await getBin(BIN.I); if(i){iscritti=i.count||0; document.getElementById('cont').innerText=iscritti;}
- let p=await getBin(BIN.P);
+ let i=await getBin('I'); if(i){iscritti=i.count||0; document.getElementById('cont').innerText=iscritti;}
+ let p=await getBin('P');
  if(p && p.posts && p.posts.trim()!=""){
    document.getElementById('board').innerHTML=p.posts;
    localStorage.setItem('board_posts', p.posts);
@@ -150,7 +144,7 @@ async function loadAll(){
    if(cache && cache.trim()!="") document.getElementById('board').innerHTML=cache;
    else document.getElementById('board').innerHTML="<p>Sii il primo!</p>";
  }
- let a=await getBin(BIN.A);
+ let a=await getBin('A');
  if(a && a.posts && a.posts.trim()!=""){
    document.getElementById('aBoard').innerHTML=a.posts;
    document.getElementById('annChi').innerHTML=a.posts;
@@ -160,7 +154,7 @@ async function loadAll(){
    let cacheA=localStorage.getItem('admin_posts');
    if(cacheA){document.getElementById('aBoard').innerHTML=cacheA; document.getElementById('annChi').innerHTML=cacheA; document.getElementById('boxAnnChi').style.display='block';}
  }
- let f=await getBin(BIN.F);
+ let f=await getBin('F');
  if(f && f.foto && f.foto.length>0){
    mostraFotoDaLista(f.foto);
    localStorage.setItem('admin_foto', JSON.stringify(f.foto));
@@ -168,13 +162,13 @@ async function loadAll(){
    let cacheF=localStorage.getItem('admin_foto');
    if(cacheF){try{mostraFotoDaLista(JSON.parse(cacheF));}catch{}}
  }
- let c=await getBin(BIN.C); document.getElementById('class').innerHTML=(c?.classifica||[]).map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);border-radius:6px;margin:4px 0"><span>${i+1}. ${x.nome}</span><b>${x.p}</b></div>`).join('')||'<p>Nessuna classifica.</p>';
+ let c=await getBin('C'); document.getElementById('class').innerHTML=(c?.classifica||[]).map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:5px;background:rgba(0,229,255,.1);border-radius:6px;margin:4px 0"><span>${i+1}. ${x.nome}</span><b>${x.p}</b></div>`).join('')||'<p>Nessuna classifica.</p>';
  try{let r=await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`);let d=await r.json();document.getElementById('apod').innerHTML=`<img src="${d.url}" style="max-width:100%;border-radius:10px">`;}catch{document.getElementById('apod').innerHTML='<p>Impossibile caricare la foto NASA.</p>'};
 }
 async function delF(i){
   let lista=[]; try{lista=JSON.parse(localStorage.getItem('admin_foto')||'[]')}catch{lista=[]}
   if(lista.length){lista.splice(i,1); localStorage.setItem('admin_foto', JSON.stringify(lista)); if(lista.length) mostraFotoDaLista(lista); else {document.getElementById('gal').innerHTML="<p>Nessuna foto.</p>"; document.getElementById('fotoChi').innerHTML="<p style='opacity:.5'>Carico foto...</p>";}}
-  let d=await getBin(BIN.F); if(d && d.foto){d.foto.splice(i,1); await putBin(BIN.F,d);} loadAll();
+  let d=await getBin('F'); if(d && d.foto){d.foto.splice(i,1); await putBin('F',d);} loadAll();
 }
 window.addEventListener('DOMContentLoaded',()=>{
   let cacheF=localStorage.getItem('admin_foto'); if(cacheF){try{mostraFotoDaLista(JSON.parse(cacheF));}catch{}}
@@ -194,7 +188,7 @@ function loadQuiz(){let d=domande[qi];document.getElementById('quizQ').innerText
 function checkQ(i){let d=domande[qi];document.getElementById('quizR').innerHTML=i==d.r?"<b style='color:#00ff88'>✅ Giusto!</b>":"<b style='color:#ff3b3b'>❌ Sbagliato!</b> Risposta: "+d.o[d.r];}
 document.getElementById('bQuiz').onclick=()=>{qi=(qi+1)%domande.length;loadQuiz();};
 document.getElementById('bIsc').onclick=()=>{let b=document.getElementById('boxIsc');b.style.display=b.style.display=='none'?'block':'none';}
-document.getElementById('bJoin').onclick=async()=>{let e=document.getElementById('email').value;if(!e.includes('@'))return alert('Email no');iscritti++;await putBin(BIN.I,{count:iscritti});document.getElementById('cont').innerText=iscritti;document.getElementById('email').value='';}
+document.getElementById('bJoin').onclick=async()=>{let e=document.getElementById('email').value;if(!e.includes('@'))return alert('Email no');iscritti++;await putBin('I',{count:iscritti});document.getElementById('cont').innerText=iscritti;document.getElementById('email').value='';}
 document.getElementById('bPost').onclick=async()=>{
   let n=document.getElementById('nome').value||"Anonimo";
   let t=document.getElementById('txt').value;
@@ -206,20 +200,20 @@ document.getElementById('bPost').onclick=async()=>{
   localStorage.setItem('board_posts', nuovo);
   document.getElementById('txt').value="";
   try{
-    let d=await getBin(BIN.P)||{posts:""};
+    let d=await getBin('P')||{posts:""};
     d.posts=nuovo;
-    await putBin(BIN.P,d);
+    await putBin('P',d);
   }catch{}
   loadAll();
 };
-document.getElementById('bClear').onclick=async()=>{if(!confirm("Pulisci?"))return;localStorage.removeItem('board_posts');await putBin(BIN.P,{posts:""});document.getElementById('board').innerHTML="<p>Sii il primo!</p>";}
-document.getElementById('bAdmin').onclick=async()=>{let t=document.getElementById('aTxt').value;if(!t)return;let d=await getBin(BIN.A)||{posts:""};d.posts=`<div class="post post-admin"><b style="color:#00e5ff">Admin</b><p>${t}</p></div>`+ (d.posts||""); document.getElementById('aBoard').innerHTML=d.posts; document.getElementById('annChi').innerHTML=d.posts; document.getElementById('boxAnnChi').style.display='block'; localStorage.setItem('admin_posts', d.posts); await putBin(BIN.A,d); document.getElementById('aTxt').value='';}
+document.getElementById('bClear').onclick=async()=>{if(!confirm("Pulisci?"))return;localStorage.removeItem('board_posts');await putBin('P',{posts:""});document.getElementById('board').innerHTML="<p>Sii il primo!</p>";}
+document.getElementById('bAdmin').onclick=async()=>{let t=document.getElementById('aTxt').value;if(!t)return;let d=await getBin('A')||{posts:""};d.posts=`<div class="post post-admin"><b style="color:#00e5ff">Admin</b><p>${t}</p></div>`+ (d.posts||""); document.getElementById('aBoard').innerHTML=d.posts; document.getElementById('annChi').innerHTML=d.posts; document.getElementById('boxAnnChi').style.display='block'; localStorage.setItem('admin_posts', d.posts); await putBin('A',d); document.getElementById('aTxt').value='';}
 document.getElementById('bUp').onclick=()=>document.getElementById('upPop').style.display='flex';
 document.getElementById('bClose').onclick=()=>document.getElementById('upPop').style.display='none';
 document.getElementById('bSave').onclick=async()=>{
-  let files=document.getElementById('file').files;if(!files.length)return alert('Scegli foto');let prog=document.getElementById('prog');prog.innerText="Carico "+files.length+"...";let existing=await getBin(BIN.F)||{foto:[]};let nuove=[];
+  let files=document.getElementById('file').files;if(!files.length)return alert('Scegli foto');let prog=document.getElementById('prog');prog.innerText="Carico "+files.length+"...";let existing=await getBin('F')||{foto:[]};let nuove=[];
   for(let f of files){await new Promise(res=>{let img=new Image();img.onload=()=>{let cv=document.getElementById('cvs');let m=350,w=img.width,h=img.height;if(w>m||h>m){if(w>h){h*=m/w;w=m}else{w*=m/h;h=m}}cv.width=w;cv.height=h;let ctx=cv.getContext('2d');ctx.clearRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);nuove.push(cv.toDataURL('image/jpeg',.82));res();};img.src=URL.createObjectURL(f);});}
-  existing.foto=existing.foto.concat(nuove); localStorage.setItem('admin_foto', JSON.stringify(existing.foto)); mostraFotoDaLista(existing.foto); await putBin(BIN.F,existing); prog.innerText="Fatto! "+nuove.length+" foto caricate"; document.getElementById('file').value=''; setTimeout(()=>document.getElementById('upPop').style.display='none',800);
+  existing.foto=existing.foto.concat(nuove); localStorage.setItem('admin_foto', JSON.stringify(existing.foto)); mostraFotoDaLista(existing.foto); await putBin('F',existing); prog.innerText="Fatto! "+nuove.length+" foto caricate"; document.getElementById('file').value=''; setTimeout(()=>document.getElementById('upPop').style.display='none',800);
 };
 document.getElementById('bPeso').onclick=()=>{let p=parseFloat(document.getElementById('peso').value);let g=parseFloat(document.getElementById('pianeta').value);if(!p)return;document.getElementById('risPeso').innerText=`${(p*g).toFixed(2)} kg sul pianeta scelto`;}
 let sc=0,tm,ti=20;
